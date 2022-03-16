@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "449637111",
+    "project_id": "appstore-e5afd",
+    "storage_bucket": "appstore-e5afd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449637111:android:3678af99b75cd538cb41f2",
+        "android_client_info": {
+          "package_name": "com.example.taphoaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449637111-c5rggm9311998bkf9ase3qma6onurl1n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoQsF3IyUTA7UFqkpLRFXtw_0LM2wCsNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "449637111-c5rggm9311998bkf9ase3qma6onurl1n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
