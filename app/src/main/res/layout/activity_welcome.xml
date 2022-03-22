@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".WelcomeActivity">
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/Username"
+        android:id="@+id/Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Socker"

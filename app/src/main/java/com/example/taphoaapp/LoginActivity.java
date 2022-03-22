@@ -2,7 +2,6 @@ package com.example.taphoaapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatEditText;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -31,26 +30,6 @@ public class LoginActivity extends AppCompatActivity {
         pass=findViewById(R.id.MatKhau);
         login = findViewById(R.id.loginBtn);
         signin = findViewById(R.id.SignInBtn);
-        /*login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAuth.createUserWithEmailAndPassword(email.getText().toString(), pass.getText().toString())
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()){
-                                    Log.d("thanhcong", "createUserWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                }
-                                else {
-                                    Log.w("Fail", "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-            }
-        });*/
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

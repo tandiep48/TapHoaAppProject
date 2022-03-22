@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#906CF3D2"
+    android:background="#3AF1F1"
     tools:context=".LoginActivity">
-
     <ImageView
         android:id="@+id/Main_Icon"
         android:layout_width="1in"
@@ -51,23 +50,24 @@
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginTop="40dp"
-        android:backgroundTint="#2FF1EB"
+        android:backgroundTint="#000000"
         android:layout_marginLeft="-2.5dp"
         android:text="Login"
         app:layout_constraintLeft_toLeftOf="@id/MatKhau"
         app:layout_constraintTop_toBottomOf="@+id/MatKhau" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/SignInBtn"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginLeft="5dp"
         android:text="Sign In"
-        android:backgroundTint="#2FF1EB"
+        android:textColor="#ffffff"
+        android:backgroundTint="#000000"
         app:layout_constraintLeft_toRightOf="@id/loginBtn"
         app:layout_constraintTop_toTopOf="@id/loginBtn"/>
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/ImgG"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -76,7 +76,7 @@
         app:layout_constraintLeft_toLeftOf="@id/loginBtn"
         app:layout_constraintTop_toTopOf="@id/LoginGBtn"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/LoginGBtn"
         android:layout_width="255dp"
         android:layout_height="50dp"
@@ -86,11 +86,12 @@
         android:textAlignment="textStart"
         android:paddingLeft="15dp"
         android:layout_marginTop="10dp"
-        android:background="#FFFFFF"
+        android:textColor="#000000"
+        android:backgroundTint="#FFFFFF"
         app:layout_constraintLeft_toRightOf="@id/ImgG"
         app:layout_constraintTop_toBottomOf="@id/loginBtn"/>
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/ImgF"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -99,7 +100,7 @@
         app:layout_constraintRight_toLeftOf="@id/LoginFBtn"
         app:layout_constraintTop_toTopOf="@id/LoginFBtn"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/LoginFBtn"
         android:layout_width="255dp"
         android:layout_height="50dp"
@@ -112,5 +113,4 @@
         android:layout_marginTop="5dp"
         app:layout_constraintLeft_toLeftOf="@id/LoginGBtn"
         app:layout_constraintTop_toBottomOf="@id/LoginGBtn"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
