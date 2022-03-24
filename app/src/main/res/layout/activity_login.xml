@@ -32,37 +32,44 @@
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:hint="Mật khẩu"
+        android:inputType="textPassword"
         app:layout_constraintLeft_toLeftOf="@id/TaiKhoan"
         app:layout_constraintTop_toBottomOf="@id/TaiKhoan" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ForgotBtn"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:text="@string/qu_n_m_t_kh_u"
         android:textColor="#000000"
         android:textAllCaps="false"
-        android:backgroundTint="#00FFFFFF"
+        android:background="#00000000"
+        android:layout_marginTop="2dp"
         app:layout_constraintLeft_toLeftOf="@id/MatKhau"
         app:layout_constraintTop_toBottomOf="@id/MatKhau"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/loginBtn"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginTop="40dp"
-        android:backgroundTint="#000000"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/custom_button_2"
         android:layout_marginLeft="-2.5dp"
         android:text="Login"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="@id/MatKhau"
         app:layout_constraintTop_toBottomOf="@+id/MatKhau" />
 
-    <Button
-        android:id="@+id/SignInBtn"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/SignUpBtn"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginLeft="5dp"
         android:text="Sign In"
-        android:textColor="#ffffff"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/custom_button_2"
+        android:textStyle="bold"
         android:backgroundTint="#000000"
         app:layout_constraintLeft_toRightOf="@id/loginBtn"
         app:layout_constraintTop_toTopOf="@id/loginBtn"/>
@@ -73,23 +80,23 @@
         android:layout_height="50dp"
         android:src="@drawable/google"
         android:background="#FFFFFF"
+        android:layout_marginTop="10dp"
         app:layout_constraintLeft_toLeftOf="@id/loginBtn"
-        app:layout_constraintTop_toTopOf="@id/LoginGBtn"/>
+        app:layout_constraintTop_toBottomOf="@id/loginBtn"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/LoginGBtn"
         android:layout_width="255dp"
         android:layout_height="50dp"
         android:text="Login with Google"
-        android:textAllCaps="false"
-        android:textSize="20dp"
         android:textAlignment="textStart"
-        android:paddingLeft="15dp"
-        android:layout_marginTop="10dp"
+        android:textAllCaps="false"
+        android:paddingLeft="10dp"
         android:textColor="#000000"
-        android:backgroundTint="#FFFFFF"
+        android:textSize="20dp"
+        android:background="@drawable/custom_button"
         app:layout_constraintLeft_toRightOf="@id/ImgG"
-        app:layout_constraintTop_toBottomOf="@id/loginBtn"/>
+        app:layout_constraintTop_toTopOf="@id/ImgG" />
 
     <ImageView
         android:id="@+id/ImgF"
@@ -100,7 +107,7 @@
         app:layout_constraintRight_toLeftOf="@id/LoginFBtn"
         app:layout_constraintTop_toTopOf="@id/LoginFBtn"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/LoginFBtn"
         android:layout_width="255dp"
         android:layout_height="50dp"
@@ -108,8 +115,8 @@
         android:textAllCaps="false"
         android:textSize="20dp"
         android:textAlignment="textStart"
-        android:paddingLeft="15dp"
-        android:background="#FFFFFF"
+        android:paddingLeft="10dp"
+        android:background="@drawable/custom_button"
         android:layout_marginTop="5dp"
         app:layout_constraintLeft_toLeftOf="@id/LoginGBtn"
         app:layout_constraintTop_toBottomOf="@id/LoginGBtn"/>

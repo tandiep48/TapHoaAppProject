@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignUpActivity"
+    android:background="#29CFDF">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/SignUpTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đăng ký tài khoản"
+        android:textSize="45dp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="40dp"/>
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/EmailInput"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="Email"
+        android:inputType="text"
+        app:layout_constraintLeft_toLeftOf="@id/SignUpTitle"
+        app:layout_constraintRight_toRightOf="@id/SignUpTitle"
+        app:layout_constraintTop_toBottomOf="@id/SignUpTitle"
+        android:layout_marginTop="20dp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/MatKhauInput"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="Mật khẩu"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@id/EmailInput"
+        app:layout_constraintLeft_toLeftOf="@id/EmailInput"
+        android:layout_marginTop="20dp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/TenInput"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="Họ tên"
+        android:inputType="text"
+        app:layout_constraintLeft_toLeftOf="@id/MatKhauInput"
+        app:layout_constraintTop_toBottomOf="@id/MatKhauInput"
+        android:layout_marginTop="20dp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/TuoiInput"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="Tuổi"
+        android:inputType="number"
+        app:layout_constraintLeft_toLeftOf="@id/TenInput"
+        app:layout_constraintTop_toBottomOf="@id/TenInput"
+        android:layout_marginTop="20dp"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/SignBtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Đăng ký"
+        android:textSize="30dp"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:background="@drawable/custom_button_2"
+        app:layout_constraintTop_toBottomOf="@id/TuoiInput"
+        app:layout_constraintLeft_toLeftOf="@id/TuoiInput"
+        app:layout_constraintRight_toRightOf="@id/TuoiInput"
+        android:layout_marginTop="10dp"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/BackBtn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Quay về"
+        android:textSize="30dp"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:background="@drawable/custom_button_2"
+        app:layout_constraintTop_toBottomOf="@id/SignBtn"
+        app:layout_constraintLeft_toLeftOf="@id/SignBtn"
+        android:layout_marginTop="10dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
