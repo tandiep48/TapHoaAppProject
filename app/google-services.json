@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "449637111-jrbsvro02ajeh8mov52gs1hvdhgdce0d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.taphoaapp",
+            "certificate_hash": "ba537fd184b4e55072f39a5448592bced3af63ec"
+          }
+        },
+        {
           "client_id": "449637111-c5rggm9311998bkf9ase3qma6onurl1n.apps.googleusercontent.com",
           "client_type": 3
         }
