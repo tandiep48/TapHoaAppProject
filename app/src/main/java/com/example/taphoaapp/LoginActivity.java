@@ -85,6 +85,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         });
                 break;
             case R.id.LoginFBtn:
+                Intent intent = new Intent(LoginActivity.this, FacebookAuthActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
                 break;
             case R.id.LoginGBtn:
                 getRequest();
