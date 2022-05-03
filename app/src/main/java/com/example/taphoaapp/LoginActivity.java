@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -82,6 +83,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 }
                             }
                         });
+                LoginUser();
                 break;
             case R.id.LoginFBtn:
                 Intent intent = new Intent(LoginActivity.this, FacebookAuthActivity.class);
@@ -93,6 +95,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.ForgotBtn:
                 break;
+        }
+    }
+
+    private void LoginUser() {
+        String Email = email.getText().toString().trim();
+        String Password = pass.getText().toString().trim();
+
+        if(Email.isEmpty()){
+            email.setError("Email is required");
+            email.requestFocus();
+        }
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(Email).matches())
+        {
+            email.setError("Please enter a valid email");
+            email.requestFocus();
+        }
+
+        if(Password.isEmpty()){
+            pass.setError("Password is required");
+            pass.requestFocus();
         }
     }
 

@@ -5,6 +5,12 @@
       <map>
         <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/custom_button.xml" value="0.3828125" />
         <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/custom_button_2.xml" value="0.3828125" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/custom_input.xml" value="0.3828125" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/custom_lock_icon.xml" value="0.3828125" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/custom_mail_icon.xml" value="0.3828125" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/ic_baseline_lock.xml" value="0.3828125" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/ic_baseline_lock_focused.xml" value="0.39479166666666665" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/ic_baseline_mail_focused.xml" value="0.3828125" />
         <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_facebook_auth.xml" value="0.36666666666666664" />
         <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_login.xml" value="0.5" />
         <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_main.xml" value="0.2" />

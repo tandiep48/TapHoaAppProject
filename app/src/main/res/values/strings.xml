@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">TapHoaApp</string>
-    <string name="qu_n_m_t_kh_u"><u>Quên mật khẩu</u></string>
+    <string name="qu_n_m_t_kh_u"><u>Quên mật khẩu ?</u></string>
     <string name="default_web">449637111-c5rggm9311998bkf9ase3qma6onurl1n.apps.googleusercontent.com</string>
     <string name="facebook_app_id">953606525358146</string>
     <string name="fb_login_protocol_scheme">fb1234</string>
