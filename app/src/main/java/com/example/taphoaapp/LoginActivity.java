@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 if (task.isSuccessful()) {
                                     Log.d("thanhcong", "createUserWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    Intent intent = new Intent(LoginActivity.this, UserActivity.class);
+                                    Intent intent = new Intent(LoginActivity.this, User_EmailAndPass_Activity.class);
                                     startActivity(intent);
                                 } else {
                                     Log.w("Fail", "createUserWithEmail:failure", task.getException());

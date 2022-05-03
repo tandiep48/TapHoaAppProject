@@ -14,6 +14,9 @@
         android:theme="@style/Theme.TapHoaApp_No"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".User_EmailAndPass_Activity"
+            android:exported="true" />
+        <activity
             android:name=".User_Facebook"
             android:exported="true" />
         <activity
@@ -29,7 +32,7 @@
 
         <activity
             android:name=".UserActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
