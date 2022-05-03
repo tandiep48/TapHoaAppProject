@@ -31,13 +31,15 @@ public class FacebookAuthActivity extends LoginActivity {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+        LoginManager.getInstance().logInWithReadPermissions(FacebookAuthActivity.this, Arrays.asList("public_profile"));
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
                         handleFacebookAccessToken(loginResult.getAccessToken());
+                        startActivity(new Intent(FacebookAuthActivity.this, User_Facebook.class));
+                        finish();
                     }
 
                     @Override
