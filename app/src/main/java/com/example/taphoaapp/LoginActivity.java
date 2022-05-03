@@ -68,21 +68,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(this, SignUpActivity.class));
                 break;
             case R.id.loginBtn:
-                mAuth.signInWithEmailAndPassword(email.getText().toString(), pass.getText().toString())
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d("thanhcong", "createUserWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    Intent intent = new Intent(LoginActivity.this, User_EmailAndPass_Activity.class);
-                                    startActivity(intent);
-                                } else {
-                                    Log.w("Fail", "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+
                 LoginUser();
                 break;
             case R.id.LoginFBtn:
@@ -105,18 +91,46 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(Email.isEmpty()){
             email.setError("Email is required");
             email.requestFocus();
+            return;
         }
 
         if(!Patterns.EMAIL_ADDRESS.matcher(Email).matches())
         {
             email.setError("Please enter a valid email");
             email.requestFocus();
+            return;
         }
 
         if(Password.isEmpty()){
             pass.setError("Password is required");
             pass.requestFocus();
+            return;
         }
+
+        if (Password.length()<6) {
+            pass.setError("Password is required");
+            pass.requestFocus();
+            return;
+        }
+        mAuth.signInWithEmailAndPassword(Email, Password)
+                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if(user.isEmailVerified()){
+
+                                Intent intent = new Intent(LoginActivity.this, User_EmailAndPass_Activity.class);
+                                startActivity(intent);
+                            }else {
+                                user.sendEmailVerification();
+                                Toast.makeText(LoginActivity.this,"Xác nhận mail của bạn",Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     private void signIn() {
