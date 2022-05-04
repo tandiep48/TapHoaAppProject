@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/custom_button.xml" value="0.3828125" />
         <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/custom_button_2.xml" value="0.3828125" />
+<<<<<<< Updated upstream
         <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/custom_input.xml" value="0.3828125" />
         <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/custom_lock_icon.xml" value="0.3828125" />
         <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/custom_mail_icon.xml" value="0.3828125" />
@@ -12,6 +13,11 @@
         <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/ic_baseline_lock_focused.xml" value="0.39479166666666665" />
         <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/ic_baseline_mail_focused.xml" value="0.3828125" />
         <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_facebook_auth.xml" value="0.36666666666666664" />
+=======
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/ic_baseline_home.xml" value="0.11666666666666667" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/ic_baseline_shopping_cart.xml" value="0.3728205128205128" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_facebook_auth.xml" value="0.1757852077001013" />
+>>>>>>> Stashed changes
         <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_login.xml" value="0.5" />
         <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_sign_up.xml" value="0.25" />
@@ -19,7 +25,11 @@
         <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_user_facebook.xml" value="0.36666666666666664" />
         <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_user_facebook2.xml" value="0.36666666666666664" />
         <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_welcome.xml" value="0.2" />
+<<<<<<< Updated upstream
         <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/user_facebook.xml" value="0.36666666666666664" />
+=======
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.1" />
+>>>>>>> Stashed changes
       </map>
     </option>
   </component>
