@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/detail_Parrent_Constraint"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".DetailProduct.DetailProductActivity"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintBottom_toTopOf="@+id/detail_topLinear"
+        app:layout_constraintEnd_toEndOf="@+id/detail_topLinear"
+        app:layout_constraintHeight_default="wrap"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ToolbarColoredBackArrow"
+        app:titleTextColor="@color/white"/>
+
+    <LinearLayout
+        android:id="@+id/detail_topLinear"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/detail_Bottom_Buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="wrap"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_toolbar"
+        android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/myScrollView"
+        android:fillViewport="false"
+        android:layout_gravity="fill_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <RelativeLayout
+            android:id="@+id/detail_Relative_myScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/head_layout_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/head_image_product"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/image_layout_product"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="horizontal"
+        android:layout_below = "@+id/head_layout_product">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/one_image_product"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_centerInParent="true"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/two_image_product"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_centerInParent="true"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/three_image_product"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_centerInParent="true"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/image_layout_product"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/detail_product_name"
+                android:layout_width="360dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:text="Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+
+            <RelativeLayout
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="right"
+                android:layout_toLeftOf="@id/detail_product_name">
+            <ImageView
+                android:id="@+id/detail_product_favorite"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/icons8_red_heart" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:id="@+id/detail_price_layout"
+                android:layout_width="0dp"
+                android:layout_weight = "2"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/detail_product_soluong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="15dp"
+                    android:text="Số lượng : 3"/>
+                <TextView
+                    android:id="@+id/detail_product_giagoc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="15dp"
+                    android:text="198.000đ"/>
+
+                <TextView
+                    android:id="@+id/detail_product_gia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="20dp"
+                    android:text="89.000đ"
+                    android:textColor="@color/win8_red"/>
+
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_gravity="right"-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight = "1"
+                android:weightSum="2"
+                android:layout_toRightOf="@id/detail_price_layout"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/detail_product_discount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight = "1"
+                    android:textSize="15dp"
+                    android:text="Giảm giá đến:"
+                    android:textColor="@color/negative_red"/>
+
+                <TextView
+                    android:id="@+id/detail_discount_gia"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight = "1"
+                    android:textSize="20dp"
+                    android:text="55%"
+                    android:textColor="@color/negative_red"/>
+
+                <!--            android:layout_alignParentLeft="true"-->
+                <!--            android:layout_alignParentEnd="true"-->
+                <!--            android:layout_gravity="right"-->
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="15dp"
+            android:layout_marginHorizontal="5dp"
+            >
+
+            <TextView
+                android:id="@+id/detail_Color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="Màu sắc :"
+                android:textSize="15dp" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/detail_Color_choose"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+
+                android:orientation="horizontal"/>
+
+
+            <TextView
+                android:id="@+id/detail_Size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="Kích cỡ :"
+                android:textSize="15dp" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/detail_Size_choose"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+ />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="4">
+
+            <TextView
+                android:id="@+id/detail_MoTa_tittle"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginBottom="5dp"
+                android:text="Mô tả :"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/detail_mota"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:inputType="textMultiLine"
+                android:text="Áo thun nam polo trơn vải cá sấu cotton cao cấp mềm mịn, áo phông polo nam đẹp cổ bẻ ngắn tay có đủ bảng màu cực hot
+Shop Áo Polo VNXK hân hạnh được phục vụ quý khách. Những sản phẩm mới nhất vẫn liên tục được cập nhật mỗi ngày phù hợp với nhiều lứa tuổi.
+\n
+\n1. GIỚI THIỆU SẢN PHẨM
+\n- Áo phông Polo nam trắng là sự lựa chọn hoàn hảo cho các chàng trai. Áo 3 màu trung tính rất dễ mặc, form áo vừa vặn cơ thể, thoải mái theo từng cử động.
+\n- Màu sắc trung tính và phối màu tuyệt vời mà rất ít áo polo có tạo nên sự dễ dàng trong việc phối đồ và tạo ra cho mình nhiều phong cách khác nhau.
+\n- Áo được làm từ chất liệu cá sấu cotton co giãn với bề mặt vải mềm mại, thấm hút mồ hôi tốt tạo cảm giác thoải mái, thoáng mát cho người mặc. Đây cũng là chất liệu dễ giặt sạch, giúp bạn tiết kiệm một khoảng thời gian đáng kể.
+\n- Áo chống nhăn tốt, dễ giặt sạch, nhanh khô.
+\n-Giặt tay hay giặt máy thoải mái không sợ ra màu, nhăn , mất form
+\n
+2. THÔNG TIN SẢN PHẨM
+\n
+\n- Chất liệu: 100% chất cotton cá sấu, thấm hút mồ hôi , giặt không ra màu , không mất form
+\n- Các Size S - M - L- XL- XXL - XXXL
+\n
+\n       + Size S :        35-47 kg             cao 1m5-1m55\
+\n       + Size  M :      48 - 59 kg           cao 1m55 - 1m65
+\n       + Size L :        60 - 67kg            cao 1m65 - 1m80
+\n       + Size XL :      68- 75kg             cao 1m65 - 1m80
+\n       + Size XXL :   76 - 85kg             cao 1m65 - 1m85
+\n       + Size XXXL :   86 - 95kg          cao 1m65 - 1m85
+\n
+\n- Màu sắc : Đen , trắng , Xanh Bích , Xanh Thiên Thanh , Xanh đen , Đỏ Tươi , Đỏ Đô , Vàng , Biển , Cam , Xanh Ya , Xanh Két , Xanh Lá , Xanh cốm , Xám Đậm , Xám Lợt , Màu nâu , Xanh Vịt
+\n- Form áo slim dễ phối đồ
+\n
+\n3. CHÍNH SÁCH BÁN HÀNG:
+\n- FREESHIP hoặc hỗ trợ 40K cho đơn hàng từ 99K toàn quốc
+\n- Ngoài ra, Chúng tôi tặng mã voucher hoặc hoàn xu cho toàn bộ đơn hàng
+\n- Cam kết chất lượng và mẫu mã sản phẩm giống với hình ảnh.
+\n- Hoàn tiền nếu sản phẩm không giống với mô tả.
+\n- Cam kết được đổi trả hàng trong vòng 2 ngày.
+\n
+\n 4. HƯỚNG DẪN CÁCH ĐẶT HÀNG
+\n- Bước 1: Cách chọn size, shop có bảng size mẫu. Bạn NÊN INBOX, cung cấp chiều cao, cân nặng để SHOP TƯ VẤN SIZE
+\n- Bước 2: Cách đặt hàng: Nếu bạn muốn mua 2 sản phẩm khác nhau hoặc 2 size khác nhau, để được freeship
+\n+ Bạn chọn từng sản phẩm rồi thêm vào giỏ hàng
+\n+ Khi giỏ hàng đã có đầy đủ các sản phẩm cần mua, bạn mới tiến hành ấn nút “ Thanh toán”
+\n- Shop luôn sẵn sàng trả lời inbox để tư vấn.
+\n
+\n🔔🔔🔔 Tham khảo thêm các sản phẩm khác tại:
+\n#áothunnamcócổ #aothunnamcoco
+\n#áothunnamcócổtayngắn
+\n#aopolonam
+\n#áopolonam
+\n#aopolonamdep
+\n#aopolonamnu
+\n#AOTHUNHANQUOC
+\n#áothunnam
+\n#aothunnambody
+\n#aothunnam
+\n#aothunnamnu
+\n#áothunnamtayngắn
+\n#aothunnamdep
+\n#aothunnama"
+                android:textSize="15dp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/detail_Bottom_Buttons"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:weightSum = "2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_topLinear">
+
+        <Button
+            android:id="@+id/detail_BuyNow"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight = "1"
+            android:text="Thêm vào giỏ hàng"
+            android:backgroundTint="@color/Orange"/>
+
+        <Button
+            android:id="@+id/detail_Order"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight = "1"
+            android:text="Đặt hàng"
+            android:backgroundTint="@color/negative_red"/>
+
+
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.taphoaapp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TapHoaApp_No"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Search.SearchActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.example.taphoaapp.MainActivity" />
+
+        <activity
+            android:name=".FacebookAuthActivity"
+            android:configChanges="locale"
+            android:exported="true" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token" />
+
+        <activity
+            android:name=".UserActivity"
+            android:configChanges="locale"
+            android:exported="true" />
+        <activity
+            android:name=".LoginActivity"
+            android:configChanges="locale"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".WelcomeActivity"
+            android:configChanges="locale"
+            android:exported="true" />
+        <activity
+            android:name=".SignUpActivity"
+            android:configChanges="locale"
+            android:exported="true" />
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="locale"
+            android:exported="true" />
+        <activity
+            android:name=".DetailProduct.DetailProductActivity"
+            android:configChanges="locale"
+            android:exported="true" />
+    </application>
+
+</manifest>

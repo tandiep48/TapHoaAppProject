@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TapHoaApp</string>
+    <string name="qu_n_m_t_kh_u"><u>Quên mật khẩu</u></string>
+    <string name="clothes">Quần áo</string>
+    <string name="Office">Văn phòng</string>
+    <string name="Electron">Điện tử</string>
+    <string name="books">Sách</string>
+    <string name="Home">Trang chủ</string>
+    <string name="Profile">Cá nhân</string>
+    <string name="Basket">Giỏ hàng</string>
+    <string name="BuyNow">Mua Ngay!</string>
+    <string name="checkout">Thanh Toán</string>
+    <string name="Name">HọTên</string>
+    <string name="Adress">Địa chỉ</string>
+    <string name="Phone">Số điện thoại</string>
+    <string name="Total">Tổng tiền</string>
+    <string name="TransFee">Phí vận chuyển</string>
+    <string name="City">Thành phố/Tỉnh</string>
+    <string name="deliver_yes">nhận hàng tại cửa hàng</string>
+</resources>

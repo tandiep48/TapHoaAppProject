@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/custom_button.xml" value="0.3828125" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/custom_button_2.xml" value="0.3828125" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/drawable/ic_baseline_shopping_cart.xml" value="0.3728205128205128" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_facebook_auth.xml" value="0.1757852077001013" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_login.xml" value="0.5" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_sign_up.xml" value="0.25" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_user.xml" value="0.36666666666666664" />
+        <entry key="..\:/TapHoaAppProject/app/src/main/res/layout/activity_welcome.xml" value="0.2" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/drawable/bg_green_button.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/drawable/card_bg.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/drawable/ic_baseline_home.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1945" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/activity_facebook_auth.xml" value="0.15715579710144928" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/activity_login.xml" value="0.15715579710144928" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/activity_main.xml" value="0.15715579710144928" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/activity_search.xml" value="0.25" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/activity_search2.xml" value="0.2" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/activity_sign_up.xml" value="0.15715579710144928" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/activity_user.xml" value="0.15715579710144928" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/activity_welcome.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/app_bar_example_nav_draw.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/basket_product_item.xml" value="0.33" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/content_example_nav_draw.xml" value="0.17074275362318841" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/content_search.xml" value="0.18" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/fragment_basket.xml" value="0.31485148514851485" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/fragment_detail_product.xml" value="0.22" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/fragment_first.xml" value="0.25" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/fragment_gallery.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/fragment_home.xml" value="0.17074275362318841" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/fragment_product_list.xml" value="0.15715579710144928" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/fragment_profile.xml" value="0.17074275362318841" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/fragment_quanao.xml" value="0.22" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/fragment_sach.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/fragment_second.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/fragment_slideshow.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/item_product.xml" value="0.22" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/item_products.xml" value="0.15715579710144928" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/item_search.xml" value="0.25" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/item_spinner_color.xml" value="0.17074275362318841" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/item_spinner_selected.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/layout_basket.xml" value="0.22" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/layout/search_menu.xml" value="0.17074275362318841" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/menu/menu_bottom_navigation.xml" value="0.25" />
+        <entry key="..\:/Users/ADMIN/OneDrive - Ho Chi Minh City University of Foreign Languages and Information Technology - HUFLIT/HK-02-2022/Android advanced/Project/TapHoaAppProject(current)/app/src/main/res/menu/search_menu.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3AF1F1"
+    tools:context=".LoginActivity">
+    <ImageView
+        android:id="@+id/Main_Icon"
+        android:layout_width="1in"
+        android:layout_height="1in"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <EditText
+        android:id="@+id/TaiKhoan"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:hint="Tài khoản"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Main_Icon" />
+
+    <EditText
+        android:id="@+id/MatKhau"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:hint="Mật khẩu"
+        android:inputType="textPassword"
+        app:layout_constraintLeft_toLeftOf="@id/TaiKhoan"
+        app:layout_constraintTop_toBottomOf="@id/TaiKhoan" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ForgotBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/qu_n_m_t_kh_u"
+        android:textColor="#000000"
+        android:textAllCaps="false"
+        android:background="#00000000"
+        android:layout_marginTop="2dp"
+        app:layout_constraintLeft_toLeftOf="@id/MatKhau"
+        app:layout_constraintTop_toBottomOf="@id/MatKhau"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/loginBtn"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/custom_button_2"
+        android:text="Đăng nhập"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/SignUpBtn"
+        app:layout_constraintTop_toBottomOf="@id/ForgotBtn" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/SignUpBtn"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="5dp"
+        android:text="Đăng ký"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/custom_button_2"
+        android:textStyle="bold"
+        android:backgroundTint="#000000"
+        app:layout_constraintLeft_toRightOf="@id/loginBtn"
+        app:layout_constraintTop_toTopOf="@id/loginBtn"/>
+
+    <ImageView
+        android:id="@+id/ImgG"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:background="#FFFFFF"
+        android:src="@drawable/google"
+        app:layout_constraintLeft_toLeftOf="@id/loginBtn"
+        app:layout_constraintTop_toBottomOf="@id/loginBtn" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/LoginGBtn"
+        android:layout_width="242dp"
+        android:layout_height="50dp"
+        android:background="@drawable/custom_button"
+        android:paddingLeft="10dp"
+        android:text="Kết nối google"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        app:layout_constraintLeft_toRightOf="@id/ImgG"
+        app:layout_constraintTop_toTopOf="@id/ImgG" />
+
+    <ImageView
+        android:id="@+id/ImgF"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/facebook"
+        android:background="#FFFFFF"
+        app:layout_constraintRight_toLeftOf="@id/LoginFBtn"
+        app:layout_constraintTop_toTopOf="@id/LoginFBtn"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/LoginFBtn"
+        android:layout_width="239dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/custom_button"
+        android:paddingLeft="10dp"
+        android:text="Kết nối facebook"
+        android:textAlignment="textStart"
+        android:textSize="20dp"
+        app:layout_constraintLeft_toLeftOf="@id/LoginGBtn"
+        app:layout_constraintTop_toBottomOf="@id/LoginGBtn" />
+</androidx.constraintlayout.widget.ConstraintLayout>

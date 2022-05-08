@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+<!--    <com.google.android.material.tabs.TabLayout-->
+<!--        android:id="@+id/TopTabmain"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:tabSelectedTextColor="#EF78A0"-->
+<!--        />-->
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/ViewPagerMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/BotomNavMain">
+
+
+<!--        <com.google.android.material.tabs.TabLayout-->
+<!--            android:id="@+id/BottomTabmain"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:tabSelectedTextColor="#EF78A0"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            android:layout_alignParentBottom="true"/>-->
+
+    </androidx.viewpager.widget.ViewPager>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/BotomNavMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:menu ="@menu/menu_bottom_navigation"
+        app:itemBackground="@color/bottom_nav_item_color_state"
+        app:itemTextColor = "@color/bottom_nav_letter_color_state"
+        app:itemIconTint="@color/bottom_nav_letter_color_state"
+        android:background ="@color/colorPrimaryDark">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
+
+    
+</RelativeLayout>
