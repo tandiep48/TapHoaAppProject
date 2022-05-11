@@ -1,7 +1,12 @@
 package com.example.taphoaapp;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,11 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.taphoaapp.Basket.BasketProductAdapter;
+import com.example.taphoaapp.Basket.DataCommunication;
 import com.example.taphoaapp.DetailProduct.DetailProductActivity;
 
 import java.text.NumberFormat;
@@ -35,6 +43,12 @@ public class BasketFragment extends Fragment {
     private BasketProductAdapter BasproAdapter;
     private View mView;
     private TextView total;
+    List<product_item> products;
+    DataCommunication mCallback;
+    private Button order;
+    Bundle extras ;
+    String prevActive;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,6 +61,21 @@ public class BasketFragment extends Fragment {
 
     Locale locale = new Locale("vi", "VN");
     NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (DataCommunication) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement DataCommunication");
+        }
+    }
+
     public BasketFragment() {
         // Required empty public constructor
     }
@@ -84,7 +113,34 @@ public class BasketFragment extends Fragment {
         // Inflate the layout for this fragment
 
         mView =  inflater.inflate(R.layout.fragment_basket, container, false);
+//        extras = getActivity().getIntent().getExtras();
+        if (requireActivity().getIntent().hasExtra("prevActive")) {
+            prevActive = savedInstanceState.getString("prevActive");
+        }
 
+        RelativeLayout ml = mView.findViewById(R.id.basket_root);
+        ml.invalidate();
+
+        order =mView.findViewById(R.id.btnPlaceOrder);
+        order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+// 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage("Đặt hàng thành công!")
+                        .setTitle("Thông báo");
+
+                builder.show();
+// 3. Get the <code><a href="/reference/android/app/AlertDialog.html">AlertDialog</a></code> from <code><a href="/reference/android/app/AlertDialog.Builder.html#create()">create()</a></code>
+//                AlertDialog dialog = builder.create();
+            }
+        });
+
+        NestedScrollView scrollView = mView.findViewById(R.id.basket_myScrollView);
+        scrollView.invalidate();
+        scrollView.requestLayout();
         Spinner spinerArea = mView.findViewById(R.id.basket_area_spinner);
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(),
                 android.R.layout.simple_spinner_item, getListArea());
@@ -126,9 +182,15 @@ public class BasketFragment extends Fragment {
 
     private List<product_item> getListProduct(){
         List<product_item> products = new ArrayList<>();
-        products.add( new product_item("https://cf.shopee.vn/file/34acd5e930c8a21e1c3a70d3cf2a70c5","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng","55%",2,198000,89000));
-        products.add( new product_item("https://cf.shopee.vn/file/b2612c1a8242069aced2f2f26b592f38","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang","22%",5,58000,45000));
-        products.add( new product_item("https://cf.shopee.vn/file/1a32d71426b5299936d59909870e92b6","Bộ Quần Áo Mặc Nhà Thể Thao Nam Mùa Hè Phong Cách Cao Cấp ZERO","42%",3,300000,175000));
+//        products.add( new product_item("https://cf.shopee.vn/file/34acd5e930c8a21e1c3a70d3cf2a70c5","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng","55%",2,198000,89000));
+//        products.add( new product_item("https://cf.shopee.vn/file/b2612c1a8242069aced2f2f26b592f38","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang","22%",5,58000,45000));
+//        products.add( new product_item("https://cf.shopee.vn/file/
+        products.add( new product_item("QuầnÁO","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng",89000,2,20));
+        products.add( new product_item("QuầnÁO","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang",45000,5,5));
+
+        if (prevActive == "DetailProduct"||prevActive == null)
+        products.add( new product_item(mCallback.getPassCategory(), mCallback.getPassName(),mCallback.getPassPrice(),mCallback.getPassquantity(),mCallback.getPassSoluong()));
+
         return products;
     }
 

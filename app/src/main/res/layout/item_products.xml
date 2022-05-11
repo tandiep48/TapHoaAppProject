@@ -16,6 +16,11 @@
     tools:layout_height="150dp">
 
     <LinearLayout
+        android:id="@+id/wrap_press_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:orientation="horizontal">
@@ -80,48 +85,51 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:textSize="10dp" />
-        <LinearLayout
-            android:id="@+id/product_layout_button"
+
+    </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/product_layout_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        >
+
+
+        <Button
+            android:id="@+id/MuaNgay"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            >
-
-
-            <Button
-                android:id="@+id/MuaNgay"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/error_red"
-                android:backgroundTintMode="src_over"
-                android:text="@string/BuyNow"
-                android:textColor="#FFC107" />
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/error_red"
+            android:backgroundTintMode="src_over"
+            android:text="@string/BuyNow"
+            android:textColor="#FFC107" />
 
 
 
-            <ImageView
-                android:id="@+id/product_favorite"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/icons8_red_heart"
-                />
+        <ImageView
+            android:id="@+id/product_favorite"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/icons8_red_heart"
+            />
 
-<!--            <com.google.android.material.imageview.ShapeableImageView-->
-<!--                android:id="@+id/more_menu"-->
-<!--                android:layout_width="45dp"-->
-<!--                android:layout_height="45dp"-->
-<!--                android:layout_gravity="center_vertical"-->
-<!--                android:src="@drawable/icons8_red_heart"-->
-<!--                app:strokeColor="@color/colorRed"-->
-<!--                app:strokeWidth="2dp" />-->
+        <!--            <com.google.android.material.imageview.ShapeableImageView-->
+        <!--                android:id="@+id/more_menu"-->
+        <!--                android:layout_width="45dp"-->
+        <!--                android:layout_height="45dp"-->
+        <!--                android:layout_gravity="center_vertical"-->
+        <!--                android:src="@drawable/icons8_red_heart"-->
+        <!--                app:strokeColor="@color/colorRed"-->
+        <!--                app:strokeWidth="2dp" />-->
 
-        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

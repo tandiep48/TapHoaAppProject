@@ -3,6 +3,7 @@ package com.example.taphoaapp;
 import static android.graphics.Color.rgb;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +12,20 @@ import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.taphoaapp.Basket.DataCommunication;
+import com.example.taphoaapp.DetailProduct.DetailProductActivity;
+import com.example.taphoaapp.Search.SearchActivity;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -25,9 +34,21 @@ import java.util.Locale;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> implements Filterable {
 
+    DataCommunication mCallback;
     private Context mContext;
     private  List<product_item> productItemList;
     private  List<product_item> OriginproductItemList;
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        try {
+            mCallback = (DataCommunication) mContext;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(mContext.toString()
+                    + " must implement DataCommunication");
+        }
+    }
 
     public ProductAdapter(List<product_item> productItemList) {
         this.productItemList = productItemList;
@@ -46,6 +67,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         private TextView  name , soluong, discount , price ,giagoc;
         private Button buy;
         private ImageView favorite;
+        private LinearLayout pressLayout;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -57,6 +79,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             soluong = itemView.findViewById(R.id.product_soluong);
             buy = (Button) itemView.findViewById(R.id.MuaNgay);
             favorite = (ImageView) itemView.findViewById(R.id.product_favorite);
+            pressLayout = itemView.findViewById(R.id.wrap_press_product);
+
 
         }
     }
@@ -83,11 +107,24 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         product_item product = productItemList.get(position);
 
+//        Log.e("product.NAME", String.valueOf(product.getName()));
         Log.e("product.URL", String.valueOf(product.getImageUrl()));
         Log.e("product.soluong", String.valueOf(product.getSoluong()));
 
         if(product == null) return;
-
+        holder.pressLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, DetailProductActivity.class);
+                intent.putExtra("NAME",product.getName());
+                intent.putExtra("prevActive", "MainActivity");
+//                intent.putExtra("Category",product.getCategory());
+//                intent.putExtra("Soluong",1);
+//                intent.putExtra("gia",product.getPrice());
+//                intent.putExtra("color","");
+                mContext.startActivity(intent);
+            }
+        });
             Glide
                     .with(mContext)
                     .load(product.getImageUrl())
@@ -105,7 +142,26 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mCallback.setPassCategory(product.getCategory());
+                mCallback.setPassName(product.getName());
+                mCallback.setPassPrice(product.getPrice());
+                mCallback.setPassquantity(1);
+                mCallback.setPassSoluong(product.getSoluong());
 
+                Fragment newFragment = new BasketFragment();
+                ((FragmentActivity)mContext).getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_home,new BasketFragment())
+                        .commit();
+//                FragmentTransaction transaction = ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction();
+//
+//// Replace whatever is in the fragment_container view with this fragment,
+//// and add the transaction to the back stack if needed
+//                transaction.replace(R.id.ViewPagerHome, newFragment);
+////                transaction.addToBackStack(null);
+//
+//// Commit the transaction
+//                transaction.commit();
             }
         });
 

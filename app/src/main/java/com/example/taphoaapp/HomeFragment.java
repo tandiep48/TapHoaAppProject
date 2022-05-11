@@ -3,6 +3,7 @@ package com.example.taphoaapp;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -23,6 +24,7 @@ public class HomeFragment extends Fragment {
     private TabLayout mTabLayout;
     private CustomViewPager viewMain;
     private View mView;
+    private String order;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,6 +60,21 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        Bundle extras = getActivity().getIntent().getExtras();
+//
+//        if (extras != null) {
+//            order = extras.getString("Order");
+//            // and get whatever type user account id is
+//        }
+//        if(order == "YES") {
+//            Fragment newFragment = new BasketFragment();
+//            ((FragmentActivity) getActivity()).getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .replace(R.id.fragment_home, new BasketFragment())
+//                    .commit();
+//        }
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -68,6 +85,9 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+
+
         mView =  inflater.inflate(R.layout.fragment_home, container, false);
 
         mTabLayout = mView.findViewById(R.id.TopTabHome);

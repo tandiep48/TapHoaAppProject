@@ -1,46 +1,91 @@
 package com.example.taphoaapp.DetailProduct;
 
+import static java.lang.Math.toIntExact;
+
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NavUtils;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.example.taphoaapp.Basket.DataCommunication;
+import com.example.taphoaapp.BasketFragment;
 import com.example.taphoaapp.IOnBackPressed;
+import com.example.taphoaapp.MainActivity;
 import com.example.taphoaapp.MainViewPagerAdpater;
 import com.example.taphoaapp.R;
+import com.example.taphoaapp.product_item;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class DetailProductActivity extends AppCompatActivity {
+public class DetailProductActivity extends AppCompatActivity implements DataCommunication {
 
     private TabLayout mTabLayout;
     private ViewPager viewMain;
     private BottomNavigationView bottomnavigation;
     private ImageView main , one , two , three;
+    private TextView tvname, tvdiscount,tvsoluong,tvgiacu,tvgia,tvMota;
     private Spinner spinColor , spinSize;
     SpinnerColorAdapter spinnerColor;
+    String name, image, discount, Namevalue, ColorVal , SizeVal, category ;
+    Integer soluong,giacu,gia;
+
+    private String passName,passCategory,passcolor,passsize;
+    private int passPrice,passquantity,passSoluong;
+
+    List <String> TrungGian;
+    List<String> listColor;
+    List<String> listSize;
+    String prevActive;
+    Bundle extras ;
+    private Button add,order;
+//    DataCommunication mCallback;
+
+//    @Override
+//    public void attachBaseContext(Context context) {
+//        super.attachBaseContext(context);
+//
+//        // This makes sure that the container activity has implemented
+//        // the callback interface. If not, it throws an exception
+//        try {
+//            mCallback = (DataCommunication) this;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(context.toString()
+//                    + " must implement DataCommunication");
+//        }
+//    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,21 +93,64 @@ public class DetailProductActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_detail_product);
-
+        extras = getIntent().getExtras();
         Locale locales = new Locale("vi");
         Locale.setDefault(locales);
         Configuration config = new Configuration();
         config.locale = locales;
         this.getApplicationContext().getResources().updateConfiguration(config, null);
+//        mCallback = (DataCommunication) this.getApplicationContext();
+
+
+        add = findViewById(R.id.detail_BuyNow);
+        order = findViewById(R.id.detail_Order);
+        order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DetailProductActivity.this, MainActivity.class);
+                intent.putExtra("prevActive", "DetailProduct");
+                intent.putExtra("Order", "YES");
+                setPassCategory(category);
+                setPassName(tvname.getText().toString());
+                int price = -1 , num,soluong =-1;
+
+                try {
+                    price = Integer.parseInt(tvgia.getText().toString());
+                    soluong = Integer.parseInt(tvsoluong.getText().toString());
+                } catch(NumberFormatException nfe) {
+                    System.out.println("Could not parse " + nfe);
+                }
+                setPassPrice(price);
+                setPassquantity(1);
+                setPassSoluong(soluong);
+//                mCallback.getPasscolor();
+//                mCallback.setPasssize();
+////
+                DetailProductActivity.this.startActivity(intent);
+            }
+        });
+
+        tvname = findViewById(R.id.detail_product_name);
+        tvdiscount = findViewById(R.id.detail_product_discount);
+        tvsoluong = findViewById(R.id.detail_product_soluong);
+        tvgiacu = findViewById(R.id.detail_product_giagoc);
+        tvgia = findViewById(R.id.detail_product_gia);
+        tvMota = findViewById(R.id.detail_mota);
+        listColor = new ArrayList<>();
+        listSize = new ArrayList<>();
+        TrungGian = new ArrayList<>();
 
         spinColor = findViewById(R.id.detail_Color_choose);
         spinSize = findViewById(R.id.detail_Size_choose);
-        spinnerColor = new SpinnerColorAdapter(this,android.R.layout.simple_spinner_item,getListColor());
+        spinnerColor = new SpinnerColorAdapter(DetailProductActivity.this,android.R.layout.simple_spinner_item,listColor);
+        spinnerColor.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinColor.setAdapter(spinnerColor);
         spinColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(DetailProductActivity.this, spinnerColor.getItem(i).getName(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(DetailProductActivity.this, spinnerColor.getItem(i).getName(), Toast.LENGTH_SHORT).show();
+                ColorVal = spinnerColor.getItem(i);
+                Log.e("gia tri Spinner mau :",String.valueOf(ColorVal));
 
             }
 
@@ -72,14 +160,18 @@ public class DetailProductActivity extends AppCompatActivity {
             }
         });
 
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this,
-                 android.R.layout.simple_spinner_item, getListsize());
+        ArrayAdapter<String> adapter = new ArrayAdapter(DetailProductActivity.this,
+                android.R.layout.simple_spinner_item, listSize);
+//        simple_spinner_item
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinSize.setAdapter(adapter);
         spinSize.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(DetailProductActivity.this, adapter.getItem(position), Toast.LENGTH_SHORT).show();
+                 SizeVal = spinSize.getSelectedItem().toString();
+                Log.e("gia tri Spinner size :",String.valueOf(SizeVal));
+
             }
 
             @Override
@@ -88,27 +180,115 @@ public class DetailProductActivity extends AppCompatActivity {
             }
         });
 
+
+
+        if (extras != null) {
+            Namevalue = extras.getString("NAME");
+            //The key argument here must match that used in the other activity
+        }
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("SAN_PHAM")
+                .whereEqualTo("NAME", Namevalue)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                tvname.setText(document.getString("NAME"));
+                                category = document.getString("CATEGORY");
+                                Glide
+                                        .with(DetailProductActivity.this)
+                                        .load(document.getString("IMAGE"))
+                                        .into(main);
+                                tvdiscount.setText(String.valueOf(toIntExact(document.getLong("DISCOUNT"))));
+                                Log.e("Soluong :",String.valueOf(toIntExact(document.getLong("SOLUONG"))));
+                                tvsoluong.setText( String.valueOf(toIntExact(document.getLong("SOLUONG"))));
+                                tvgiacu.setText(String.valueOf(toIntExact(document.getLong("GIACU"))));
+                                tvgia.setText(String.valueOf(toIntExact(document.getLong("GIA"))));
+
+                                Log.e("documment", document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.e("documment", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        db.collection("CHI_TIET_SAN_PHAM")
+                .whereEqualTo("NAME", Namevalue)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                tvMota.setText(document.getString("MOTA"));
+                                Glide
+                                        .with(DetailProductActivity.this)
+                                        .load(document.getString("IMAGE1"))
+                                        .into(one);
+                                Glide
+                                        .with(DetailProductActivity.this)
+                                        .load(document.getString("IMAGE2"))
+                                        .into(two);
+                                Glide
+                                        .with(DetailProductActivity.this)
+                                        .load(document.getString("IMAGE3"))
+                                        .into(three);
+                                if(document.get("MAUSAC") != null) {
+                                    TrungGian = (List<String>) document.get("MAUSAC");
+                                    for (int i=0;i<TrungGian.size();i++) { // < instead of <=, don't hardcode the length
+                                        if (TrungGian.get(i) != null)
+                                        {
+                                            listColor.add(new String(TrungGian.get(i)));
+                                        }// once we insert a, stop looping
+                                        }
+                                    spinnerColor.notifyDataSetChanged();
+                                    Log.e("ListMauSac :",String.valueOf(listColor));
+                                }
+                                if(document.get("SIZE") != null) {
+                                    TrungGian = (List<String>) document.get("SIZE");
+
+                                    for (int i=0;i<TrungGian.size();i++) { // < instead of <=, don't hardcode the length
+                                        if (TrungGian.get(i) != null)
+                                        {
+                                            listSize.add(new String(TrungGian.get(i)));
+                                        }// once we insert a, stop looping
+                                    }
+                                    adapter.notifyDataSetChanged();
+
+                                    Log.e("Listsize :",String.valueOf(listSize));
+                                }
+
+                                Log.e("documment", document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.e("documment", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
         main = (ImageView) findViewById(R.id.head_image_product);
         one = (ImageView) findViewById(R.id.one_image_product);
         two = (ImageView) findViewById(R.id.two_image_product);
         three = (ImageView) findViewById(R.id.three_image_product);
 
-        Glide
-                .with(this)
-                .load("https://cf.shopee.vn/file/34acd5e930c8a21e1c3a70d3cf2a70c5")
-                .into(main);
-        Glide
-                .with(this)
-                .load("https://cf.shopee.vn/file/1657b14b218fd5962fc3508d367379fc")
-                .into(one);
-        Glide
-                .with(this)
-                .load("https://cf.shopee.vn/file/e86689e29f6f3d7131d0a0948ef254c1")
-                .into(two);
-        Glide
-                .with(this)
-                .load("https://cf.shopee.vn/file/afe17b6984db098f4e39e2f2c66a0d65")
-                .into(three);
+
+//        Glide
+//                .with(this)
+//                .load("https://cf.shopee.vn/file/1657b14b218fd5962fc3508d367379fc")
+//                .into(one);
+//        Glide
+//                .with(this)
+//                .load("https://cf.shopee.vn/file/e86689e29f6f3d7131d0a0948ef254c1")
+//                .into(two);
+//        Glide
+//                .with(this)
+//                .load("https://cf.shopee.vn/file/afe17b6984db098f4e39e2f2c66a0d65")
+//                .into(three);
 
 
         ConstraintLayout ml = findViewById(R.id.detail_Parrent_Constraint);
@@ -202,5 +382,122 @@ public class DetailProductActivity extends AppCompatActivity {
         listSize.add(new String("XXl"));
 
         return listSize;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public Intent getSupportParentActivityIntent() {
+        return getParentActivityIntentImpl();
+    }
+
+    @Override
+    public Intent getParentActivityIntent() {
+        return getParentActivityIntentImpl();
+    }
+
+    private Intent getParentActivityIntentImpl() {
+        Intent i = null;
+        if (extras != null) {
+            prevActive = extras.getString("prevActive");
+            //The key argument here must match that used in the other activity
+        }
+
+        // Here you need to do some logic to determine from which Activity you came.
+        // example: you could pass a variable through your Intent extras and check that.
+        if (prevActive == "MainActivity") {
+            i = new Intent(this, MainActivity.class);
+            // set any flags or extras that you need.
+            // If you are reusing the previous Activity (i.e. bringing it to the top
+            // without re-creating a new instance) set these flags:
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            // if you are re-using the parent Activity you may not need to set any extras
+            i.putExtra("prevActive", "DetailProduct");
+        } else {
+            i = new Intent(this, BasketFragment.class);
+            // same comments as above
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            i.putExtra("prevActive", "DetailProduct");
+        }
+
+        return i;
+    }
+
+    @Override
+    public String getPassName() {
+        return passName;
+    }
+
+    @Override
+    public void setPassName(String passName) {
+        this.passName = passName;
+    }
+
+    @Override
+    public String getPassCategory() {
+        return passCategory;
+    }
+
+    @Override
+    public void setPassCategory(String passCategory) {
+        this.passCategory = passCategory;
+    }
+
+    @Override
+    public int getPassquantity() {
+        return passquantity;
+    }
+
+    @Override
+    public void setPassquantity(int passquantity) {
+        this.passquantity = passquantity;
+    }
+
+    @Override
+    public String getPasscolor() {
+        return passcolor;
+    }
+
+    @Override
+    public void setPasscolor(String passcolor) {
+        this.passcolor = passcolor;
+    }
+
+    @Override
+    public String getPasssize() {
+        return passsize;
+    }
+
+    @Override
+    public void setPasssize(String passsize) {
+        this.passsize = passsize;
+    }
+
+    @Override
+    public int getPassPrice() {
+        return passPrice;
+    }
+
+    @Override
+    public void setPassPrice(int passPrice) {
+        this.passPrice = passPrice;
+    }
+
+    @Override
+    public int getPassSoluong() {
+        return passSoluong;
+    }
+
+    @Override
+    public void setPassSoluong(int passSoluong) {
+        this.passSoluong = passSoluong;
     }
 }

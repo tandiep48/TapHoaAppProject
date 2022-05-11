@@ -1,5 +1,7 @@
 package com.example.taphoaapp;
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -8,6 +10,8 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class MainViewPagerAdpater extends FragmentStatePagerAdapter
 {
+    Bundle extras ;
+
 
 
 
@@ -16,7 +20,6 @@ public class MainViewPagerAdpater extends FragmentStatePagerAdapter
     @NonNull
     @Override
     public Fragment getItem(int position) {
-
 
         switch (position) {
             case 0: return new HomeFragment();

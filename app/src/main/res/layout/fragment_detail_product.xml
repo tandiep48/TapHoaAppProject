@@ -231,16 +231,14 @@
                 android:id="@+id/detail_Color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:text="Màu sắc :"
                 android:textSize="15dp" />
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/detail_Color_choose"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-
-                android:orientation="horizontal"/>
+                android:layout_height="50dp"
+                />
 
 
             <TextView
@@ -254,7 +252,7 @@
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/detail_Size_choose"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="50dp"
  />
 
         </LinearLayout>

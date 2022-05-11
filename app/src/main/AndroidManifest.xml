@@ -16,11 +16,13 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".Search.SearchActivity"
-            android:exported="false" />
+            android:exported="true" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.taphoaapp.MainActivity" />
+        </activity>
 
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.example.taphoaapp.MainActivity" />
+
 
         <activity
             android:name=".FacebookAuthActivity"
@@ -63,7 +65,13 @@
         <activity
             android:name=".DetailProduct.DetailProductActivity"
             android:configChanges="locale"
-            android:exported="true" />
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.taphoaapp.MainActivity"
+                />
+        </activity>
+
     </application>
 
 </manifest>

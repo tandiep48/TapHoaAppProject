@@ -2,11 +2,15 @@ plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
 }
+apply plugin: 'com.android.application'
+// Add the following line:
+apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 
 android {
     compileSdk 32
 
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId "com.example.taphoaapp"
         minSdk 28
         targetSdk 32
@@ -32,7 +36,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    implementation 'com.facebook.android:facebook-android-sdk:4,5'
 }
 
 dependencies {
@@ -53,9 +57,10 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
-    def lifecycle_version = "2.2.0"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+//    def lifecycle_version = "2.4.1"
+//    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
+//    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "com.google.android.material:material:$version"
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

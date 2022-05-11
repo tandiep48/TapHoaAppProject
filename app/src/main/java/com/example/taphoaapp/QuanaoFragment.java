@@ -1,5 +1,7 @@
 package com.example.taphoaapp;
 
+import static java.lang.Math.toIntExact;
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -26,11 +28,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.taphoaapp.DetailProduct.DetailProductActivity;
 import com.example.taphoaapp.Search.SearchActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -45,11 +59,15 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
   private RecyclerView mRecycler;
   private ProductAdapter proAdapter;
   private SearchView searchView;
+  private LinearLayout pressLayout;
     private View ViewItem;
     private View mView;
     private Spinner spinner;
-    private List<product_item> SortProduct;
+    public List<product_item> SortProduct;
     private Collator VNCollator;
+    String name, image, discount,category;
+    Integer soluong,giacu,gia;
+
 
 
 
@@ -87,6 +105,7 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         mView =  inflater.inflate(R.layout.fragment_quanao, container, false);
         // Inflate the layout for this fragment
         spinner = mView.findViewById(R.id.Spinner_sort);
@@ -166,6 +185,8 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        SearchView searchView = (SearchView) view.findViewById(R.id.search_viewmenu);
 //        searchView.onActionViewExpanded();
+
+
         ViewItem=view.findViewById(R.id.search_item_menu);
         ViewItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,11 +220,37 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
 
     private List<product_item> getListProduct(){
         List<product_item> products = new ArrayList<>();
-        products.add( new product_item("https://cf.shopee.vn/file/34acd5e930c8a21e1c3a70d3cf2a70c5","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng","55%",10,198000,89000));
-        products.add( new product_item("https://cf.shopee.vn/file/b2612c1a8242069aced2f2f26b592f38","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang","22%",15,58000,45000));
-        products.add( new product_item("https://cf.shopee.vn/file/bb8871d9ef15f8772df509343b3c2c89","Quần áo phòng dịch đi máy bay đã kiểm định","55%",22,70000,330000));
-        products.add( new product_item("https://cf.shopee.vn/file/8e022cdaa1ccc462c0b3b51d02438c91","Tất ngắn nam Vớ thấp cổ 4 màu trơn chống hôi chân","20%",5,3900,3500));
-        products.add( new product_item("https://cf.shopee.vn/file/1a32d71426b5299936d59909870e92b6","Bộ Quần Áo Mặc Nhà Thể Thao Nam Mùa Hè Phong Cách Cao Cấp ZERO","42%",8,300000,175000));
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("SAN_PHAM")
+                .whereEqualTo("CATEGORY", "quanao")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                category = document.getString("CATEGORY");
+                                name = document.getString("NAME");
+                                image = document.getString("IMAGE");
+                                discount = String.valueOf(toIntExact(document.getLong("DISCOUNT")));
+                                soluong = toIntExact(document.getLong("SOLUONG"));
+                                giacu = toIntExact(document.getLong("GIACU"));
+                                gia = toIntExact(document.getLong("GIA"));
+
+                                products.add( new product_item(category,image,name,discount,soluong,giacu,gia));
+                                Log.e("documment", document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.e("documment", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+//        products.add( new product_item("https://cf.shopee.vn/file/34acd5e930c8a21e1c3a70d3cf2a70c5","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng","55%",10,198000,89000));
+//        products.add( new product_item("https://cf.shopee.vn/file/b2612c1a8242069aced2f2f26b592f38","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang","22%",15,58000,45000));
+//        products.add( new product_item("https://cf.shopee.vn/file/bb8871d9ef15f8772df509343b3c2c89","Quần áo phòng dịch đi máy bay đã kiểm định","55%",22,70000,330000));
+//        products.add( new product_item("https://cf.shopee.vn/file/8e022cdaa1ccc462c0b3b51d02438c91","Tất ngắn nam Vớ thấp cổ 4 màu trơn chống hôi chân","20%",5,3900,3500));
+//        products.add( new product_item("https://cf.shopee.vn/file/1a32d71426b5299936d59909870e92b6","Bộ Quần Áo Mặc Nhà Thể Thao Nam Mùa Hè Phong Cách Cao Cấp ZERO","42%",8,300000,175000));
 
 
         return products;

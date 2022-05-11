@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         if (Password.length()<6) {
-            pass.setError("Password is required");
+            pass.setError("Password not valid");
             pass.requestFocus();
             return;
         }

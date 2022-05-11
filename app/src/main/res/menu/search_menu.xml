@@ -9,6 +9,7 @@
         app:iconTint="@color/black"
         app:showAsAction="collapseActionView|always"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        tools:ignore="AppCompatResource"/>
+        tools:ignore="AppCompatResource"
+        android:tooltipText="Tìm kiếm sản phẩm . . . "/>
 
 </menu>

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -17,6 +18,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.taphoaapp.Basket.DataCommunication;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -25,11 +27,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DataCommunication {
 
     private TabLayout mTabLayout;
     private ViewPager viewMain;
     private BottomNavigationView bottomnavigation;
+    private String passName,passCategory,passcolor,passsize  , order;
+    private int passPrice,passquantity,passSoluong;
+    Bundle extras;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        extras = getIntent().getExtras();
+        Bundle extras = getIntent().getExtras();
 
+        if (extras != null) {
+            order = extras.getString("Order");
+            // and get whatever type user account id is
+        }
         Locale locales = new Locale("vi");
         Locale.setDefault(locales);
         Configuration config = new Configuration();
@@ -80,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         bottomnavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if(order =="YES") viewMain.setCurrentItem(1);
                 switch (item.getItemId()) {
                     case R.id.Menu_Shop: viewMain.setCurrentItem(0); break;
                     case R.id.Menu_Basket: viewMain.setCurrentItem(1); break;
@@ -104,5 +119,75 @@ public class MainActivity extends AppCompatActivity {
 
       }
         super.onBackPressed();
+    }
+
+    @Override
+    public String getPassName() {
+        return passName;
+    }
+
+    @Override
+    public void setPassName(String passName) {
+        this.passName = passName;
+    }
+
+    @Override
+    public String getPassCategory() {
+        return passCategory;
+    }
+
+    @Override
+    public void setPassCategory(String passCategory) {
+        this.passCategory = passCategory;
+    }
+
+    @Override
+    public int getPassquantity() {
+        return passquantity;
+    }
+
+    @Override
+    public void setPassquantity(int passquantity) {
+        this.passquantity = passquantity;
+    }
+
+    @Override
+    public String getPasscolor() {
+        return passcolor;
+    }
+
+    @Override
+    public void setPasscolor(String passcolor) {
+        this.passcolor = passcolor;
+    }
+
+    @Override
+    public String getPasssize() {
+        return passsize;
+    }
+
+    @Override
+    public void setPasssize(String passsize) {
+        this.passsize = passsize;
+    }
+
+    @Override
+    public int getPassPrice() {
+        return passPrice;
+    }
+
+    @Override
+    public void setPassPrice(int passPrice) {
+        this.passPrice = passPrice;
+    }
+
+    @Override
+    public int getPassSoluong() {
+        return passSoluong;
+    }
+    
+    @Override
+    public void setPassSoluong(int passSoluong) {
+        this.passSoluong = passSoluong;
     }
 }
