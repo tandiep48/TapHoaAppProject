@@ -32,8 +32,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
         Email = findViewById(R.id.EmailInput);
         Pass = findViewById(R.id.MatKhauInput);
-        Name = findViewById(R.id.TenInput);
-        Age = findViewById(R.id.TuoiInput);
         Finish = findViewById(R.id.SignBtn);
         Back = findViewById(R.id.BackBtn);
         Back.setOnClickListener(this);

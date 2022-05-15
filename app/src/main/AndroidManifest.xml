@@ -44,11 +44,7 @@
             android:name=".LoginActivity"
             android:configChanges="locale"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".WelcomeActivity"
@@ -61,7 +57,13 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="locale"
-            android:exported="true" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".DetailProduct.DetailProductActivity"
             android:configChanges="locale"
