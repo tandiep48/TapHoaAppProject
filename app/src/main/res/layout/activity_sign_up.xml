@@ -5,22 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SignUpActivity"
-    android:background="#29CFDF">
+    android:background="#00E676">
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/SignUpTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Đăng ký tài khoản"
-        android:textSize="45dp"
+        android:textSize="30dp"
         android:textStyle="bold"
         android:textColor="#000000"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="20dp"/>
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/EmailInput"
         android:layout_width="300dp"
+        android:background="@drawable/custom_input"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:layout_height="50dp"
         android:hint="Email"
         android:inputType="text"
@@ -32,6 +35,9 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/MatKhauInput"
         android:layout_width="300dp"
+        android:background="@drawable/custom_input"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:layout_height="50dp"
         android:hint="Mật khẩu"
         android:inputType="text"
@@ -40,24 +46,89 @@
         android:layout_marginTop="20dp"/>
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/TenInput"
+        android:id="@+id/MatKhauCInput"
         android:layout_width="300dp"
+        android:background="@drawable/custom_input"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:layout_height="50dp"
-        android:hint="Họ tên"
+        android:hint="Xác nhận mật khẩu"
         android:inputType="text"
-        app:layout_constraintLeft_toLeftOf="@id/MatKhauInput"
         app:layout_constraintTop_toBottomOf="@id/MatKhauInput"
+        app:layout_constraintLeft_toLeftOf="@id/MatKhauInput"
+        app:layout_constraintRight_toRightOf="@id/MatKhauInput"
         android:layout_marginTop="20dp"/>
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/TuoiInput"
+        android:id="@+id/TenInput"
+        android:layout_width="125dp"
+        android:background="@drawable/custom_input"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:layout_height="50dp"
+        android:hint="Tên"
+        android:inputType="text"
+        app:layout_constraintLeft_toLeftOf="@id/MatKhauCInput"
+        app:layout_constraintTop_toBottomOf="@id/MatKhauCInput"
+        app:layout_constraintRight_toLeftOf="@id/TenInput"
+        android:layout_marginTop="20dp"/>
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/HoInput"
+        android:layout_width="125dp"
+        android:background="@drawable/custom_input"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:layout_height="50dp"
+        android:hint="Họ"
+        android:inputType="text"
+        app:layout_constraintRight_toRightOf="@id/MatKhauCInput"
+        app:layout_constraintTop_toBottomOf="@id/MatKhauCInput"
+        android:layout_marginTop="20dp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/BirtInput"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:hint="Tuổi"
+        android:hint="Ngày sinh"
+        android:background="@drawable/custom_input"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:inputType="number"
         app:layout_constraintLeft_toLeftOf="@id/TenInput"
         app:layout_constraintTop_toBottomOf="@id/TenInput"
         android:layout_marginTop="20dp"/>
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/SdtInput"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="Số điện thoại"
+        android:background="@drawable/custom_input"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:inputType="number"
+        app:layout_constraintLeft_toLeftOf="@id/BirtInput"
+        app:layout_constraintTop_toBottomOf="@id/BirtInput"
+        android:layout_marginTop="20dp"/>
+    <RadioGroup
+        android:id="@+id/radio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="@id/SdtInput"
+        app:layout_constraintRight_toRightOf="@id/SdtInput"
+        app:layout_constraintTop_toBottomOf="@id/SdtInput">
+        <RadioButton android:id="@+id/radio_Male"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"
+            android:layout_marginLeft="80dp"/>
+        <RadioButton android:id="@+id/radio_Female"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:text="Female"/>
+    </RadioGroup>
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/SignBtn"
         android:layout_width="250dp"
@@ -67,9 +138,9 @@
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:background="@drawable/custom_button_2"
-        app:layout_constraintTop_toBottomOf="@id/TuoiInput"
-        app:layout_constraintLeft_toLeftOf="@id/TuoiInput"
-        app:layout_constraintRight_toRightOf="@id/TuoiInput"
+        app:layout_constraintTop_toBottomOf="@id/radio"
+        app:layout_constraintLeft_toLeftOf="@id/radio"
+        app:layout_constraintRight_toRightOf="@id/radio"
         android:layout_marginTop="10dp"/>
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/BackBtn"
