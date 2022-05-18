@@ -51,6 +51,8 @@ import java.util.Locale;
 
 public class DetailProductActivity extends AppCompatActivity implements DataCommunication {
 
+    DataCommunication mCallback;
+
     private TabLayout mTabLayout;
     private ViewPager viewMain;
     private BottomNavigationView bottomnavigation;
@@ -67,7 +69,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
     List <String> TrungGian;
     List<String> listColor;
     List<String> listSize;
-    String prevActive;
+    String PrevActive;
     Bundle extras ;
     private Button add,order;
 //    DataCommunication mCallback;
@@ -100,6 +102,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
         config.locale = locales;
         this.getApplicationContext().getResources().updateConfiguration(config, null);
 //        mCallback = (DataCommunication) this.getApplicationContext();
+        mCallback = (DataCommunication) DetailProductActivity.this;
 
 
         add = findViewById(R.id.detail_BuyNow);
@@ -108,8 +111,10 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DetailProductActivity.this, MainActivity.class);
-                intent.putExtra("prevActive", "DetailProduct");
+//                intent.putExtra("prevActive", "DetailProduct");
+                mCallback.setPrevActive("DetailProduct");
                 intent.putExtra("Order", "YES");
+                intent.putExtra("PrevActive", "DetailProduct");
                 setPassCategory(category);
                 setPassName(tvname.getText().toString());
                 int price = -1 , num,soluong =-1;
@@ -407,13 +412,13 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
     private Intent getParentActivityIntentImpl() {
         Intent i = null;
         if (extras != null) {
-            prevActive = extras.getString("prevActive");
+            PrevActive = extras.getString("prevActive");
             //The key argument here must match that used in the other activity
         }
 
         // Here you need to do some logic to determine from which Activity you came.
         // example: you could pass a variable through your Intent extras and check that.
-        if (prevActive == "MainActivity") {
+        if (PrevActive == "MainActivity") {
             i = new Intent(this, MainActivity.class);
             // set any flags or extras that you need.
             // If you are reusing the previous Activity (i.e. bringing it to the top
@@ -499,5 +504,15 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
     @Override
     public void setPassSoluong(int passSoluong) {
         this.passSoluong = passSoluong;
+    }
+
+    @Override
+    public void setPrevActive(String PrevActive) {
+        this.PrevActive = PrevActive;
+    }
+
+    @Override
+    public String getPrevActive() {
+        return PrevActive;
     }
 }

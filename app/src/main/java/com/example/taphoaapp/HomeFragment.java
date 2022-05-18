@@ -1,7 +1,9 @@
 package com.example.taphoaapp;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -25,6 +27,16 @@ public class HomeFragment extends Fragment {
     private CustomViewPager viewMain;
     private View mView;
     private String order;
+    private Context mContext;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+        // This ma;kes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+
+    }
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,20 +72,20 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        Bundle extras = getActivity().getIntent().getExtras();
 //
-//        if (extras != null) {
-//            order = extras.getString("Order");
-//            // and get whatever type user account id is
-//        }
-//        if(order == "YES") {
+//      String extras = getActivity().getIntent().getStringExtra("Order");
+//
+ //      if (extras != null) {
+//           order = extras.getString("Order");
+           // and get whatever type user account id is
+//       }
+//        if(extras == "YES") {
 //            Fragment newFragment = new BasketFragment();
 //            ((FragmentActivity) getActivity()).getSupportFragmentManager()
 //                    .beginTransaction()
 //                    .replace(R.id.fragment_home, new BasketFragment())
-//                    .commit();
-//        }
+//                   .commit();
+//       }
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);

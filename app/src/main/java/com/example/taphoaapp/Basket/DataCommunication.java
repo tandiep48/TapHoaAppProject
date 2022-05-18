@@ -6,6 +6,7 @@ public interface DataCommunication {
     public void setPassName(String passName);
     public String getPassCategory();
 
+
     public void setPassCategory(String passCategory) ;
 
     public int getPassquantity();
@@ -27,5 +28,8 @@ public interface DataCommunication {
     public int getPassSoluong();
 
     public void setPassSoluong(int passSoluong) ;
+
+    public void setPrevActive(String PrevActive);
+    public String getPrevActive();
 }
 

@@ -3,11 +3,15 @@ package com.example.taphoaapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -19,6 +23,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.taphoaapp.Basket.DataCommunication;
+import com.example.taphoaapp.DetailProduct.DetailProductActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -32,10 +37,11 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
     private TabLayout mTabLayout;
     private ViewPager viewMain;
     private BottomNavigationView bottomnavigation;
-    private String passName,passCategory,passcolor,passsize  , order;
+    private String passName,passCategory,passcolor,passsize  , order,active ,PrevActive, ActiPrev;
     private int passPrice,passquantity,passSoluong;
     Bundle extras;
-
+    Context mContext;
+    DataCommunication mCallback;
 
 
 
@@ -45,13 +51,39 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mCallback = (DataCommunication) MainActivity.this;
+//        if(PrevActive!= null){
+//        Log.e("PrevActive : " , PrevActive.toString());
+//        }
 //        extras = getIntent().getExtras();
+//
+//        if (extras != null) {
+//            order = extras.getString("Order");
+//            active = extras.getString("prevActive");
+//            // and get whatever type user account id is
+//        }
+
+
+        Intent i = getIntent();
         Bundle extras = getIntent().getExtras();
 
-        if (extras != null) {
+        if ( i!= null &&extras != null) {
             order = extras.getString("Order");
+            ActiPrev = i.getStringExtra("PrevActive");
+
+            Log.e("PrevActive : " , ActiPrev.toString());
+
             // and get whatever type user account id is
         }
+
+//        if(savedInstanceState == null  ) {
+//            Fragment newFragment = new BasketFragment();
+//            this.getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .replace(R.id.Main_root, new BasketFragment())
+//                    .commit();
+//        }
+
         Locale locales = new Locale("vi");
         Locale.setDefault(locales);
         Configuration config = new Configuration();
@@ -69,7 +101,9 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
         viewMain.setAdapter(view_pager_adpater);
 //        mTabLayout.setupWithViewPager(viewMain);
 
-
+        if( i!= null && extras !=null &&ActiPrev.toString().equalsIgnoreCase("DetailProduct")){
+            viewMain.setCurrentItem(1);
+        }
 
         viewMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -94,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
         bottomnavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if(order =="YES") viewMain.setCurrentItem(1);
                 switch (item.getItemId()) {
                     case R.id.Menu_Shop: viewMain.setCurrentItem(0); break;
                     case R.id.Menu_Basket: viewMain.setCurrentItem(1); break;
@@ -190,4 +223,17 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
     public void setPassSoluong(int passSoluong) {
         this.passSoluong = passSoluong;
     }
+
+    @Override
+    public void setPrevActive(String PrevActive) {
+        this.PrevActive = PrevActive;
+    }
+
+    @Override
+    public String getPrevActive() {
+        return PrevActive;
+    }
+
+
+
 }
