@@ -65,6 +65,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
 
     private String passName,passCategory,passcolor,passsize;
     private int passPrice,passquantity,passSoluong;
+    product_item productItem;
 
     List <String> TrungGian;
     List<String> listColor;
@@ -112,9 +113,19 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
             public void onClick(View view) {
                 Intent intent = new Intent(DetailProductActivity.this, MainActivity.class);
 //                intent.putExtra("prevActive", "DetailProduct");
+
+                productItem = new product_item();
+
+                productItem.setCategory(category);
+                productItem.setName(tvname.getText().toString());
+                productItem.setPrice(Integer.parseInt(tvgia.getText().toString()));
+                //productItem.setNumdat(Integer.parseInt(tv.getText().toString()));
+                productItem.setSoluong(Integer.parseInt(tvsoluong.getText().toString()));
+
                 mCallback.setPrevActive("DetailProduct");
                 intent.putExtra("Order", "YES");
                 intent.putExtra("PrevActive", "DetailProduct");
+                intent.putExtra("productItem",productItem);
                 setPassCategory(category);
                 setPassName(tvname.getText().toString());
                 int price = -1 , num,soluong =-1;

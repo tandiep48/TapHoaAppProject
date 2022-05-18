@@ -140,7 +140,7 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
             }
             else{
                 holder.name.setText(product.getName());
-                holder.soluong.setText(String.valueOf(product.getSoluong() + 1));
+                holder.soluong.setText(String.valueOf(product.getSoluong()));
                 holder.tvQuan.setText(String.valueOf(product.getSoluong()));
                 sum = product.getPrice() * product.getSoluong();
                 holder.price.setText(String.valueOf(currencyFormatter.format(product.getPrice())));

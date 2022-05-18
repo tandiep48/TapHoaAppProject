@@ -1,6 +1,8 @@
 package com.example.taphoaapp;
 
-public class product_item {
+import java.io.Serializable;
+
+public class product_item implements Serializable {
       private String category, imageUrl , name , discount,mau, size;
       private int soluong, price , GiaGoc, numdat;
       private double soluong2;

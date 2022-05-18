@@ -63,10 +63,12 @@ public class BasketFragment extends Fragment {
     DataCommunication mCallback;
     private Button order;
     Bundle extras ;
-    String prevActive,ActiPrev;
+    String prevActive,ActiPrev,PassCategory,PassName;
+     private Integer PassPrice,PassQuantity,PassSoluong;
     private EditText name, address,phone;
     private CheckBox nhanhang;
    private Intent i;
+   product_item product_item;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -141,6 +143,16 @@ public class BasketFragment extends Fragment {
         extras = getActivity().getIntent().getExtras();
 
         if ( i!= null &&extras != null) {
+
+            PassCategory = i.getStringExtra("PrevActive");
+            PassName = i.getStringExtra("PrevActive");
+            PassPrice = i.getIntExtra("PrevActive",0);
+            PassQuantity = i.getIntExtra("PrevActive",0);
+            PassSoluong= i.getIntExtra("PrevActive",0);
+
+            product_item = (product_item) i.getSerializableExtra("productItem");
+
+
 
             ActiPrev = i.getStringExtra("PrevActive");
 
@@ -228,7 +240,8 @@ public class BasketFragment extends Fragment {
 
   //      if (prevActive == "DetailProduct"||prevActive == null)
         if(i!= null && extras !=null &&ActiPrev.toString().equalsIgnoreCase("DetailProduct"))
-        {products.add( new product_item(mCallback.getPassCategory(), mCallback.getPassName(),mCallback.getPassPrice(),mCallback.getPassquantity(),mCallback.getPassSoluong())); }
+     //   {products.add( new product_item(PassCategory, PassName,PassPrice,PassQuantity,PassSoluong)); }
+        {products.add( new product_item(product_item.getCategory(), product_item.getName(),product_item.getPrice(),product_item.getNumdat(),product_item.getSoluong())); }
 
         return products;
     }
