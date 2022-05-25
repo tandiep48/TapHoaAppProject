@@ -17,13 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -69,6 +72,15 @@ public class BasketFragment extends Fragment {
     private CheckBox nhanhang;
    private Intent i;
    product_item product_item;
+   private ImageView btnAdd, btnSubtract;
+   int FinalTong;
+
+    private RecyclerViewReadyCallback recyclerViewReadyCallback;
+
+    public interface RecyclerViewReadyCallback {
+        void onLayoutReady();
+    }
+
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -84,6 +96,12 @@ public class BasketFragment extends Fragment {
     NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
 
     @Override
+    public void onResume() {
+        super.onResume();
+        total.setText(String.valueOf(currencyFormatter.format(FinalTong)));
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
@@ -96,6 +114,8 @@ public class BasketFragment extends Fragment {
                     + " must implement DataCommunication");
         }
     }
+
+
 
     public BasketFragment() {
         // Required empty public constructor
@@ -202,6 +222,7 @@ public class BasketFragment extends Fragment {
             }
         });
 
+
         mRecycler = mView.findViewById(R.id.rvFoods);
         total = mView.findViewById(R.id.tvTotal);
         TransFee = mView.findViewById(R.id.tvTransFee);
@@ -211,21 +232,101 @@ public class BasketFragment extends Fragment {
         nhanhang = mView.findViewById(R.id.basket_deliver_check);
         IdDonHang = mView.findViewById(R.id.tvIdDonHang);
 
-        BasproAdapter = new BasketProductAdapter(getActivity());
+
+
+
+        BasproAdapter = new BasketProductAdapter(getActivity(), BasketFragment.this);
 
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false);
 //        mRecycler.setLayoutManager(linearLayoutManager);
+
+
+
         mRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false) {
             @Override
             public void onLayoutCompleted(RecyclerView.State state) {
                 super.onLayoutCompleted(state);
-                total.setText(String.valueOf(currencyFormatter.format(BasproAdapter.getTinh())));
+//                total.setText(String.valueOf(currencyFormatter.format(BasproAdapter.getTinh())));
             }
+
+
+//            @Override
+//            public void onItemsChanged(@NonNull RecyclerView recyclerView) {
+//                super.onItemsChanged(recyclerView);
+//                int FinalTong = 0;
+//                for (int x = mRecycler.getChildCount(), i = 0; i < x; i++) {
+//                    BasketProductAdapter.ProductViewHolder holder = (BasketProductAdapter.ProductViewHolder) mRecycler.getChildViewHolder(mRecycler.getChildAt(i));
+//                    FinalTong += holder.getNumtong();
+//                }
+//                Toast.makeText(getActivity(), "Đã chạy OnTouch", Toast.LENGTH_LONG).show();
+//                // i have been touched
+//                total.setText(String.valueOf(currencyFormatter.format(FinalTong)));
+//            }
+
         });
 
 
         BasproAdapter.setData(getListProduct());
         mRecycler.setAdapter(BasproAdapter);
+
+        mRecycler.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (recyclerViewReadyCallback != null) {
+                    recyclerViewReadyCallback.onLayoutReady();
+                }
+                mRecycler.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
+        recyclerViewReadyCallback = new RecyclerViewReadyCallback() {
+            @Override
+            public void onLayoutReady() {
+                total.setText(String.valueOf(currencyFormatter.format(BasproAdapter.getTinh())));
+                //here comes your code that will be executed after all items are laid down
+            }
+        };
+
+
+
+//        mRecycler.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                int FinalTong = 0;
+//                for (int x = mRecycler.getChildCount(), i = 0; i < x; i++) {
+//                    BasketProductAdapter.ProductViewHolder holder = (BasketProductAdapter.ProductViewHolder) mRecycler.getChildViewHolder(mRecycler.getChildAt(i));
+//                    FinalTong += holder.getNumtong();
+//                }
+//                Toast.makeText(getActivity(), "Đã chạy OnTouch", Toast.LENGTH_SHORT).show();
+//                // i have been touched
+//                total.setText(String.valueOf(currencyFormatter.format(FinalTong)));
+//            }
+//        });
+
+
+//        mView.setOnTouchListener(new View.OnTouchListener() {
+//
+//            @Override
+//            public boolean onTouch(View arg0, MotionEvent event) {
+//                if(event.getActionMasked()  == MotionEvent.ACTION_UP){
+//                    int FinalTong = 0;
+//                    for (int x = mRecycler.getChildCount(), i = 0; i < x; i++) {
+//                        BasketProductAdapter.ProductViewHolder holder = (BasketProductAdapter.ProductViewHolder) mRecycler.getChildViewHolder(mRecycler.getChildAt(i));
+//                        FinalTong += holder.getNumtong();
+//                    }
+//                    Toast.makeText(getActivity(), "Đã chạy OnTouch", Toast.LENGTH_LONG).show();
+//                    // i have been touched
+//                    total.setText(String.valueOf(currencyFormatter.format(FinalTong)));
+//                    return true;
+//                }
+//                if(event.getActionMasked()  == MotionEvent.ACTION_DOWN){
+//                    // you can implement this
+//
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
 
         return mView;
     }
@@ -235,8 +336,8 @@ public class BasketFragment extends Fragment {
 //        products.add( new product_item("https://cf.shopee.vn/file/34acd5e930c8a21e1c3a70d3cf2a70c5","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng","55%",2,198000,89000));
 //        products.add( new product_item("https://cf.shopee.vn/file/b2612c1a8242069aced2f2f26b592f38","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang","22%",5,58000,45000));
 //        products.add( new product_item("https://cf.shopee.vn/file/
-        products.add( new product_item("QuầnÁO","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng",89000,2,20));
-        products.add( new product_item("QuầnÁO","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang",45000,5,5));
+//        products.add( new product_item("QuầnÁO","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng",89000,2,20));
+//        products.add( new product_item("QuầnÁO","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang",45000,5,5));
 
   //      if (prevActive == "DetailProduct"||prevActive == null)
         if(i!= null && extras !=null &&ActiPrev.toString().equalsIgnoreCase("DetailProduct"))
@@ -276,7 +377,7 @@ public class BasketFragment extends Fragment {
         order.put("ListProducts", products);
 
 
-        db.collection("Gio_hang").document(name.getText().toString()+d.getTime())
+        db.collection("Don_hang").document(name.getText().toString()+d.getTime())
                 .set(order)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -292,4 +393,19 @@ public class BasketFragment extends Fragment {
                 });
 
     }
+
+    public void SetTotalPrice(){
+        //        Log.e("fianlPrice",String.valueOf(FinalTong));
+//        Toast.makeText(getActivity(), "Đã chạy OnTouch", Toast.LENGTH_SHORT).show();
+        FinalTong = 0;
+        for (int x = mRecycler.getChildCount(), i = 0; i < x; i++) {
+            BasketProductAdapter.ProductViewHolder holder = (BasketProductAdapter.ProductViewHolder) mRecycler.getChildViewHolder(mRecycler.getChildAt(i));
+            FinalTong += holder.getNumtong();
+        }
+        total.setText(String.valueOf(currencyFormatter.format(FinalTong)));
+    }
+//    public void changeText(int data,TextView tv)
+//    {
+//        tv.setText(String.valueOf(currencyFormatter.format(data)));
+//    }
 }

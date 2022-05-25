@@ -109,7 +109,9 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
         mView =  inflater.inflate(R.layout.fragment_quanao, container, false);
         // Inflate the layout for this fragment
         spinner = mView.findViewById(R.id.Spinner_sort);
-        SortProduct = getListProduct();
+//        SortProduct = getListProduct();
+        SortProduct = new ArrayList<product_item>();
+
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(),
                 android.R.layout.simple_spinner_item, getListsize());
@@ -201,7 +203,8 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false);
         mRecycler.setLayoutManager(linearLayoutManager);
 
-        proAdapter.setData(SortProduct);
+//        proAdapter.setData(SortProduct);
+        getListProduct();
         mRecycler.setAdapter(proAdapter);
 
         RecyclerView.ItemDecoration itemDecoration  = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
@@ -240,6 +243,8 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
                                 products.add( new product_item(category,image,name,discount,soluong,giacu,gia));
                                 Log.e("documment", document.getId() + " => " + document.getData());
                             }
+                            SortProduct = products;
+                            proAdapter.setData(SortProduct);
                         } else {
                             Log.e("documment", "Error getting documents: ", task.getException());
                         }

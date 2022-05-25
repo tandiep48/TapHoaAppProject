@@ -41,13 +41,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class DetailProductActivity extends AppCompatActivity implements DataCommunication {
 
@@ -104,7 +108,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
         this.getApplicationContext().getResources().updateConfiguration(config, null);
 //        mCallback = (DataCommunication) this.getApplicationContext();
         mCallback = (DataCommunication) DetailProductActivity.this;
-
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         add = findViewById(R.id.detail_BuyNow);
         order = findViewById(R.id.detail_Order);
@@ -121,6 +125,12 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                 productItem.setPrice(Integer.parseInt(tvgia.getText().toString()));
                 //productItem.setNumdat(Integer.parseInt(tv.getText().toString()));
                 productItem.setSoluong(Integer.parseInt(tvsoluong.getText().toString()));
+//                List<product_item> products = new ArrayList<>();
+//                products.add(productItem);
+//                Map<String, Object> order = new HashMap<>();
+//                order.put("ListProducts", products);
+
+                db.collection("Gio_hang").document("Diệp Đức Tân1652852397096").update("ListProducts", FieldValue.arrayUnion(productItem));
 
                 mCallback.setPrevActive("DetailProduct");
                 intent.putExtra("Order", "YES");
@@ -203,7 +213,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
             //The key argument here must match that used in the other activity
         }
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         db.collection("SAN_PHAM")
                 .whereEqualTo("NAME", Namevalue)
                 .get()
