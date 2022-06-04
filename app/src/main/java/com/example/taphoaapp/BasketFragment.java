@@ -1,23 +1,18 @@
 package com.example.taphoaapp;
 
-import static java.lang.Math.toIntExact;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -30,18 +25,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.taphoaapp.Basket.BasketProductAdapter;
 import com.example.taphoaapp.Basket.DataCommunication;
-import com.example.taphoaapp.DetailProduct.DetailProductActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -62,7 +51,7 @@ public class BasketFragment extends Fragment {
     private BasketProductAdapter BasproAdapter;
     private View mView;
     private TextView total,TransFee,IdDonHang;
-    List<product_item> products;
+    List<basket_product_item> products;
     DataCommunication mCallback;
     private Button order;
     Bundle extras ;
@@ -71,9 +60,13 @@ public class BasketFragment extends Fragment {
     private EditText name, address,phone;
     private CheckBox nhanhang;
    private Intent i;
-   product_item product_item;
+   basket_product_item product_item;
    private ImageView btnAdd, btnSubtract;
    int FinalTong;
+   FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    String Category,Name;
+    Integer price, numdat, soluong;
 
     private RecyclerViewReadyCallback recyclerViewReadyCallback;
 
@@ -170,7 +163,7 @@ public class BasketFragment extends Fragment {
             PassQuantity = i.getIntExtra("PrevActive",0);
             PassSoluong= i.getIntExtra("PrevActive",0);
 
-            product_item = (product_item) i.getSerializableExtra("productItem");
+            product_item = (basket_product_item) i.getSerializableExtra("productItem");
 
 
 
@@ -265,6 +258,7 @@ public class BasketFragment extends Fragment {
 
         });
 
+//        getListProduct();
 
         BasproAdapter.setData(getListProduct());
         mRecycler.setAdapter(BasproAdapter);
@@ -331,8 +325,10 @@ public class BasketFragment extends Fragment {
         return mView;
     }
 
-    private List<product_item> getListProduct(){
-        List<product_item> products = new ArrayList<>();
+    private List<basket_product_item> getListProduct(){
+        products = new ArrayList<>();
+
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
 //        products.add( new product_item("https://cf.shopee.vn/file/34acd5e930c8a21e1c3a70d3cf2a70c5","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng","55%",2,198000,89000));
 //        products.add( new product_item("https://cf.shopee.vn/file/b2612c1a8242069aced2f2f26b592f38","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang","22%",5,58000,45000));
 //        products.add( new product_item("https://cf.shopee.vn/file/
@@ -341,8 +337,45 @@ public class BasketFragment extends Fragment {
 
   //      if (prevActive == "DetailProduct"||prevActive == null)
         if(i!= null && extras !=null &&ActiPrev.toString().equalsIgnoreCase("DetailProduct"))
+        {products.add( new basket_product_item(product_item.getCategory(), product_item.getName(),product_item.getMau(),product_item.getSize(),product_item.getSoluong(),product_item.getPrice(),product_item.getNumdat())); }
      //   {products.add( new product_item(PassCategory, PassName,PassPrice,PassQuantity,PassSoluong)); }
-        {products.add( new product_item(product_item.getCategory(), product_item.getName(),product_item.getPrice(),product_item.getNumdat(),product_item.getSoluong())); }
+
+//        db.collection("Gio_hang")
+//                .document("Diệp Đức Tân1652852397096")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                name.setText(document.getString("name"));
+//                                address.setText(document.getString("DiaChi"));
+//                                phone.setText(document.getString("SoDienThoai"));
+//                                nhanhang.setChecked(document.getBoolean("giaohang"));
+//                                IdDonHang.setText(document.getString("DonHang_Id"));
+//                                if (document.get("ListProducts") != null) {
+//                                    products = (List<basket_product_item>) document.get("ListProducts");
+//                                }
+//                            }
+//                            BasproAdapter.setData(products);
+//                            mRecycler.setAdapter(BasproAdapter);
+//                        }
+//                        else {
+//                            if(i!= null && extras !=null &&ActiPrev.toString().equalsIgnoreCase("DetailProduct"))
+//                            {
+//                                db.collection("Gio_hang").document("Diệp Đức Tân1652852397096").set(product_item);
+//                            }
+//                            else{
+//                                Map<String, Object> data = new HashMap<>();
+//                                data.put("name", "Diệp Đức Tân");
+//                                db.collection("Gio_hang").document("Diệp Đức Tân1652852397096").set(new HashMap<String, Object>());
+//                            }
+//                            Log.e("documment", "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+
+
 
         return products;
     }
@@ -362,7 +395,7 @@ public class BasketFragment extends Fragment {
         return listSize;
     }
 
-    private void OrderListProduct( List<product_item> products ){
+    private void OrderListProduct( List<basket_product_item> products ){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Date d = new Date();
         Map<String, Object> order = new HashMap<>();

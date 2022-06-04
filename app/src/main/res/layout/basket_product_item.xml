@@ -41,9 +41,10 @@
                 android:id="@+id/product_variant_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="11dp"
                 android:gravity="left"
                 android:text="Màu: xám"
+                android:textSize="12dp"
                 android:textColor="@color/XÁM_ĐẬM_HEXA"
                 android:textStyle="bold" />
 
@@ -54,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
+                android:textSize="12dp"
                 android:text="Size: L"
                 android:textColor="@color/colorPrimary" />
 

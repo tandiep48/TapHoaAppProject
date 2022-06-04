@@ -4,23 +4,21 @@ import static android.graphics.Color.rgb;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.taphoaapp.BasketFragment;
 import com.example.taphoaapp.DetailProduct.DetailProductActivity;
 import com.example.taphoaapp.R;
-import com.example.taphoaapp.product_item;
+import com.example.taphoaapp.basket_product_item;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -30,10 +28,10 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
 
     DataCommunication mCallback;
 
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     BasketFragment mFragment;
     private Context mContext;
-    private List<product_item> productItemList;
+    private List<basket_product_item> productItemList;
 
     public int getTinh() {
         return tinh;
@@ -101,7 +99,7 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
     }
 
 
-    public void setData(List<product_item> product){
+    public void setData(List<basket_product_item> product){
         tinh = 0 ;
         sum = 0 ;
         this.productItemList = product;
@@ -128,10 +126,11 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
 
         holder.vitri = position;
-        product_item product = productItemList.get(position);
+        basket_product_item product = productItemList.get(position);
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                db.collection("Gio_hang").document("Diệp Đức Tân1652852397096").update("ListProducts", FieldValue.arrayRemove(productItemList.get(position)));
                 DeleteAt(position);
             }
         });
@@ -150,33 +149,50 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
 
 
         if(product == null) return;
+//            if(product.getName() == mCallback.getPassName()) {
+//                holder.name.setText(mCallback.getPassName());
+//                holder.soluong.setText(String.valueOf(product.getSoluong()));
+//                holder.tvQuan.setText(String.valueOf(mCallback.getPassquantity()));
+//                sum = mCallback.getPassPrice() * mCallback.getPassquantity();
+//                holder.price.setText(String.valueOf(currencyFormatter.format(mCallback.getPassPrice())));
+//                holder.tong.setText(String.valueOf(currencyFormatter.format(sum)));
+//                tinh += sum;
+//            }
+//            else{
+//                holder.name.setText(product.getName());
+//                holder.name.setTooltipText(product.getName());
+//                holder.name.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        holder.name.performLongClick();
+//                    }
+//                });
+//                holder.soluong.setText(String.valueOf(product.getSoluong()));
+//                holder.tvQuan.setText(String.valueOf(product.getSoluong()));
+//                sum = product.getPrice() * product.getSoluong();
+//                holder.price.setText(String.valueOf(currencyFormatter.format(product.getPrice())));
+//                holder.setNumtong(sum);
+//                holder.tong.setText(String.valueOf(currencyFormatter.format(sum)));
+//                tinh += sum;
+//            }
 
-            if(product.getName() == mCallback.getPassName()) {
-                holder.name.setText(mCallback.getPassName());
-                holder.soluong.setText(String.valueOf(product.getSoluong()));
-                holder.tvQuan.setText(String.valueOf(mCallback.getPassquantity()));
-                sum = mCallback.getPassPrice() * mCallback.getPassquantity();
-                holder.price.setText(String.valueOf(currencyFormatter.format(mCallback.getPassPrice())));
-                holder.tong.setText(String.valueOf(currencyFormatter.format(sum)));
-                tinh += sum;
+        holder.name.setText(product.getName());
+        holder.name.setTooltipText(product.getName());
+        holder.name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.name.performLongClick();
             }
-            else{
-                holder.name.setText(product.getName());
-                holder.name.setTooltipText(product.getName());
-                holder.name.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        holder.name.performLongClick();
-                    }
-                });
-                holder.soluong.setText(String.valueOf(product.getSoluong()));
-                holder.tvQuan.setText(String.valueOf(product.getSoluong()));
-                sum = product.getPrice() * product.getSoluong();
-                holder.price.setText(String.valueOf(currencyFormatter.format(product.getPrice())));
-                holder.setNumtong(sum);
-                holder.tong.setText(String.valueOf(currencyFormatter.format(sum)));
-                tinh += sum;
-            }
+        });
+        holder.soluong.setText(String.valueOf(product.getSoluong()));
+        holder.tvQuan.setText(String.valueOf(product.getSoluong()));
+        holder.type_mau.setText("Màu: " + String.valueOf(product.getMau()));
+        holder.type_size.setText("Size: " +String.valueOf(product.getSize()));
+        sum = product.getPrice() * product.getSoluong();
+        holder.price.setText(String.valueOf(currencyFormatter.format(product.getPrice())));
+        holder.setNumtong(sum);
+        holder.tong.setText(String.valueOf(currencyFormatter.format(sum)));
+        tinh += sum;
 
         holder.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,7 +216,11 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
             holder.btnSubtract.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int tnp = Integer.parseInt(holder.tvQuan.getText().toString()) - 1;
+                    int tnp;
+                    if(Integer.parseInt(holder.tvQuan.getText().toString()) >= 2) {
+                        tnp = Integer.parseInt(holder.tvQuan.getText().toString()) - 1;
+                    }
+                    else {tnp = 1;}
                     sum = product.getPrice() * tnp;
                     holder.setNumtong(sum);;
                     holder.tong.setText(String.valueOf(currencyFormatter.format(sum)));

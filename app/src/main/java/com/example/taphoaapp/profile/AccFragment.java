@@ -1,23 +1,24 @@
-package com.example.taphoaapp;
+package com.example.taphoaapp.profile;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+
+import com.example.taphoaapp.HomeViewPagerAdpater;
+import com.example.taphoaapp.R;
 import com.example.taphoaapp.widget.CustomViewPager;
 import com.google.android.material.tabs.TabLayout;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
+ * Use the {@link AccFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment {
+public class AccFragment extends Fragment {
 
     private TabLayout mTabLayout;
     private CustomViewPager viewMain;
@@ -32,7 +33,7 @@ public class ProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public ProfileFragment() {
+    public AccFragment() {
         // Required empty public constructor
     }
 
@@ -45,8 +46,8 @@ public class ProfileFragment extends Fragment {
      * @return A new instance of fragment ProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
+    public static AccFragment newInstance(String param1, String param2) {
+        AccFragment fragment = new AccFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

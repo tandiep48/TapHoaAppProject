@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.example.taphoaapp.profile.ProfileFragment;
+
 public class MainViewPagerAdpater extends FragmentStatePagerAdapter
 {
     Bundle extras ;

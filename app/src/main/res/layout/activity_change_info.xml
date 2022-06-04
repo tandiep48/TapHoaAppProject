@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+<!--    tools:context=".ChangeInfoActivity">-->
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:title="Thay đổi Thông tin"
+        app:titleTextColor="@color/colorWhite" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvFullname"
+            android:inputType="textPersonName"
+            android:background="@drawable/background_tw"
+            android:layout_marginTop="16dp"
+            android:hint="" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvEmail"
+            android:background="@drawable/background_tw"
+            android:layout_marginTop="16dp"
+            android:inputType="textEmailAddress"
+            android:hint="" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvPhone"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/background_tw"
+            android:inputType="number"
+            android:hint="" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvGender"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/background_tw"
+            android:inputType="text"
+            android:hint="" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvConfirmPassword"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/background_tw"
+            android:inputType="text"
+            android:hint="" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnChangePassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="90sp"
+        android:layout_marginRight="90sp"
+        android:background="@color/colorPrimary"
+        android:text=""
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textStyle="normal" />
+
+</LinearLayout>

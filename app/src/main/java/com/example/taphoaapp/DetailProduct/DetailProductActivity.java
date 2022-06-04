@@ -2,11 +2,8 @@ package com.example.taphoaapp.DetailProduct;
 
 import static java.lang.Math.toIntExact;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -25,19 +22,17 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NavUtils;
 import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.taphoaapp.Basket.DataCommunication;
 import com.example.taphoaapp.BasketFragment;
-import com.example.taphoaapp.IOnBackPressed;
 import com.example.taphoaapp.MainActivity;
-import com.example.taphoaapp.MainViewPagerAdpater;
 import com.example.taphoaapp.R;
-import com.example.taphoaapp.product_item;
+import com.example.taphoaapp.basket_product_item;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -45,13 +40,10 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class DetailProductActivity extends AppCompatActivity implements DataCommunication {
 
@@ -69,7 +61,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
 
     private String passName,passCategory,passcolor,passsize;
     private int passPrice,passquantity,passSoluong;
-    product_item productItem;
+    basket_product_item productItem;
 
     List <String> TrungGian;
     List<String> listColor;
@@ -118,19 +110,32 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                 Intent intent = new Intent(DetailProductActivity.this, MainActivity.class);
 //                intent.putExtra("prevActive", "DetailProduct");
 
-                productItem = new product_item();
+                productItem = new basket_product_item();
 
                 productItem.setCategory(category);
                 productItem.setName(tvname.getText().toString());
                 productItem.setPrice(Integer.parseInt(tvgia.getText().toString()));
                 //productItem.setNumdat(Integer.parseInt(tv.getText().toString()));
                 productItem.setSoluong(Integer.parseInt(tvsoluong.getText().toString()));
+                productItem.setMau(spinColor.getSelectedItem().toString());
+                productItem.setSize(spinSize.getSelectedItem().toString());
 //                List<product_item> products = new ArrayList<>();
 //                products.add(productItem);
 //                Map<String, Object> order = new HashMap<>();
 //                order.put("ListProducts", products);
 
-                db.collection("Gio_hang").document("Diệp Đức Tân1652852397096").update("ListProducts", FieldValue.arrayUnion(productItem));
+                db.collection("Gio_hang").document("Diệp Đức Tân1652852397096").update("ListProducts", FieldValue.arrayUnion(productItem)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                db.collection("Gio_hang").document("Diệp Đức Tân1652852397096").set(productItem);
+                            }
+                        });
 
                 mCallback.setPrevActive("DetailProduct");
                 intent.putExtra("Order", "YES");
