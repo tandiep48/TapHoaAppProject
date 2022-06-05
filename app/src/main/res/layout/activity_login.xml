@@ -107,6 +107,11 @@
         app:layout_constraintRight_toLeftOf="@id/LoginFBtn"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/anotherLog" />
+    <com.google.android.gms.common.SignInButton
+        android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/LoginGBtn"
+        app:layout_constraintTop_toBottomOf="@id/LoginGBtn"
+        android:layout_height="wrap_content"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/LoginFBtn"
