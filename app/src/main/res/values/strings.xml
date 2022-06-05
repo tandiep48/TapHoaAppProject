@@ -28,7 +28,12 @@
     <string name="City">Quận/ThànhPhố</string>
 
     <string name="deliver_yes">nhận hàng tại cửa hàng</string>
-<!--    <string name="title_activity_search">SearchActivity</string>-->
+    <string name="h_v_t_n">Họ và tên</string>
+    <string name="email">Email</string>
+    <string name="tu_i">Tuổi</string>
+    <string name="s_i_n_tho_i">Số điện thoại</string>
+    <!-- <string name="default_web_client_id">449637111-c5rggm9311998bkf9ase3qma6onurl1n.apps.googleusercontent.com</string> -->
+    <!--    <string name="title_activity_search">SearchActivity</string>-->
 <!--    &lt;!&ndash; Strings used for fragments for navigation &ndash;&gt;-->
 <!--    <string name="first_fragment_label">First Fragment</string>-->
 <!--    <string name="second_fragment_label">Second Fragment</string>-->

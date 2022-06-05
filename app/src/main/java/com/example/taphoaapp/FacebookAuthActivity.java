@@ -38,13 +38,15 @@ public class FacebookAuthActivity extends LoginActivity {
                     public void onSuccess(LoginResult loginResult) {
                         // App code
                         handleFacebookAccessToken(loginResult.getAccessToken());
-                        startActivity(new Intent(FacebookAuthActivity.this, User_Facebook.class));
+                        startActivity(new Intent(FacebookAuthActivity.this, MainActivity.class));
                         finish();
                     }
 
                     @Override
                     public void onCancel() {
                         // App code
+                        Intent intent = new Intent(FacebookAuthActivity.this, LoginActivity.class);
+                        startActivity(intent);
                     }
 
                     @Override
