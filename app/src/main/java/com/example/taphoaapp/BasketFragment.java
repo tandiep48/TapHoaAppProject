@@ -28,12 +28,18 @@ import android.widget.TextView;
 
 import com.example.taphoaapp.Basket.BasketProductAdapter;
 import com.example.taphoaapp.Basket.DataCommunication;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +61,7 @@ public class BasketFragment extends Fragment {
     DataCommunication mCallback;
     private Button order;
     Bundle extras ;
-    String prevActive,ActiPrev,PassCategory,PassName;
+    String prevActive,ActiPrev,PassCategory,PassName,userID;
      private Integer PassPrice,PassQuantity,PassSoluong;
     private EditText name, address,phone;
     private CheckBox nhanhang;
@@ -63,6 +69,7 @@ public class BasketFragment extends Fragment {
    basket_product_item product_item;
    private ImageView btnAdd, btnSubtract;
    int FinalTong;
+   Double size;
    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     String Category,Name;
@@ -166,6 +173,8 @@ public class BasketFragment extends Fragment {
             product_item = (basket_product_item) i.getSerializableExtra("productItem");
 
 
+                userID = i.getStringExtra("userID");
+
 
             ActiPrev = i.getStringExtra("PrevActive");
 
@@ -181,7 +190,7 @@ public class BasketFragment extends Fragment {
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OrderListProduct(getListProduct());
+                OrderListProduct(products);
                 // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -258,10 +267,10 @@ public class BasketFragment extends Fragment {
 
         });
 
-//        getListProduct();
+        getListProduct();
 
-        BasproAdapter.setData(getListProduct());
-        mRecycler.setAdapter(BasproAdapter);
+//        BasproAdapter.setData(getListProduct());
+//        mRecycler.setAdapter(BasproAdapter);
 
         mRecycler.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -336,44 +345,75 @@ public class BasketFragment extends Fragment {
 //        products.add( new product_item("QuầnÁO","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang",45000,5,5));
 
   //      if (prevActive == "DetailProduct"||prevActive == null)
-        if(i!= null && extras !=null &&ActiPrev.toString().equalsIgnoreCase("DetailProduct"))
-        {products.add( new basket_product_item(product_item.getCategory(), product_item.getName(),product_item.getMau(),product_item.getSize(),product_item.getSoluong(),product_item.getPrice(),product_item.getNumdat())); }
+//        if(i!= null && extras !=null &&ActiPrev.toString().equalsIgnoreCase("DetailProduct"))
+//        {products.add( new basket_product_item(product_item.getCategory(), product_item.getName(),product_item.getMau(),product_item.getSize(),product_item.getSoluong(),product_item.getPrice(),product_item.getNumdat())); }
      //   {products.add( new product_item(PassCategory, PassName,PassPrice,PassQuantity,PassSoluong)); }
 
-//        db.collection("Gio_hang")
-//                .document("Diệp Đức Tân1652852397096")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                name.setText(document.getString("name"));
-//                                address.setText(document.getString("DiaChi"));
-//                                phone.setText(document.getString("SoDienThoai"));
-//                                nhanhang.setChecked(document.getBoolean("giaohang"));
-//                                IdDonHang.setText(document.getString("DonHang_Id"));
-//                                if (document.get("ListProducts") != null) {
-//                                    products = (List<basket_product_item>) document.get("ListProducts");
-//                                }
-//                            }
-//                            BasproAdapter.setData(products);
-//                            mRecycler.setAdapter(BasproAdapter);
-//                        }
-//                        else {
-//                            if(i!= null && extras !=null &&ActiPrev.toString().equalsIgnoreCase("DetailProduct"))
-//                            {
-//                                db.collection("Gio_hang").document("Diệp Đức Tân1652852397096").set(product_item);
-//                            }
-//                            else{
-//                                Map<String, Object> data = new HashMap<>();
-//                                data.put("name", "Diệp Đức Tân");
-//                                db.collection("Gio_hang").document("Diệp Đức Tân1652852397096").set(new HashMap<String, Object>());
-//                            }
-//                            Log.e("documment", "Error getting documents: ", task.getException());
-//                        }
-//                    }
-//                });
+        db.collection("Gio_hang")
+                .document(userID)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        name.setText(document.getString("name"));
+                        address.setText(document.getString("DiaChi"));
+                        phone.setText(document.getString("SoDienThoai"));
+                        nhanhang.setChecked(document.getBoolean("giaohang"));
+                        IdDonHang.setText(document.getString("DonHang_Id"));
+                        if (document.get("ListProducts") != null) {
+                            products = (List<basket_product_item>) document.get("ListProducts");
+                        }
+                        BasproAdapter.setData(products);
+                        mRecycler.setAdapter(BasproAdapter);
+                    } else {
+                        db.collection("Gio_hang")
+                                .document("Counter")
+                                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    size = document.getDouble("Count");
+                                } else {
+                                    Log.d("this", "Error getting documents: ");
+                                }
+                            }
+                        });
+
+
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("name", "");
+                        data.put("phiVanChuyen", "");
+                        data.put("DonHang_Id", "DH"+size);
+                        data.put("DiaChi", "");
+                        data.put("SoDienThoai", "");
+                        data.put("TongThanhToan", "");
+                        data.put("giaohang", "");
+                        if(i!= null && extras !=null &&ActiPrev.toString().equalsIgnoreCase("DetailProduct"))
+                        {
+                            data.put("ListProducts", Arrays.asList(product_item));
+
+
+                            db.collection("Gio_hang").document("userID").set(data);
+                        }
+                        else{
+
+                            db.collection("Gio_hang").document(userID).set(new HashMap<String, Object>());
+                        }
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage("Giỏ hàng mới tạo lần đầu , mời load lại để hiển thị chính xác!")
+                                .setTitle("Thông báo");
+
+                        builder.show();
+                        Log.e("documment", "Error getting documents: ", task.getException());
+                    }
+                } else {
+                }
+            }
+        });
+
 
 
 
@@ -396,6 +436,24 @@ public class BasketFragment extends Fragment {
     }
 
     private void OrderListProduct( List<basket_product_item> products ){
+        for(int tmp = 0 ; tmp < products.size();tmp++) {
+            if(products.get(tmp).getNumdat() > products.get(tmp).getSoluong()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Sản phẩm"+products.get(tmp).getName()+" không đủ số lượng đặt")
+                        .setTitle("Thông báo");
+                builder.show();
+                return;
+            }
+            else if(products.get(tmp).getNumdat() <=0) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Sản phẩm"+products.get(tmp).getName()+"số lượng đặt không hợp lệ")
+                        .setTitle("Thông báo");
+                builder.show();
+                return;
+            }
+        }
+
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Date d = new Date();
         Map<String, Object> order = new HashMap<>();
@@ -408,6 +466,7 @@ public class BasketFragment extends Fragment {
         order.put("DonHang_Id", IdDonHang.getText().toString());
 
         order.put("ListProducts", products);
+
 
 
         db.collection("Don_hang").document(name.getText().toString()+d.getTime())
@@ -424,6 +483,27 @@ public class BasketFragment extends Fragment {
                         Log.w("PostOrder", "Error writing document", e);
                     }
                 });
+
+        for(int tmp = 0 ; tmp < products.size();tmp++) {
+            double SoLuong;
+            if(products.get(tmp).getSoluong() -products.get(tmp).getNumdat() ==0) SoLuong = 0;
+            else if(products.get(tmp).getSoluong() - products.get(tmp).getNumdat() <0) SoLuong = products.get(tmp).getSoluong();
+            else SoLuong = products.get(tmp).getSoluong() - products.get(tmp).getNumdat();
+            db.collection("SAN_PHAM").document(products.get(tmp).getID())
+                    .update("SOLUONG",(SoLuong ))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.e("UpdateSoLuongSP", "Thành công!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("UpdateSoLuongSP", "Thất bại!");
+                        }
+                    });
+        }
 
     }
 

@@ -64,10 +64,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login.setOnClickListener(this);
         Glogin.setOnClickListener(this);
         Flogin.setOnClickListener(this);
+
+
     }
 
     @Override
     public void onClick(View view) {
+
         switch (view.getId()) {
             case R.id.SignUpBtn:
                 startActivity(new Intent(this, SignUpActivity.class));
@@ -90,9 +93,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void LoginUser() {
+
         String Email = email.getText().toString().trim();
         String Password = pass.getText().toString().trim();
-
         if(Email.isEmpty()){
             email.setError("Email is required");
             email.requestFocus();
@@ -124,7 +127,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Intent intent = new Intent(LoginActivity.this,
-                                    User_EmailAndPass_Activity.class);
+                                    MainActivity.class);
+                            intent.putExtra("userID", mAuth.getCurrentUser().getUid());
+                            intent.putExtra("email", Email);
+                            intent.putExtra("password", Password);
                             startActivity(intent);
                         } else {
                             Toast.makeText(LoginActivity.this, "Đăng nhập thất bại",
@@ -154,8 +160,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void ChangeActivity() {
+        String Email = email.getText().toString().trim();
+        String Password = pass.getText().toString().trim();
         finish();
-        Intent intent = new Intent(getApplicationContext(), User_EmailAndPass_Activity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra("userID", mAuth.getCurrentUser().getUid());
+        intent.putExtra("email", Email);
+        intent.putExtra("password", Password);
         startActivity(intent);
     }
 }

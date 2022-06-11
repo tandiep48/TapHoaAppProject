@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.taphoaapp.profile.ProfileFragment;
+import com.example.taphoaapp.profile.ProfileMainFragment;
 
 public class MainViewPagerAdpater extends FragmentStatePagerAdapter
 {
@@ -26,7 +27,7 @@ public class MainViewPagerAdpater extends FragmentStatePagerAdapter
         switch (position) {
             case 0: return new HomeFragment();
             case 1: return new BasketFragment();
-            case 2: return new ProfileFragment();
+            case 2: return new ProfileMainFragment();
             default: return new QuanaoFragment();
         }
     }

@@ -3,13 +3,13 @@ package com.example.taphoaapp;
 import java.io.Serializable;
 
 public class basket_product_item implements Serializable {
-      private String category,  name , mau, size;
+      private String category,  name , mau, size,ID;
       private int soluong, price ,  numdat;
 
     public basket_product_item() {
     }
 
-    public basket_product_item(String category, String name, String mau, String size, int soluong, int price, int numdat) {
+    public basket_product_item(String ID,String category, String name, String mau, String size, int soluong, int price, int numdat) {
         this.category = category;
         this.name = name;
         this.mau = mau;
@@ -17,6 +17,7 @@ public class basket_product_item implements Serializable {
         this.soluong = soluong;
         this.price = price;
         this.numdat = numdat;
+        this.ID= ID;
     }
 
     public String getCategory() {
@@ -73,6 +74,14 @@ public class basket_product_item implements Serializable {
 
     public void setNumdat(int numdat) {
         this.numdat = numdat;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
     }
 }
 

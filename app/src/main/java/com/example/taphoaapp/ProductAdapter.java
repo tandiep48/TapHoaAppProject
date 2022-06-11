@@ -2,8 +2,10 @@ package com.example.taphoaapp;
 
 import static android.graphics.Color.rgb;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     private Context mContext;
     private  List<product_item> productItemList;
     private  List<product_item> OriginproductItemList;
+    String userID;
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -110,6 +113,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 //        Log.e("product.NAME", String.valueOf(product.getName()));
         Log.e("product.URL", String.valueOf(product.getImageUrl()));
         Log.e("product.soluong", String.valueOf(product.getSoluong()));
+        Intent i = ((Activity) mContext).getIntent();
+        Bundle extras = ((Activity) mContext).getIntent().getExtras();
+
+        if ( i!= null &&extras != null) {
+            userID = i.getStringExtra("userID");
+        }
 
         if(product == null) return;
         holder.pressLayout.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +127,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 Intent intent = new Intent(mContext, DetailProductActivity.class);
                 intent.putExtra("NAME",product.getName());
                 intent.putExtra("prevActive", "MainActivity");
+                intent.putExtra("userID", userID);
 //                intent.putExtra("Category",product.getCategory());
 //                intent.putExtra("Soluong",1);
 //                intent.putExtra("gia",product.getPrice());

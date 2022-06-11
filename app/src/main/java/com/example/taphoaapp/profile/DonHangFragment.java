@@ -69,7 +69,7 @@ public class DonHangFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        mView =  inflater.inflate(R.layout.fragment_profile, container, false);
+        mView =  inflater.inflate(R.layout.fragment_shipment, container, false);
 
         mTabLayout = mView.findViewById(R.id.TopTabProfile);
         viewMain = mView.findViewById(R.id.ViewPagerProfile);

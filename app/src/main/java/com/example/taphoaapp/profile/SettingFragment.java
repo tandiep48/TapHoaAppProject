@@ -15,10 +15,10 @@ import com.google.android.material.tabs.TabLayout;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AccFragment#newInstance} factory method to
+ * Use the {@link SettingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccFragment extends Fragment {
+public class SettingFragment extends Fragment {
 
     private TabLayout mTabLayout;
     private CustomViewPager viewMain;
@@ -33,7 +33,7 @@ public class AccFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public AccFragment() {
+    public SettingFragment() {
         // Required empty public constructor
     }
 
@@ -46,8 +46,8 @@ public class AccFragment extends Fragment {
      * @return A new instance of fragment ProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AccFragment newInstance(String param1, String param2) {
-        AccFragment fragment = new AccFragment();
+    public static SettingFragment newInstance(String param1, String param2) {
+        SettingFragment fragment = new SettingFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

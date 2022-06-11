@@ -7,11 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.taphoaapp.App;
-import com.example.taphoaapp.DientuFragment;
-import com.example.taphoaapp.QuanaoFragment;
 import com.example.taphoaapp.R;
-import com.example.taphoaapp.SachFragment;
-import com.example.taphoaapp.VanphongFragment;
 
 public class ProfileViewPagerAdpater extends FragmentStatePagerAdapter
 {
@@ -26,17 +22,16 @@ public class ProfileViewPagerAdpater extends FragmentStatePagerAdapter
 
 
         switch (position) {
-            case 0: return new AccFragment();
-            case 1: return new DientuFragment();
-            case 2: return new VanphongFragment();
-            case 3: return new SachFragment();
-            default: return new AccFragment();
+            case 0: return new DonHangFragment();
+            case 1: return new ProfileFragment();
+            case 2: return new SettingFragment();
+            default: return new ProfileFragment();
         }
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return 3;
     }
 
     @Nullable
@@ -44,11 +39,9 @@ public class ProfileViewPagerAdpater extends FragmentStatePagerAdapter
     public CharSequence getPageTitle(int position) {
         String title ="";
         switch (position) {
-            case 0: title = App.getAppResources().getString(R.string.clothes); break;
-            case 1: title = App.getAppResources().getString(R.string.Electron);break;
-            case 2: title = App.getAppResources().getString(R.string.Office);break;
-            case 3: title = App.getAppResources().getString(R.string.books);break;
-
+            case 0: title = App.getAppResources().getString(R.string.Shipment);break;
+            case 1: title = App.getAppResources().getString(R.string.Profile); break;
+            case 2: title = App.getAppResources().getString(R.string.Setting);break;
         }
         return title;
     }

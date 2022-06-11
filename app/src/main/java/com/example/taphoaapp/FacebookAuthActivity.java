@@ -76,6 +76,7 @@ public class FacebookAuthActivity extends LoginActivity {
     }
     private void updateUI(FirebaseUser user){
         Intent intent = new Intent(FacebookAuthActivity.this, MainActivity.class);
+        intent.putExtra("userID", mAuth.getCurrentUser().getUid());
         startActivity(intent);
     }
 }

@@ -27,6 +27,9 @@
 
     <string name="City">Quận/ThànhPhố</string>
 
+    <string name="Shipment">Shipment</string>
+    <string name="Setting">Setting</string>
+
     <string name="deliver_yes">nhận hàng tại cửa hàng</string>
     <string name="h_v_t_n">Họ và tên</string>
     <string name="email">Email</string>

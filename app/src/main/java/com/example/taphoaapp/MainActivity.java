@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
     private TabLayout mTabLayout;
     private ViewPager viewMain;
     private BottomNavigationView bottomnavigation;
-    private String passName,passCategory,passcolor,passsize  , order,active ,PrevActive, ActiPrev;
+    private String passName,passCategory,passcolor,passsize  , order,active ,PrevActive, ActiPrev,userID;
     private int passPrice,passquantity,passSoluong;
     Bundle extras;
     Context mContext;
@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
         if ( i!= null &&extras != null) {
             order = extras.getString("Order");
             ActiPrev = i.getStringExtra("PrevActive");
+            userID = i.getStringExtra("userID");
 
             Log.e("PrevActive : " , ActiPrev.toString());
 

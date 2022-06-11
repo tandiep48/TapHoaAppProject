@@ -185,7 +185,8 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
             }
         });
         holder.soluong.setText(String.valueOf(product.getSoluong()));
-        holder.tvQuan.setText(String.valueOf(product.getSoluong()));
+        holder.tvQuan.setText(String.valueOf(1));
+        product.setNumdat(1);
         holder.type_mau.setText("Màu: " + String.valueOf(product.getMau()));
         holder.type_size.setText("Size: " +String.valueOf(product.getSize()));
         sum = product.getPrice() * product.getSoluong();
@@ -197,7 +198,9 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
         holder.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               int tmp = Integer.parseInt(holder.tvQuan.getText().toString()) + 1;
+               int tmp;
+               if( (Integer.parseInt(holder.tvQuan.getText().toString()) + 1) >= Integer.parseInt(holder.soluong.getText().toString())) tmp = Integer.parseInt(holder.soluong.getText().toString());
+               else tmp = Integer.parseInt(holder.tvQuan.getText().toString()) + 1;
                 sum = product.getPrice() * tmp;
                 holder.setNumtong(sum);;
                 holder.tong.setText(String.valueOf(currencyFormatter.format(sum)));
@@ -211,6 +214,7 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
 
                holder.tvQuan.setText(String.valueOf(tmp));
 //                notifyItemChanged(position);
+                product.setNumdat(tmp);
             }
         });
             holder.btnSubtract.setOnClickListener(new View.OnClickListener() {
@@ -234,6 +238,8 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
                     mFragment.SetTotalPrice();
                     holder.tvQuan.setText(String.valueOf(tnp));
 //                    notifyItemChanged(position);
+                    if(Integer.parseInt(holder.soluong.getText().toString()) <= 0 ) product.setNumdat(0);
+                    else product.setNumdat(tnp);
                 }
             });
 

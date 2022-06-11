@@ -18,4 +18,10 @@
     <string name="TransFee">Phí vận chuyển</string>
     <string name="City">Thành phố/Tỉnh</string>
     <string name="deliver_yes">nhận hàng tại cửa hàng</string>
+    <string name="Setting">Cài Đặt</string>
+    <string name="Shipment">Đơn Hàng</string>
+    <string name="h_v_t_n">Họ và tên</string>
+    <string name="email">Email</string>
+    <string name="tu_i">Tuổi</string>
+    <string name="s_i_n_tho_i">Số điện thoại</string>
 </resources>

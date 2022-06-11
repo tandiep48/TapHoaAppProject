@@ -36,14 +36,18 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class DetailProductActivity extends AppCompatActivity implements DataCommunication {
 
@@ -56,10 +60,11 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
     private TextView tvname, tvdiscount,tvsoluong,tvgiacu,tvgia,tvMota;
     private Spinner spinColor , spinSize;
     SpinnerColorAdapter spinnerColor;
-    String name, image, discount, Namevalue, ColorVal , SizeVal, category ;
+    String name, image, discount, Namevalue, ColorVal , SizeVal, category,IDsp ;
     Integer soluong,giacu,gia;
+    Double size;
 
-    private String passName,passCategory,passcolor,passsize;
+    private String passName,passCategory,passcolor,passsize,userID;
     private int passPrice,passquantity,passSoluong;
     basket_product_item productItem;
 
@@ -102,6 +107,14 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
         mCallback = (DataCommunication) DetailProductActivity.this;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        Intent i = getIntent();
+        Bundle extras = getIntent().getExtras();
+
+        if ( i!= null &&extras != null) {
+            userID = i.getStringExtra("userID");
+
+        }
+
         add = findViewById(R.id.detail_BuyNow);
         order = findViewById(R.id.detail_Order);
         order.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +125,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
 
                 productItem = new basket_product_item();
 
+                productItem.setID(IDsp);
                 productItem.setCategory(category);
                 productItem.setName(tvname.getText().toString());
                 productItem.setPrice(Integer.parseInt(tvgia.getText().toString()));
@@ -124,7 +138,9 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
 //                Map<String, Object> order = new HashMap<>();
 //                order.put("ListProducts", products);
 
-                db.collection("Gio_hang").document("Diệp Đức Tân1652852397096").update("ListProducts", FieldValue.arrayUnion(productItem)).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+
+                db.collection("Gio_hang").document(userID).update("ListProducts", FieldValue.arrayUnion(productItem)).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
 
@@ -133,7 +149,37 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                db.collection("Gio_hang").document("Diệp Đức Tân1652852397096").set(productItem);
+                                db.collection("Gio_hang")
+                                        .document("Counter")
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot document = task.getResult();
+                                                    if (document.exists()) {
+                                                        size = document.getDouble("Count");
+                                                    } else {
+
+                                                    }
+                                                } else {
+
+                                                }
+                                            }
+                                        });
+
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("name", "");
+                                data.put("phiVanChuyen", "");
+                                data.put("DonHang_Id", "DH"+size);
+                                data.put("DiaChi", "");
+                                data.put("SoDienThoai", "");
+                                data.put("TongThanhToan", "");
+                                data.put("giaohang", "");
+                                data.put("ListProducts", Arrays.asList(productItem));
+
+
+                                db.collection("Gio_hang").document("userID").set(data);
                             }
                         });
 
@@ -141,6 +187,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                 intent.putExtra("Order", "YES");
                 intent.putExtra("PrevActive", "DetailProduct");
                 intent.putExtra("productItem",productItem);
+                intent.putExtra("userID",userID);
                 setPassCategory(category);
                 setPassName(tvname.getText().toString());
                 int price = -1 , num,soluong =-1;
@@ -227,6 +274,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                IDsp = document.getId();
                                 tvname.setText(document.getString("NAME"));
                                 category = document.getString("CATEGORY");
                                 Glide
