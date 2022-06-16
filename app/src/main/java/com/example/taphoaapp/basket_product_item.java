@@ -9,7 +9,7 @@ public class basket_product_item implements Serializable {
     public basket_product_item() {
     }
 
-    public basket_product_item(String ID,String category, String name, String mau, String size, int soluong, int price, int numdat) {
+    public basket_product_item(String category,String ID, String mau, String name, int numdat, int price, String size, int soluong) {
         this.category = category;
         this.name = name;
         this.mau = mau;

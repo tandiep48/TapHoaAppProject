@@ -62,7 +62,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
     SpinnerColorAdapter spinnerColor;
     String name, image, discount, Namevalue, ColorVal , SizeVal, category,IDsp ;
     Integer soluong,giacu,gia;
-    Double size;
+    Integer size;
 
     private String passName,passCategory,passcolor,passsize,userID;
     private int passPrice,passquantity,passSoluong;
@@ -149,6 +149,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+                                Map<String, Object> data = new HashMap<>();
                                 db.collection("Gio_hang")
                                         .document("Counter")
                                         .get()
@@ -158,7 +159,18 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                                                 if (task.isSuccessful()) {
                                                     DocumentSnapshot document = task.getResult();
                                                     if (document.exists()) {
-                                                        size = document.getDouble("Count");
+                                                        size = (document.getDouble("Count").intValue() +1);
+                                                        data.put("name", "");
+                                                        data.put("phiVanChuyen", "");
+                                                        data.put("DonHang_Id", "DH"+size);
+                                                        data.put("DiaChi", "");
+                                                        data.put("SoDienThoai", "");
+                                                        data.put("TongThanhToan", "");
+                                                        data.put("giaohang", false);
+                                                        data.put("ListProducts", Arrays.asList(productItem));
+
+
+                                                        db.collection("Gio_hang").document(userID).set(data);
                                                     } else {
 
                                                     }
@@ -168,18 +180,6 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                                             }
                                         });
 
-                                Map<String, Object> data = new HashMap<>();
-                                data.put("name", "");
-                                data.put("phiVanChuyen", "");
-                                data.put("DonHang_Id", "DH"+size);
-                                data.put("DiaChi", "");
-                                data.put("SoDienThoai", "");
-                                data.put("TongThanhToan", "");
-                                data.put("giaohang", "");
-                                data.put("ListProducts", Arrays.asList(productItem));
-
-
-                                db.collection("Gio_hang").document("userID").set(data);
                             }
                         });
 

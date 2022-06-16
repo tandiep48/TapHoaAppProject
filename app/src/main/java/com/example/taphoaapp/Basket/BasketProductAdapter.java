@@ -2,11 +2,16 @@ package com.example.taphoaapp.Basket;
 
 import static android.graphics.Color.rgb;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +26,9 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,6 +40,9 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
     BasketFragment mFragment;
     private Context mContext;
     private List<basket_product_item> productItemList;
+    Bundle extras ;
+    String userID;
+    private Intent i;
 
     public int getTinh() {
         return tinh;
@@ -103,6 +114,16 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
         tinh = 0 ;
         sum = 0 ;
         this.productItemList = product;
+//        HashMap<String, Object> map = new HashMap<String, Object>();
+//
+//        //Getting Collection of values from HashMap
+//
+//        Collection<Object> values = map.values();
+//
+//        //Creating an ArrayList of values
+//
+//        ArrayList<String> listOfValues = new ArrayList<String>(values);
+
         notifyDataSetChanged();
     }
 
@@ -122,15 +143,30 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
 
+        i = ((Activity) mContext).getIntent();
+        extras = ((Activity) mContext).getIntent().getExtras();
+
+        if ( i!= null &&extras != null) {
+            userID = i.getStringExtra("userID");
+        }
         Locale locale = new Locale("vi", "VN");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
 
         holder.vitri = position;
+        Log.e("check",productItemList+"");
+        Log.e("checklist",productItemList.get(position).getID()+"");
         basket_product_item product = productItemList.get(position);
+//        basket_product_item product = new basket_product_item(productItemList.get(position).getID(),productItemList.get(position).getCategory(),productItemList.get(position).getName(),productItemList.get(position).getMau(),productItemList.get(position).getSize(),productItemList.get(position).getSoluong(),productItemList.get(position).getPrice(),productItemList.get(position).getNumdat()) ;
+
+//        HashMap<String, String> map = new HashMap<String, String>();
+//
+//        Collection<String> values = map.values();
+
+        //Creating an ArrayList of values
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.collection("Gio_hang").document("Diệp Đức Tân1652852397096").update("ListProducts", FieldValue.arrayRemove(productItemList.get(position)));
+                db.collection("Gio_hang").document(userID).update("ListProducts", FieldValue.arrayRemove(productItemList.get(position)));
                 DeleteAt(position);
             }
         });

@@ -71,14 +71,14 @@ public class DonHangFragment extends Fragment {
 
         mView =  inflater.inflate(R.layout.fragment_shipment, container, false);
 
-        mTabLayout = mView.findViewById(R.id.TopTabProfile);
-        viewMain = mView.findViewById(R.id.ViewPagerProfile);
+//        mTabLayout = mView.findViewById(R.id.TopTabProfile);
+//        viewMain = mView.findViewById(R.id.ViewPagerProfile);
 
-        HomeViewPagerAdpater view_pager_adpater = new HomeViewPagerAdpater(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-
-        viewMain.setAdapter(view_pager_adpater);
-        viewMain.setPagingEnabled(false);
-        mTabLayout.setupWithViewPager(viewMain);
+//        HomeViewPagerAdpater view_pager_adpater = new HomeViewPagerAdpater(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+//
+//        viewMain.setAdapter(view_pager_adpater);
+//        viewMain.setPagingEnabled(false);
+//        mTabLayout.setupWithViewPager(viewMain);
 
         return mView;
     }

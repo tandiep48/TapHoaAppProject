@@ -37,6 +37,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.reflect.Array;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,7 +70,7 @@ public class BasketFragment extends Fragment {
    basket_product_item product_item;
    private ImageView btnAdd, btnSubtract;
    int FinalTong;
-   Double size;
+   Integer size;
    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     String Category,Name;
@@ -178,8 +179,9 @@ public class BasketFragment extends Fragment {
 
             ActiPrev = i.getStringExtra("PrevActive");
 
-            Log.e("PrevActive : " , ActiPrev.toString());
-
+            if( ActiPrev != null) {
+                Log.e("PrevActive : ", ActiPrev.toString());
+            }
             // and get whatever type user account id is
         }
 
@@ -190,17 +192,23 @@ public class BasketFragment extends Fragment {
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OrderListProduct(products);
-                // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                if(products != null) {
+                    OrderListProduct(products);
+                    // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Đặt hàng thành công!")
+                            .setTitle("Thông báo");
 
-// 2. Chain together various setter methods to set the dialog characteristics
-                builder.setMessage("Đặt hàng thành công!")
-                        .setTitle("Thông báo");
+                    builder.show();
+                }
+                else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Giỏ hàng trống!")
+                            .setTitle("Thông báo");
 
-                builder.show();
-// 3. Get the <code><a href="/reference/android/app/AlertDialog.html">AlertDialog</a></code> from <code><a href="/reference/android/app/AlertDialog.Builder.html#create()">create()</a></code>
-//                AlertDialog dialog = builder.create();
+                    builder.show();
+                }
+
             }
         });
 
@@ -356,6 +364,7 @@ public class BasketFragment extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
+                    if(document != null){
                     if (document.exists()) {
                         name.setText(document.getString("name"));
                         address.setText(document.getString("DiaChi"));
@@ -363,61 +372,71 @@ public class BasketFragment extends Fragment {
                         nhanhang.setChecked(document.getBoolean("giaohang"));
                         IdDonHang.setText(document.getString("DonHang_Id"));
                         if (document.get("ListProducts") != null) {
-                            products = (List<basket_product_item>) document.get("ListProducts");
+//                            products = (List<basket_product_item>) document.get("ListProducts");
+//                            Log.d("check",((List<?>) document.get("ListProducts")).get(0).toString().sp+"");
+//                            for(Array set : document.get("ListProducts").toArray() )
                         }
                         BasproAdapter.setData(products);
                         mRecycler.setAdapter(BasproAdapter);
-                    } else {
-                        db.collection("Gio_hang")
-                                .document("Counter")
-                                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    size = document.getDouble("Count");
-                                } else {
-                                    Log.d("this", "Error getting documents: ");
-                                }
-                            }
-                        });
-
-
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("name", "");
-                        data.put("phiVanChuyen", "");
-                        data.put("DonHang_Id", "DH"+size);
-                        data.put("DiaChi", "");
-                        data.put("SoDienThoai", "");
-                        data.put("TongThanhToan", "");
-                        data.put("giaohang", "");
-                        if(i!= null && extras !=null &&ActiPrev.toString().equalsIgnoreCase("DetailProduct"))
-                        {
-                            data.put("ListProducts", Arrays.asList(product_item));
-
-
-                            db.collection("Gio_hang").document("userID").set(data);
-                        }
-                        else{
-
-                            db.collection("Gio_hang").document(userID).set(new HashMap<String, Object>());
-                        }
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setMessage("Giỏ hàng mới tạo lần đầu , mời load lại để hiển thị chính xác!")
-                                .setTitle("Thông báo");
-
-                        builder.show();
-                        Log.e("documment", "Error getting documents: ", task.getException());
+                    }else{FillBasket();}
+                    }else {
+                       FillBasket();
                     }
                 } else {
+                    FillBasket();
                 }
             }
         });
 
 
-
-
         return products;
+    }
+
+    private void FillBasket(){
+        Map<String, Object> data = new HashMap<>();
+        db.collection("Gio_hang")
+                .document("Counter")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    size =  (document.getDouble("Count").intValue() +1);
+                    data.put("DonHang_Id", "DH"+size);
+                    data.put("name", "");
+                    data.put("phiVanChuyen", "");
+                    data.put("DiaChi", "");
+                    data.put("SoDienThoai", "");
+                    data.put("TongThanhToan", "");
+                    data.put("giaohang", false);
+                    if(ActiPrev != null) {
+                        if (i != null && extras != null && ActiPrev.toString().equalsIgnoreCase("DetailProduct")) {
+                            data.put("ListProducts", Arrays.asList(product_item));
+
+
+                            db.collection("Gio_hang").document(userID).set(data);
+                        }
+                        else{
+                            data.put("ListProducts",Arrays.asList());
+                            db.collection("Gio_hang").document(userID).set(data);}
+                    }
+                    else{
+                        data.put("ListProducts",Arrays.asList());
+                        db.collection("Gio_hang").document(userID).set(data);
+                    }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Giỏ hàng mới tạo lần đầu , mời load lại để hiển thị chính xác!")
+                            .setTitle("Thông báo");
+
+                    builder.show();
+                    getListProduct();
+                    Log.e("documment", "Error getting documents: ");
+                } else {
+                    Log.d("this", "Error getting documents: ");
+                }
+            }
+        });
+
     }
 
     private List<CharSequence>  getListArea(){

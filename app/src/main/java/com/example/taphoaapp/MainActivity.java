@@ -26,6 +26,7 @@ import com.example.taphoaapp.Basket.DataCommunication;
 import com.example.taphoaapp.DetailProduct.DetailProductActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.security.MessageDigest;
 import java.util.Arrays;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements DataCommunication {
+
 
     private TabLayout mTabLayout;
     private ViewPager viewMain;
@@ -69,10 +71,13 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
 
         if ( i!= null &&extras != null) {
             order = extras.getString("Order");
-            ActiPrev = i.getStringExtra("PrevActive");
+
             userID = i.getStringExtra("userID");
 
-            Log.e("PrevActive : " , ActiPrev.toString());
+            ActiPrev = i.getStringExtra("PrevActive");
+            if(ActiPrev !=null) {
+                Log.e("PrevActive : ", ActiPrev.toString());
+            }
 
             // and get whatever type user account id is
         }
@@ -102,8 +107,10 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
         viewMain.setAdapter(view_pager_adpater);
 //        mTabLayout.setupWithViewPager(viewMain);
 
-        if( i!= null && extras !=null &&ActiPrev.toString().equalsIgnoreCase("DetailProduct")){
-            viewMain.setCurrentItem(1);
+        if(ActiPrev !=null) {
+            if (i != null && extras != null && ActiPrev.toString().equalsIgnoreCase("DetailProduct")) {
+                viewMain.setCurrentItem(1);
+            }
         }
 
         viewMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
