@@ -4,11 +4,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+
     android:id="@+id/DonHang_press_wrap">
         <LinearLayout
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+           >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,7 +81,8 @@
         <LinearLayout
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+           >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -129,4 +132,10 @@
             </LinearLayout>
 
         </LinearLayout>
+<!--    <Button-->
+<!--        android:id="@+id/DonHang_Huy"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:text="Hủy Đơn hàng"-->
+<!--        android:backgroundTint="@color/negative_red"/>-->
     </LinearLayout>

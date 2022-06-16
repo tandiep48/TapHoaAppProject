@@ -120,7 +120,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ProductV
         holder.pressLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, DetailProductActivity.class);
+                Intent intent = new Intent(mContext, DonhangDetailActivity.class);
 //                intent.putExtra("NAME",product.getName());
                 intent.putExtra("prevActive", "MainActivity");
                 intent.putExtra("userID", userID);

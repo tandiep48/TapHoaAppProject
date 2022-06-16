@@ -24,14 +24,14 @@ public class ProfileViewPagerAdpater extends FragmentStatePagerAdapter
         switch (position) {
             case 0: return new DonHangFragment();
             case 1: return new ProfileFragment();
-            case 2: return new SettingFragment();
+//            case 2: return new SettingFragment();
             default: return new ProfileFragment();
         }
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     @Nullable
@@ -41,7 +41,7 @@ public class ProfileViewPagerAdpater extends FragmentStatePagerAdapter
         switch (position) {
             case 0: title = App.getAppResources().getString(R.string.Shipment);break;
             case 1: title = App.getAppResources().getString(R.string.Profile); break;
-            case 2: title = App.getAppResources().getString(R.string.Setting);break;
+//            case 2: title = App.getAppResources().getString(R.string.Setting);break;
         }
         return title;
     }

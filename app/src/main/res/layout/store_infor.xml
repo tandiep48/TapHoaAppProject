@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/detail_Parrent_Constraint"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".DetailProduct.DetailProductActivity"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintBottom_toTopOf="@+id/detail_topLinear"
+        app:layout_constraintEnd_toEndOf="@+id/detail_topLinear"
+        app:layout_constraintHeight_default="wrap"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ToolbarColoredBackArrow"
+        app:titleTextColor="@color/white"/>
+
+    <LinearLayout
+        android:id="@+id/detail_topLinear"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/detail_Bottom_Buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="wrap"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_toolbar"
+        android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/myScrollView"
+        android:fillViewport="false"
+        android:layout_gravity="fill_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <RelativeLayout
+            android:id="@+id/detail_Relative_myScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/head_layout_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/head_image_product"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/detail_product_name"
+                android:layout_width="360dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:text="Tiệm tạp hóa Socker"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/detail_price_layout"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_weight = "2"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/detail_product_soluong"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:textSize="15dp"-->
+<!--                    android:text="Số lượng : 3"/>-->
+<!--                <TextView-->
+<!--                    android:id="@+id/detail_product_giagoc"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:textSize="15dp"-->
+<!--                    android:text="198.000đ"/>-->
+<!--            </LinearLayout>-->
+
+
+
+
+
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="4">
+
+            <TextView
+                android:id="@+id/detail_MoTa_tittle"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginBottom="5dp"
+                android:text="Giới thiệu :"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/detail_mota"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:inputType="textMultiLine"
+                android:text=""
+                android:textSize="15dp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/detail_Bottom_Buttons"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:weightSum = "2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_topLinear">
+
+        <Button
+            android:id="@+id/detail_BuyNow"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight = "1"
+            android:text="Thêm vào giỏ hàng"
+            android:backgroundTint="@color/Orange"/>
+
+        <Button
+            android:id="@+id/detail_Order"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight = "1"
+            android:text="Đặt hàng"
+            android:backgroundTint="@color/negative_red"/>
+
+
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

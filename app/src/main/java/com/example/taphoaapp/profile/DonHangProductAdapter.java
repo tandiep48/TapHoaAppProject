@@ -1,6 +1,4 @@
-package com.example.taphoaapp.Basket;
-
-import static android.graphics.Color.rgb;
+package com.example.taphoaapp.profile;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,14 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.taphoaapp.Basket.DataCommunication;
 import com.example.taphoaapp.BasketFragment;
 import com.example.taphoaapp.DetailProduct.DetailProductActivity;
 import com.example.taphoaapp.R;
@@ -26,13 +23,10 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdapter.ProductViewHolder>{
+public class DonHangProductAdapter extends RecyclerView.Adapter<DonHangProductAdapter.ProductViewHolder>{
 
     DataCommunication mCallback;
 
@@ -65,20 +59,18 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
         }
     }
 
-    public BasketProductAdapter(Context mContext,BasketFragment Fragment) {
+    public DonHangProductAdapter(Context mContext, BasketFragment Fragment) {
         this.mContext = mContext;
         this.mFragment=Fragment;
     }
 
-    public BasketProductAdapter(Context mContext) {
+    public DonHangProductAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder{
 
         private TextView  cate ,name ,type_mau,type_size, soluong,  price , tong, tvQuan;
-        private ImageView minus , plus ,edit ,delete;
-        private ImageView btnAdd, btnSubtract;
         public int numtong, vitri;
 
 
@@ -91,16 +83,6 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
             price = itemView.findViewById(R.id.product_price);
             soluong = itemView.findViewById(R.id.product_Quantity);
             tong = itemView.findViewById(R.id.tvFSum);
-            tvQuan = itemView.findViewById(R.id.tvQuantity);
-            minus =  itemView.findViewById(R.id.btnSubtract);
-            plus =  itemView.findViewById(R.id.btnAdd);
-            edit = (ImageView) itemView.findViewById(R.id.basket_product_edit);
-            delete = (ImageView) itemView.findViewById(R.id.basket_product_cancel);
-            btnAdd = (ImageView) itemView.findViewById(R.id.btnAdd);
-            btnSubtract = itemView.findViewById(R.id.btnSubtract);
-
-
-
 
         }
 
@@ -140,7 +122,7 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view  = LayoutInflater.from(parent.getContext()).inflate(R.layout.basket_product_item,parent,false);
+        View view  = LayoutInflater.from(parent.getContext()).inflate(R.layout.donhang_product_item,parent,false);
         return new ProductViewHolder(view);
     }
 
@@ -166,26 +148,6 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
 //
 //        Collection<String> values = map.values();
 
-        //Creating an ArrayList of values
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                db.collection("Gio_hang").document(userID).update("ListProducts", FieldValue.arrayRemove(productItemList.get(position)));
-                DeleteAt(position);
-            }
-        });
-
-        holder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, DetailProductActivity.class);
-                intent.putExtra("NAME",product.getName());
-                intent.putExtra("prevActive", "BasketProduct");
-                intent.putExtra("Order", "NO");
-
-                mContext.startActivity(intent);
-            }
-        });
 
 
         if(product == null) return;
@@ -224,9 +186,7 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
                 holder.name.performLongClick();
             }
         });
-        holder.soluong.setText(String.valueOf(product.getSoluong()));
-        holder.tvQuan.setText(String.valueOf(1));
-        product.setNumdat(1);
+        holder.soluong.setText(String.valueOf(product.getNumdat()));
         holder.type_mau.setText("Màu: " + String.valueOf(product.getMau()));
         holder.type_size.setText("Size: " +String.valueOf(product.getSize()));
         sum = product.getPrice() * product.getSoluong();
@@ -235,53 +195,6 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
         holder.tong.setText(String.valueOf(currencyFormatter.format(sum)));
         tinh += sum;
 
-        holder.btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               int tmp;
-               if( (Integer.parseInt(holder.tvQuan.getText().toString()) + 1) >= Integer.parseInt(holder.soluong.getText().toString())) tmp = Integer.parseInt(holder.soluong.getText().toString());
-               else tmp = Integer.parseInt(holder.tvQuan.getText().toString()) + 1;
-                sum = product.getPrice() * tmp;
-                holder.setNumtong(sum);;
-                holder.tong.setText(String.valueOf(currencyFormatter.format(sum)));
-                holder.numtong = product.getPrice();
-//                for (int i = 0; i < productItemList.size(); i++){
-//                    product_item productTMP = productItemList.get(i);
-//                    int sumTMP = productTMP.getPrice() * productTMP.getSoluong();
-//                    tinh += sumTMP;
-//                }
-                mFragment.SetTotalPrice();
-
-               holder.tvQuan.setText(String.valueOf(tmp));
-//                notifyItemChanged(position);
-                product.setNumdat(tmp);
-            }
-        });
-            holder.btnSubtract.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int tnp;
-                    if(Integer.parseInt(holder.tvQuan.getText().toString()) >= 2) {
-                        tnp = Integer.parseInt(holder.tvQuan.getText().toString()) - 1;
-                    }
-                    else {tnp = 1;}
-                    sum = product.getPrice() * tnp;
-                    holder.setNumtong(sum);;
-                    holder.tong.setText(String.valueOf(currencyFormatter.format(sum)));
-////                    tinh = 0;
-//                    for (int i = 0; i < productItemList.size(); i++){
-//                        product_item productTNP = productItemList.get(i);
-//
-//                        int sumTNP = productTNP.getPrice() * productTNP.getSoluong();
-//                        tinh += sumTNP;
-//                    }
-                    mFragment.SetTotalPrice();
-                    holder.tvQuan.setText(String.valueOf(tnp));
-//                    notifyItemChanged(position);
-                    if(Integer.parseInt(holder.soluong.getText().toString()) <= 0 ) product.setNumdat(0);
-                    else product.setNumdat(tnp);
-                }
-            });
 
 
         holder.price.setTextColor(mContext.getColor(R.color.negative_red));

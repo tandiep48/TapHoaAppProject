@@ -22,9 +22,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NavUtils;
 import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.example.taphoaapp.Basket.BasketProductAdapter;
 import com.example.taphoaapp.Basket.DataCommunication;
 import com.example.taphoaapp.BasketFragment;
 import com.example.taphoaapp.DetailProduct.SpinnerColor;
@@ -44,6 +47,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -55,11 +59,17 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
 
     DataCommunication mCallback;
 
+    private RecyclerView mRecycler;
+    private DonHangProductAdapter BasproAdapter;
+    basket_product_item product_item;
+
+    List<basket_product_item> products;
+
     private TabLayout mTabLayout;
     private ViewPager viewMain;
     private BottomNavigationView bottomnavigation;
     private ImageView main , one , two , three;
-    private TextView tvname, tvdiscount,tvsoluong,tvgiacu,tvgia,tvMota;
+    private TextView MaHD,Status , nguoiOrder,tvpay,date,phone,delivery,TransFee,address;
     private Spinner spinColor , spinSize;
     SpinnerColorAdapter spinnerColor;
     String name, image, discount, Namevalue, ColorVal , SizeVal, category,IDsp ;
@@ -98,7 +108,18 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
 
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_detail_product);
+        setContentView(R.layout.fragment_detail__order);
+
+
+        mRecycler = findViewById(R.id.DonHang_productRC);
+        BasproAdapter = new DonHangProductAdapter(this);
+        mRecycler.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false) {
+            @Override
+            public void onLayoutCompleted(RecyclerView.State state) {
+                super.onLayoutCompleted(state);
+            }
+        });
+
         extras = getIntent().getExtras();
         Locale locales = new Locale("vi");
         Locale.setDefault(locales);
@@ -106,7 +127,6 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
         config.locale = locales;
         this.getApplicationContext().getResources().updateConfiguration(config, null);
 //        mCallback = (DataCommunication) this.getApplicationContext();
-        mCallback = (DataCommunication) DonhangDetailActivity.this;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         Intent i = getIntent();
@@ -116,149 +136,30 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
             userID = i.getStringExtra("userID");
 
         }
+        Locale locale = new Locale("vi", "VN");
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
 
-        add = findViewById(R.id.detail_BuyNow);
-        order = findViewById(R.id.detail_Order);
-        order.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DonhangDetailActivity.this, MainActivity.class);
-//                intent.putExtra("prevActive", "DetailProduct");
+        MaHD = findViewById(R.id.tvOrderName);
+        Status = findViewById(R.id.tvStatusOrder);
+        nguoiOrder = findViewById(R.id.tvPersonName);
+        tvpay = findViewById(R.id.tvPrice);
+        date = findViewById(R.id.tvDate);
+        phone = findViewById(R.id.tvPhone);
+        delivery = findViewById(R.id.tvDelivery);
+        TransFee = findViewById(R.id.tvTransFee);
+        address = findViewById(R.id.tvAddress);
 
-                productItem = new basket_product_item();
+        MaHD.setText("DH02");
+        Status.setText("Đang lấy hàng");
+        nguoiOrder.setText("Diệp Đức Tân");
+        date.setText("16-thg 6-2022");
+        phone.setText("0902548260");
+//        delivery.setText("");
+        TransFee.setText("15.000đ");
+        address.setText("828 Sư Vạn Hạnh, Phường 13, Quận 10");
+        tvpay.setText(currencyFormatter.format(104000 ));
 
-                productItem.setID(IDsp);
-                productItem.setCategory(category);
-                productItem.setName(tvname.getText().toString());
-                productItem.setPrice(Integer.parseInt(tvgia.getText().toString()));
-                //productItem.setNumdat(Integer.parseInt(tv.getText().toString()));
-                productItem.setSoluong(Integer.parseInt(tvsoluong.getText().toString()));
-                productItem.setMau(spinColor.getSelectedItem().toString());
-                productItem.setSize(spinSize.getSelectedItem().toString());
-//                List<product_item> products = new ArrayList<>();
-//                products.add(productItem);
-//                Map<String, Object> order = new HashMap<>();
-//                order.put("ListProducts", products);
-
-
-
-                db.collection("Gio_hang").document(userID).update("ListProducts", FieldValue.arrayUnion(productItem)).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-
-                    }
-                })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Map<String, Object> data = new HashMap<>();
-                                db.collection("Gio_hang")
-                                        .document("Counter")
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    DocumentSnapshot document = task.getResult();
-                                                    if (document.exists()) {
-                                                        size = (document.getDouble("Count").intValue() +1);
-                                                        data.put("name", "");
-                                                        data.put("phiVanChuyen", "");
-                                                        data.put("DonHang_Id", "DH"+size);
-                                                        data.put("DiaChi", "");
-                                                        data.put("SoDienThoai", "");
-                                                        data.put("TongThanhToan", "");
-                                                        data.put("giaohang", false);
-                                                        data.put("ListProducts", Arrays.asList(productItem));
-
-
-                                                        db.collection("Gio_hang").document(userID).set(data);
-                                                    } else {
-
-                                                    }
-                                                } else {
-
-                                                }
-                                            }
-                                        });
-
-                            }
-                        });
-
-                mCallback.setPrevActive("DetailProduct");
-                intent.putExtra("Order", "YES");
-                intent.putExtra("PrevActive", "DetailProduct");
-                intent.putExtra("productItem",productItem);
-                intent.putExtra("userID",userID);
-                setPassCategory(category);
-                setPassName(tvname.getText().toString());
-                int price = -1 , num,soluong =-1;
-
-                try {
-                    price = Integer.parseInt(tvgia.getText().toString());
-                    soluong = Integer.parseInt(tvsoluong.getText().toString());
-                } catch(NumberFormatException nfe) {
-                    System.out.println("Could not parse " + nfe);
-                }
-                setPassPrice(price);
-                setPassquantity(1);
-                setPassSoluong(soluong);
-//                mCallback.getPasscolor();
-//                mCallback.setPasssize();
-////
-                DonhangDetailActivity.this.startActivity(intent);
-            }
-        });
-
-        tvname = findViewById(R.id.detail_product_name);
-        tvdiscount = findViewById(R.id.detail_product_discount);
-        tvsoluong = findViewById(R.id.detail_product_soluong);
-        tvgiacu = findViewById(R.id.detail_product_giagoc);
-        tvgia = findViewById(R.id.detail_product_gia);
-        tvMota = findViewById(R.id.detail_mota);
-        listColor = new ArrayList<>();
-        listSize = new ArrayList<>();
-        TrungGian = new ArrayList<>();
-
-        spinColor = findViewById(R.id.detail_Color_choose);
-        spinSize = findViewById(R.id.detail_Size_choose);
-        spinnerColor = new SpinnerColorAdapter(DonhangDetailActivity.this,android.R.layout.simple_spinner_item,listColor);
-        spinnerColor.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinColor.setAdapter(spinnerColor);
-        spinColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                Toast.makeText(DetailProductActivity.this, spinnerColor.getItem(i).getName(), Toast.LENGTH_SHORT).show();
-                ColorVal = spinnerColor.getItem(i);
-                Log.e("gia tri Spinner mau :",String.valueOf(ColorVal));
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        ArrayAdapter<String> adapter = new ArrayAdapter(DonhangDetailActivity.this,
-                android.R.layout.simple_spinner_item, listSize);
-//        simple_spinner_item
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinSize.setAdapter(adapter);
-        spinSize.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(DonhangDetailActivity.this, adapter.getItem(position), Toast.LENGTH_SHORT).show();
-                 SizeVal = spinSize.getSelectedItem().toString();
-                Log.e("gia tri Spinner size :",String.valueOf(SizeVal));
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        getListProduct();
 
 
 
@@ -268,117 +169,15 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
         }
 
 
-        db.collection("SAN_PHAM")
-                .whereEqualTo("NAME", Namevalue)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                IDsp = document.getId();
-                                tvname.setText(document.getString("NAME"));
-                                category = document.getString("CATEGORY");
-                                Glide
-                                        .with(DonhangDetailActivity.this)
-                                        .load(document.getString("IMAGE"))
-                                        .into(main);
-                                tvdiscount.setText(String.valueOf(toIntExact(document.getLong("DISCOUNT"))));
-                                Log.e("Soluong :",String.valueOf(toIntExact(document.getLong("SOLUONG"))));
-                                tvsoluong.setText( String.valueOf(toIntExact(document.getLong("SOLUONG"))));
-                                tvgiacu.setText(String.valueOf(toIntExact(document.getLong("GIACU"))));
-                                tvgia.setText(String.valueOf(toIntExact(document.getLong("GIA"))));
 
-                                Log.e("documment", document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.e("documment", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+//
+//        ConstraintLayout ml = findViewById(R.id.detail_Parrent_Constraint);
+//        ml.invalidate();
 
-        db.collection("CHI_TIET_SAN_PHAM")
-                .whereEqualTo("NAME", Namevalue)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                tvMota.setText(document.getString("MOTA"));
-                                Glide
-                                        .with(DonhangDetailActivity.this)
-                                        .load(document.getString("IMAGE1"))
-                                        .into(one);
-                                Glide
-                                        .with(DonhangDetailActivity.this)
-                                        .load(document.getString("IMAGE2"))
-                                        .into(two);
-                                Glide
-                                        .with(DonhangDetailActivity.this)
-                                        .load(document.getString("IMAGE3"))
-                                        .into(three);
-                                if(document.get("MAUSAC") != null) {
-                                    TrungGian = (List<String>) document.get("MAUSAC");
-                                    for (int i=0;i<TrungGian.size();i++) { // < instead of <=, don't hardcode the length
-                                        if (TrungGian.get(i) != null)
-                                        {
-                                            listColor.add(new String(TrungGian.get(i)));
-                                        }// once we insert a, stop looping
-                                        }
-                                    spinnerColor.notifyDataSetChanged();
-                                    Log.e("ListMauSac :",String.valueOf(listColor));
-                                }
-                                if(document.get("SIZE") != null) {
-                                    TrungGian = (List<String>) document.get("SIZE");
-
-                                    for (int i=0;i<TrungGian.size();i++) { // < instead of <=, don't hardcode the length
-                                        if (TrungGian.get(i) != null)
-                                        {
-                                            listSize.add(new String(TrungGian.get(i)));
-                                        }// once we insert a, stop looping
-                                    }
-                                    adapter.notifyDataSetChanged();
-
-                                    Log.e("Listsize :",String.valueOf(listSize));
-                                }
-
-                                Log.e("documment", document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.e("documment", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-
-        main = (ImageView) findViewById(R.id.head_image_product);
-        one = (ImageView) findViewById(R.id.one_image_product);
-        two = (ImageView) findViewById(R.id.two_image_product);
-        three = (ImageView) findViewById(R.id.three_image_product);
-
-
-//        Glide
-//                .with(this)
-//                .load("https://cf.shopee.vn/file/1657b14b218fd5962fc3508d367379fc")
-//                .into(one);
-//        Glide
-//                .with(this)
-//                .load("https://cf.shopee.vn/file/e86689e29f6f3d7131d0a0948ef254c1")
-//                .into(two);
-//        Glide
-//                .with(this)
-//                .load("https://cf.shopee.vn/file/afe17b6984db098f4e39e2f2c66a0d65")
-//                .into(three);
-
-
-        ConstraintLayout ml = findViewById(R.id.detail_Parrent_Constraint);
-        ml.invalidate();
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.DonHangdetail_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Quần Áo");
+        getSupportActionBar().setTitle("Chi tiết Đơn hàng DH02");
 //        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
@@ -386,83 +185,29 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
         scrollView.invalidate();
         scrollView.requestLayout();
 
-//        mTabLayout =findViewById(R.id.TopTabmain);
-//        viewMain = findViewById(R.id.ViewPagerMain);
-//        bottomnavigation = findViewById(R.id.BotomNavMain);
-//
-//        MainViewPagerAdpater view_pager_adpater = new MainViewPagerAdpater(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-//
-//        viewMain.setAdapter(view_pager_adpater);
-////        mTabLayout.setupWithViewPager(viewMain);
-//
-//
-//
-//        viewMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                switch (position) {
-//                    case 0: bottomnavigation.getMenu().findItem(R.id.Menu_Shop).setChecked(true); break;
-//                    case 1: bottomnavigation.getMenu().findItem(R.id.Menu_Basket).setChecked(true); break;
-//                    case 2: bottomnavigation.getMenu().findItem(R.id.Menu_Profile).setChecked(true); break;
-//                }
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
-//        bottomnavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.Menu_Shop: viewMain.setCurrentItem(0); break;
-//                    case R.id.Menu_Basket: viewMain.setCurrentItem(1); break;
-//                    case R.id.Menu_Profile: viewMain.setCurrentItem(2); break;
-//                }
-//                return true;
-//            }
-//        });
-//
-//    }
-//    //        String[] Fragement =  {"QuanaoFragment","DientuFragment","VanphongFragment","SachFragment" };
-////        String[] Title =  {App.getAppResources().getString(R.string.clothes),App.getAppResources().getString(R.string.Electron),App.getAppResources().getString(R.string.Office),App.getAppResources().getString(R.string.books) };
-////        List<String> FragList = Arrays.asList(Fragement);
-////        List<String> TiList = Arrays.asList(Title);
-//
-//
-//    @Override
-//    public void onBackPressed() {
-//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_quanao);
-//      if (!(fragment instanceof IOnBackPressed) || !((IOnBackPressed) fragment).onBackPressed()) {
-//          super.onBackPressed();
-//
-//      }
-//        super.onBackPressed();
-//    }
 }
+    private List<basket_product_item> getListProduct(){
+        products = new ArrayList<>();
+        products.add( new basket_product_item("Quần áo","SP02","xám","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng",1,89000,"L",20));
+//        products.add( new basket_product_item("Quần áo","SP03","xanh tía","Mũ lưỡi trai ❤ Nón kết thêu chữ Memorie phong cách Ulzzang",5,225000,"",6));
 
-    private List<SpinnerColor> getListColor(){
-        List<SpinnerColor> listColor = new ArrayList<>();
-        listColor.add(new SpinnerColor("Xám","#808080"));
-        listColor.add(new SpinnerColor("Vàng kem","#FFFFB2"));
-        listColor.add(new SpinnerColor("Đen","#191919"));
 
-        return listColor;
-    }
+        BasproAdapter.setData(products);
+        mRecycler.setAdapter(BasproAdapter);
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        products.add( new product_item("https://cf.shopee.vn/file/34acd5e930c8a21e1c3a70d3cf2a70c5","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng","55%",2,198000,89000));
+//        products.add( new product_item("https://cf.shopee.vn/file/b2612c1a8242069aced2f2f26b592f38","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang","22%",5,58000,45000));
+//        products.add( new product_item("https://cf.shopee.vn/file/
+//        products.add( new product_item("QuầnÁO","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng",89000,2,20));
+//        products.add( new product_item("QuầnÁO","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang",45000,5,5));
 
-    private List<CharSequence>  getListsize(){
-        List<CharSequence> listSize = new ArrayList<>();
-        listSize.add(new String("L"));
-        listSize.add(new String("XL"));
-        listSize.add(new String("XXl"));
+        //      if (prevActive == "DetailProduct"||prevActive == null)
+//        if(i!= null && extras !=null &&ActiPrev.toString().equalsIgnoreCase("DetailProduct"))
+//        {products.add( new basket_product_item(product_item.getCategory(), product_item.getName(),product_item.getMau(),product_item.getSize(),product_item.getSoluong(),product_item.getPrice(),product_item.getNumdat())); }
+        //   {products.add( new product_item(PassCategory, PassName,PassPrice,PassQuantity,PassSoluong)); }
 
-        return listSize;
+
+        return products;
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
