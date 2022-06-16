@@ -40,23 +40,21 @@
             android:value="@string/facebook_client_token" />
 
         <activity
-            android:name=".UserActivity"
-            android:configChanges="locale"
-            android:exported="true" />
-        <activity
             android:name=".LoginActivity"
             android:configChanges="locale"
             android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".WelcomeActivity"
+            android:configChanges="locale"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".WelcomeActivity"
-            android:configChanges="locale"
-            android:exported="true" />
         <activity
             android:name=".SignUpActivity"
             android:configChanges="locale"
