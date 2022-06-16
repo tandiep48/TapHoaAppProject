@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,8 +15,6 @@
         android:background="@color/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:layout_constraintBottom_toTopOf="@+id/detail_topLinear"
-        app:layout_constraintEnd_toEndOf="@+id/detail_topLinear"
         app:layout_constraintHeight_default="wrap"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -27,24 +25,11 @@
         app:theme="@style/ToolbarColoredBackArrow"
         app:titleTextColor="@color/white"/>
 
-    <LinearLayout
-        android:id="@+id/detail_topLinear"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/detail_Bottom_Buttons"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_default="wrap"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_toolbar"
-        android:orientation="vertical">
+
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/myScrollView"
-        android:fillViewport="false"
+        android:fillViewport="true"
         android:layout_gravity="fill_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -56,19 +41,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/head_layout_product"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/head_image_product"
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"
-            android:layout_centerInParent="true"/>
-
-    </RelativeLayout>
 
 
 
@@ -78,6 +50,29 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginVertical="10dp"
+                android:weightSum="2">
+                <ImageView
+                    android:id="@+id/head_image_product"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    />
+
+        <ImageView
+            android:id="@+id/head_image_product2"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            />
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -100,38 +95,9 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
-<!--            <LinearLayout-->
-<!--                android:id="@+id/detail_price_layout"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_weight = "2"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical">-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/detail_product_soluong"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:textSize="15dp"-->
-<!--                    android:text="Số lượng : 3"/>-->
-<!--                <TextView-->
-<!--                    android:id="@+id/detail_product_giagoc"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:textSize="15dp"-->
-<!--                    android:text="198.000đ"/>-->
-<!--            </LinearLayout>-->
-
-
-
-
-
+            android:orientation="horizontal">
 
         </LinearLayout>
 
@@ -160,53 +126,188 @@
                 android:layout_height="0dp"
                 android:layout_weight="4"
                 android:inputType="textMultiLine"
-                android:text=""
+                android:text="Chúng tôi mong muốn mang đến sự nhanh chóng và tiện lợi tối đa khi mua sắm đến cho khách hàng bằng việc đưa hệ thống siêu thị Socker Xanh khắp mọi khu.
+/n Bên cạnh đó, chúng tôi cũng tập trung phát triển kênh mua sắm online trên ứng dụng di động tạp hóa SockerXANH để phục vụ cho mọi đối tượng, đặc biệt là nhóm khách hàng trẻ./n
+Socker XANH cũng không ngừng tìm kiếm và mang đến sự đa dạng trong việc lựa chọn sản phẩm với hơn 12.000 sản phẩm đủ chủng loại, xuất xứ rõ ràng, giá cả hợp lý, minh bạch.
+
+"
                 android:textSize="15dp" />
 
+            <LinearLayout
+                android:id="@+id/contac_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginVertical="10dp">
+
+                <TextView
+                    android:id="@+id/adress_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="15dp"
+                    android:text="Địa chỉ :"/>
+
+
+                <TextView
+                    android:id="@+id/adress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:text="14 Kỳ Đồng, Phường 9, Quận 3, Thành phố Hồ Chí Minh"/>
+            </LinearLayout>
+
+            <org.osmdroid.views.MapView
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="175dp" />
+
+            <LinearLayout
+                android:id="@+id/contac_Time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginVertical="10dp">
+
+                <TextView
+                    android:id="@+id/Time_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="15dp"
+                    android:text="Thời gian làm việc :"/>
+
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:text="7h00 sáng - 19h00 tối"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/LienHe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:text="LienHe"/>
+
+            <LinearLayout
+                android:id="@+id/contac"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/detail_product_soluong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="15dp"
+                    android:text="Điện thoại liên hệ :"/>
+
+
+                <TextView
+                    android:id="@+id/phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:text="38 632 052 - 38 629 232 "/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/contac2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/email_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="15dp"
+                    android:text="Email liên hệ :"/>
+
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:text="contact_SockerXanh@gmail.vn"/>
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
 
+
+
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
         </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/detail_Bottom_Buttons"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:weightSum = "2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_topLinear">
-
-        <Button
-            android:id="@+id/detail_BuyNow"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight = "1"
-            android:text="Thêm vào giỏ hàng"
-            android:backgroundTint="@color/Orange"/>
-
-        <Button
-            android:id="@+id/detail_Order"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight = "1"
-            android:text="Đặt hàng"
-            android:backgroundTint="@color/negative_red"/>
 
 
+<!--    <LinearLayout-->
+<!--        android:id="@+id/detail_Bottom_Buttons"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:weightSum = "2"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/detail_topLinear">-->
 
-    </LinearLayout>
+<!--        <Button-->
+<!--            android:id="@+id/detail_BuyNow"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight = "1"-->
+<!--            android:text="Thêm vào giỏ hàng"-->
+<!--            android:backgroundTint="@color/Orange"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/detail_Order"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight = "1"-->
+<!--            android:text="Đặt hàng"-->
+<!--            android:backgroundTint="@color/negative_red"/>-->
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+<!--    </LinearLayout>-->
+
+
+
+</LinearLayout>

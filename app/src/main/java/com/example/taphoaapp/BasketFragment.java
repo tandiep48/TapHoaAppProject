@@ -349,45 +349,49 @@ public class BasketFragment extends Fragment {
 //        products.add( new product_item("https://cf.shopee.vn/file/34acd5e930c8a21e1c3a70d3cf2a70c5","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng","55%",2,198000,89000));
 //        products.add( new product_item("https://cf.shopee.vn/file/b2612c1a8242069aced2f2f26b592f38","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang","22%",5,58000,45000));
 //        products.add( new product_item("https://cf.shopee.vn/file/
-//        products.add( new product_item("QuầnÁO","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng",89000,2,20));
-//        products.add( new product_item("QuầnÁO","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang",45000,5,5));
+//        products.add( new basket_product_item("QuầnÁO","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng",89000,2,20));
+//        products.add( new basket_product_item("QuầnÁO","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang",45000,5,5));
+
+        products.add( new basket_product_item("Quần áo","SP02","xám","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng",1,89000,"L",20));
+//        products.add( new basket_product_item("Quần áo","SP03","xám","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang",1,45000,"L",6));
 
   //      if (prevActive == "DetailProduct"||prevActive == null)
 //        if(i!= null && extras !=null &&ActiPrev.toString().equalsIgnoreCase("DetailProduct"))
-//        {products.add( new basket_product_item(product_item.getCategory(), product_item.getName(),product_item.getMau(),product_item.getSize(),product_item.getSoluong(),product_item.getPrice(),product_item.getNumdat())); }
+//        {products.add( new basket_product_item(product_item.getCategory(),product_item.getID(),product_item.getMau(), product_item.getName(),product_item.getNumdat(),product_item.getPrice(),product_item.getSize(),product_item.getSoluong())); }
      //   {products.add( new product_item(PassCategory, PassName,PassPrice,PassQuantity,PassSoluong)); }
 
-        db.collection("Gio_hang")
-                .document(userID)
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if(document != null){
-                    if (document.exists()) {
-                        name.setText(document.getString("name"));
-                        address.setText(document.getString("DiaChi"));
-                        phone.setText(document.getString("SoDienThoai"));
-                        nhanhang.setChecked(document.getBoolean("giaohang"));
-                        IdDonHang.setText(document.getString("DonHang_Id"));
-                        if (document.get("ListProducts") != null) {
-//                            products = (List<basket_product_item>) document.get("ListProducts");
-//                            Log.d("check",((List<?>) document.get("ListProducts")).get(0).toString().sp+"");
-//                            for(Array set : document.get("ListProducts").toArray() )
-                        }
-                        BasproAdapter.setData(products);
-                        mRecycler.setAdapter(BasproAdapter);
-                    }else{FillBasket();}
-                    }else {
-                       FillBasket();
-                    }
-                } else {
-                    FillBasket();
-                }
-            }
-        });
-
+//        db.collection("Gio_hang")
+//                .document(userID)
+//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if(document != null){
+//                    if (document.exists()) {
+//                        name.setText(document.getString("name"));
+//                        address.setText(document.getString("DiaChi"));
+//                        phone.setText(document.getString("SoDienThoai"));
+//                        nhanhang.setChecked(document.getBoolean("giaohang"));
+//                        IdDonHang.setText(document.getString("DonHang_Id"));
+//                        if (document.get("ListProducts") != null) {
+////                            products = (List<basket_product_item>) document.get("ListProducts");
+////                            Log.d("check",((List<?>) document.get("ListProducts")).get(0).toString().sp+"");
+////                            for(Array set : document.get("ListProducts").toArray() )
+//                        }
+//                        BasproAdapter.setData(products);
+//                        mRecycler.setAdapter(BasproAdapter);
+//                    }else{FillBasket();}
+//                    }else {
+//                       FillBasket();
+//                    }
+//                } else {
+//                    FillBasket();
+//                }
+//            }
+//        });
+        BasproAdapter.setData(products);
+        mRecycler.setAdapter(BasproAdapter);
 
         return products;
     }
@@ -534,6 +538,7 @@ public class BasketFragment extends Fragment {
             BasketProductAdapter.ProductViewHolder holder = (BasketProductAdapter.ProductViewHolder) mRecycler.getChildViewHolder(mRecycler.getChildAt(i));
             FinalTong += holder.getNumtong();
         }
+        FinalTong = FinalTong + 15000 ;
         total.setText(String.valueOf(currencyFormatter.format(FinalTong)));
     }
 //    public void changeText(int data,TextView tv)

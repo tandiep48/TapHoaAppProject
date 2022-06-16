@@ -126,7 +126,14 @@ public class ProfileFragment extends Fragment {
         StoreInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getActivity(), StoreInfo.class);
+                intent.putExtra("userID", UID);
+                intent.putExtra("Info_fullname", Info_fullname.getText().toString());
+                intent.putExtra("Info_email", Info_email.getText().toString());
+                intent.putExtra("Info_age",Info_age.getText().toString());
+                intent.putExtra("Info_gender",Info_gender.getText().toString());
+                intent.putExtra("Info_phone",Info_phone.getText().toString());
+                startActivity(intent);
             }
         });
         Logout.setOnClickListener(new View.OnClickListener() {
