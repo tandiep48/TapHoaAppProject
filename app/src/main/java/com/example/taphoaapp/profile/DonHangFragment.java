@@ -1,56 +1,80 @@
 package com.example.taphoaapp.profile;
 
+import static java.lang.Math.toIntExact;
+
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.taphoaapp.HomeViewPagerAdpater;
+import com.example.taphoaapp.IOnBackPressed;
+import com.example.taphoaapp.ProductAdapter;
 import com.example.taphoaapp.R;
-import com.example.taphoaapp.widget.CustomViewPager;
-import com.google.android.material.tabs.TabLayout;
+import com.example.taphoaapp.Search.SearchActivity;
+import com.example.taphoaapp.product_item;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DonHangFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class DonHangFragment extends Fragment {
+import java.text.Collator;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
-    private TabLayout mTabLayout;
-    private CustomViewPager viewMain;
+
+public class DonHangFragment extends Fragment  implements IOnBackPressed {
+
+  private RecyclerView mRecycler;
+  private DonHangAdapter proAdapter;
+  private SearchView searchView;
+  private LinearLayout pressLayout;
+    private View ViewItem;
     private View mView;
+    private Spinner spinner;
+    public List<DonHang_item> SortDonHang;
+    private Collator VNCollator;
+    String name, image, discount,category;
+    Integer soluong,giacu,gia;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
 
     public DonHangFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static DonHangFragment newInstance(String param1, String param2) {
         DonHangFragment fragment = new DonHangFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,28 +82,230 @@ public class DonHangFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        VNCollator = Collator.getInstance(new Locale("vi", "VN")); //Your locale here
+        VNCollator.setStrength(Collator.PRIMARY); //desired strength
+
+        setHasOptionsMenu(true);
+
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        mView =  inflater.inflate(R.layout.fragment_product_list, container, false);
         // Inflate the layout for this fragment
+        spinner = mView.findViewById(R.id.Spinner_sort);
+//        SortProduct = getListProduct();
+        SortDonHang = new ArrayList<DonHang_item>();
 
-        mView =  inflater.inflate(R.layout.fragment_shipment, container, false);
 
-//        mTabLayout = mView.findViewById(R.id.TopTabProfile);
-//        viewMain = mView.findViewById(R.id.ViewPagerProfile);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(),
+                android.R.layout.simple_spinner_item, getListsize());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getActivity(), adapter.getItem(position), Toast.LENGTH_SHORT).show();
+                Log.e("possition",String.valueOf(position));
+//                proAdapter.clear();
+                if(position<=1){
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+//                        SortProduct.sort((o1, o2) -> (o1.getName().substring(0,1)).compareToIgnoreCase((o2.getName().substring(0,1))));
+//                        SortDonHang.sort((o1, o2) -> compare(o1.getName(),o2.getName()));
+//                        Collections.sort(SortDonHang, VNCollator);
 
-//        HomeViewPagerAdpater view_pager_adpater = new HomeViewPagerAdpater(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-//
-//        viewMain.setAdapter(view_pager_adpater);
-//        viewMain.setPagingEnabled(false);
-//        mTabLayout.setupWithViewPager(viewMain);
+                    }
+                    if (position==1){
+                        Collections.reverse(SortDonHang);
+                    }
+
+                }
+                if(position>1&&position<=3){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                        SortDonHang.sort(((o1, o2) ->  Integer.valueOf(o1.getPrice()).compareTo(Integer.valueOf(o2.getPrice()))));
+                    }
+                    if (position==3){
+                        Collections.reverse(SortDonHang);
+                    }
+
+                }
+
+                proAdapter.setData(SortDonHang);
+                mRecycler.setAdapter(proAdapter);
+                proAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
 
         return mView;
+    }
+
+
+    public int compare(String arg1, String arg2) {
+        return VNCollator.compare(arg1, arg2);
+    }
+
+    private List<CharSequence>  getListsize(){
+        List<CharSequence> listSize = new ArrayList<>();
+        listSize.add(new String("A-Z"));
+        listSize.add(new String("Z-A"));
+        listSize.add(new String("Giá tăng dần"));
+        listSize.add(new String("Giá giảm dần"));
+        listSize.add(new String("Khuyến mãi"));
+
+        return listSize;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        Toolbar myToolbar = (Toolbar) view.findViewById(R.id.my_toolbar);
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(myToolbar);
+//        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        SearchView searchView = (SearchView) view.findViewById(R.id.search_viewmenu);
+//        searchView.onActionViewExpanded();
+
+
+//        ViewItem=view.findViewById(R.id.search_item_menu);
+//        ViewItem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(), SearchActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+        mRecycler = view.findViewById(R.id.rcv_product_list);
+        proAdapter = new DonHangAdapter(getActivity());
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false);
+        mRecycler.setLayoutManager(linearLayoutManager);
+
+//        proAdapter.setData(SortDonHang);
+        getListDonHang();
+        mRecycler.setAdapter(proAdapter);
+
+        RecyclerView.ItemDecoration itemDecoration  = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
+        mRecycler.addItemDecoration(itemDecoration);
+
+
+
+
+    }
+
+    private void LoadNRefreshLayout()
+    {
+        proAdapter.setData(getListDonHang());
+        mRecycler.setAdapter(proAdapter);
+    }
+
+    private List<DonHang_item> getListDonHang(){
+        List<DonHang_item> DonHangs = new ArrayList<>();
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection("SAN_PHAM")
+//                .whereEqualTo("CATEGORY", "quanao")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                category = document.getString("CATEGORY");
+//                                name = document.getString("NAME");
+//                                image = document.getString("IMAGE");
+//                                discount = String.valueOf(toIntExact(document.getLong("DISCOUNT")));
+//                                soluong = toIntExact(document.getLong("SOLUONG"));
+//                                giacu = toIntExact(document.getLong("GIACU"));
+//                                gia = toIntExact(document.getLong("GIA"));
+//
+//                                products.add( new product_item(category,image,name,discount,soluong,giacu,gia));
+//                                Log.e("documment", document.getId() + " => " + document.getData());
+//                            }
+//                            SortProduct = products;
+//                            proAdapter.setData(SortProduct);
+//                        } else {
+//                            Log.e("documment", "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        String formattedDate = df.format(c);
+        DonHangs.add( new DonHang_item("DH02","Đang lấy hàng",1,104000, formattedDate));
+    SortDonHang = DonHangs;
+    proAdapter.setData(SortDonHang);
+
+//        products.add( new product_item("https://cf.shopee.vn/file/34acd5e930c8a21e1c3a70d3cf2a70c5","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng","55%",10,198000,89000));
+//        products.add( new product_item("https://cf.shopee.vn/file/b2612c1a8242069aced2f2f26b592f38","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang","22%",15,58000,45000));
+//        products.add( new product_item("https://cf.shopee.vn/file/bb8871d9ef15f8772df509343b3c2c89","Quần áo phòng dịch đi máy bay đã kiểm định","55%",22,70000,330000));
+//        products.add( new product_item("https://cf.shopee.vn/file/8e022cdaa1ccc462c0b3b51d02438c91","Tất ngắn nam Vớ thấp cổ 4 màu trơn chống hôi chân","20%",5,3900,3500));
+//        products.add( new product_item("https://cf.shopee.vn/file/1a32d71426b5299936d59909870e92b6","Bộ Quần Áo Mặc Nhà Thể Thao Nam Mùa Hè Phong Cách Cao Cấp ZERO","42%",8,300000,175000));
+
+
+        return DonHangs;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.search_menu, menu) ;
+//        SearchManager searchManager = (SearchManager) ((AppCompatActivity)getActivity()).getSystemService(Context.SEARCH_SERVICE);
+//        searchView = (SearchView) menu.findItem(R.id.search_item_menu).getActionView();
+////        ViewItem=menu.findItem(R.id.search_item_menu);
+////        ViewItem.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                Intent intent = new Intent(getActivity(), SearchActivity.class);
+////                startActivity(intent);
+////            }
+////        });
+//
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(((AppCompatActivity)getActivity()).getComponentName()));
+//        searchView.setMaxWidth(Integer.MAX_VALUE);
+//        searchView.setFocusable(true);
+
+        super.onCreateOptionsMenu(menu, inflater);
+
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+//
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                proAdapter.getFilter().filter(query);
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                proAdapter.getFilter().filter(newText);
+//                return false;
+//            }
+//        });
+
+    }
+
+
+    @Override
+    public boolean onBackPressed() {
+        if (!searchView.isIconified()) {
+            searchView.setIconified(true);
+            return true ;
+        }
+        else{
+            return false;
+        }
     }
 }

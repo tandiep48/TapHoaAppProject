@@ -1,5 +1,6 @@
 package com.example.taphoaapp.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,11 +9,15 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.taphoaapp.HomeViewPagerAdpater;
 import com.example.taphoaapp.R;
+import com.example.taphoaapp.Search.SearchActivity;
 import com.example.taphoaapp.widget.CustomViewPager;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +29,10 @@ public class ProfileFragment extends Fragment {
     private TabLayout mTabLayout;
     private CustomViewPager viewMain;
     private View mView;
+    Button changeInfo, changePass , StoreInfo, Logout;
+    TextView Info_fullname,Info_email,Info_age,Info_gender,Info_phone;
+    String UID;
+    private FirebaseAuth mAuth;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,7 +79,62 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        mView =  inflater.inflate(R.layout.fragment_sub_rofile, container, false);
+        mAuth = FirebaseAuth.getInstance();
+
+        mView =  inflater.inflate(R.layout.fragment_info, container, false);
+
+        Info_fullname = mView.findViewById(R.id.Info_fullName);
+        Info_email = mView.findViewById(R.id.Info_email);
+        Info_age = mView.findViewById(R.id.Info_age);
+        Info_gender = mView.findViewById(R.id.Info_gender);
+        Info_phone = mView.findViewById(R.id.Info_phone);
+
+        UID = mAuth.getCurrentUser().getUid();
+
+        changeInfo = mView.findViewById(R.id.btnChangeInfo);
+        changePass = mView.findViewById(R.id.btnChangePass);
+        StoreInfo =  mView.findViewById(R.id.btnStoreInfo);
+        Logout =  mView.findViewById(R.id.btnLogout);
+
+        changeInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), changeInfo.class);
+//                intent.putExtra("userID", UID);
+                intent.putExtra("Info_fullname", Info_fullname.getText().toString());
+                intent.putExtra("Info_email", Info_email.getText().toString());
+                intent.putExtra("Info_age",Info_age.getText().toString());
+                intent.putExtra("Info_gender",Info_gender.getText().toString());
+                intent.putExtra("Info_phone",Info_phone.getText().toString());
+                startActivity(intent);
+            }
+        });
+        changePass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), changePassword.class);
+                intent.putExtra("userID", UID);
+                intent.putExtra("Info_fullname", Info_fullname.getText().toString());
+                intent.putExtra("Info_email", Info_email.getText().toString());
+                intent.putExtra("Info_age",Info_age.getText().toString());
+                intent.putExtra("Info_gender",Info_gender.getText().toString());
+                intent.putExtra("Info_phone",Info_phone.getText().toString());
+                startActivity(intent);
+            }
+        });
+
+        StoreInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        Logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
 //        mTabLayout = mView.findViewById(R.id.TopTabProfile);
 //        viewMain = mView.findViewById(R.id.ViewPagerProfile);

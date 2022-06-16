@@ -74,6 +74,33 @@
                 android:value="com.example.taphoaapp.MainActivity"
                 />
         </activity>
+        <activity
+            android:name=".profile.changeInfo"
+            android:configChanges="locale"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.taphoaapp.MainActivity"
+                />
+        </activity>
+        <activity
+            android:name=".profile.changePassword"
+            android:configChanges="locale"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.taphoaapp.MainActivity"
+                />
+        </activity>
+        <activity
+            android:name=".profile.DonhangDetailActivity"
+            android:configChanges="locale"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.taphoaapp.MainActivity"
+                />
+        </activity>
 
     </application>
 
