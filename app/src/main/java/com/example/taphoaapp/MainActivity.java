@@ -106,12 +106,13 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
 
         viewMain.setAdapter(view_pager_adpater);
 //        mTabLayout.setupWithViewPager(viewMain);
-
         if(ActiPrev !=null) {
             if (i != null && extras != null && ActiPrev.toString().equalsIgnoreCase("DetailProduct")) {
                 viewMain.setCurrentItem(1);
+                bottomnavigation.getMenu().findItem(R.id.Menu_Basket).setChecked(true);
             }
         }
+
 
         viewMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

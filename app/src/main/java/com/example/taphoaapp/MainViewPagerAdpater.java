@@ -28,13 +28,13 @@ public class MainViewPagerAdpater extends FragmentStatePagerAdapter
             case 0: return new HomeFragment();
             case 1: return new BasketFragment();
             case 2: return new ProfileMainFragment();
-            default: return new QuanaoFragment();
+            default: return new HomeFragment();
         }
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return 3;
     }
 
     @Nullable

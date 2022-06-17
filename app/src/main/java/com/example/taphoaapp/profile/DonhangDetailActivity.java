@@ -2,6 +2,7 @@ package com.example.taphoaapp.profile;
 
 import static java.lang.Math.toIntExact;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -41,6 +43,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -75,17 +78,21 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
     String name, image, discount, Namevalue, ColorVal , SizeVal, category,IDsp ;
     Integer soluong,giacu,gia;
     Integer size;
+    private FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String userID;
 
-    private String passName,passCategory,passcolor,passsize,userID;
+    private String passName,passCategory,passcolor,passsize, maDH;
     private int passPrice,passquantity,passSoluong;
     basket_product_item productItem;
+    basket_product_item ProtrungGian;
 
     List <String> TrungGian;
     List<String> listColor;
     List<String> listSize;
     String PrevActive;
     Bundle extras ;
-    private Button add,order;
+    private Button add,order, cancelOrder;
 //    DataCommunication mCallback;
 
 //    @Override
@@ -134,7 +141,7 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
 
         if ( i!= null &&extras != null) {
             userID = i.getStringExtra("userID");
-
+            maDH = i.getStringExtra("maDH");
         }
         Locale locale = new Locale("vi", "VN");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
@@ -148,16 +155,17 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
         delivery = findViewById(R.id.tvDelivery);
         TransFee = findViewById(R.id.tvTransFee);
         address = findViewById(R.id.tvAddress);
+        cancelOrder = findViewById(R.id.DonHang_Huy);
 
-        MaHD.setText("DH02");
-        Status.setText("Đang lấy hàng");
-        nguoiOrder.setText("Diệp Đức Tân");
-        date.setText("16-thg 6-2022");
-        phone.setText("0902548260");
-//        delivery.setText("");
-        TransFee.setText("15.000đ");
-        address.setText("828 Sư Vạn Hạnh, Phường 13, Quận 10");
-        tvpay.setText(currencyFormatter.format(104000 ));
+//        MaHD.setText("DH02");
+//        Status.setText("Đang lấy hàng");
+//        nguoiOrder.setText("Diệp Đức Tân");
+//        date.setText("16-thg 6-2022");
+//        phone.setText("0902548260");
+////        delivery.setText("");
+//        TransFee.setText("15.000đ");
+//        address.setText("828 Sư Vạn Hạnh, Phường 13, Quận 10");
+//        tvpay.setText(currencyFormatter.format(104000 ));
 
         getListProduct();
 
@@ -168,7 +176,45 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
             //The key argument here must match that used in the other activity
         }
 
+        cancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Status.getText() == "đang lấy hàng . . .") {
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    db.collection("Don_hang").document(maDH).update("status","Đã hủy").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(DonhangDetailActivity.this);
+                                            builder.setMessage("Hủy Đơn hàng thành công")
+                                                    .setTitle("Thông báo");
+                                            builder.show();
+                                        }
+                                    });
+                                    break;
 
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    dialog.dismiss();
+                                    break;
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(DonhangDetailActivity.this);
+                    builder.setMessage("Có chắc muốn hủy đơn hàng này ?").setPositiveButton("Có", dialogClickListener)
+                            .setNegativeButton("Không", dialogClickListener).show();
+                }
+                else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(DonhangDetailActivity.this);
+                    builder.setMessage("Đơn hàng đã quá thời hạn có thể hủy")
+                            .setTitle("Thông báo");
+                    builder.show();
+                }
+            }
+        });
 
 //
 //        ConstraintLayout ml = findViewById(R.id.detail_Parrent_Constraint);
@@ -177,7 +223,7 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
         Toolbar toolbar = (Toolbar) findViewById(R.id.DonHangdetail_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Chi tiết Đơn hàng DH02");
+        getSupportActionBar().setTitle("Chi tiết Đơn hàng" + maDH);
 //        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
@@ -188,12 +234,91 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
 }
     private List<basket_product_item> getListProduct(){
         products = new ArrayList<>();
-        products.add( new basket_product_item("Quần áo","SP02","xám","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng",1,89000,"L",20));
+//        products.add( new basket_product_item("Quần áo","SP02","xám","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng",1,89000,"L",20));
 //        products.add( new basket_product_item("Quần áo","SP03","xanh tía","Mũ lưỡi trai ❤ Nón kết thêu chữ Memorie phong cách Ulzzang",5,225000,"",6));
+        db.collection("Don_hang")
+                .whereEqualTo("DonHang_Id", maDH)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                MaHD = findViewById(R.id.tvOrderName);
+                                Status = findViewById(R.id.tvStatusOrder);
+                                nguoiOrder = findViewById(R.id.tvPersonName);
+                                tvpay = findViewById(R.id.tvPrice);
+                                date = findViewById(R.id.tvDate);
+                                phone = findViewById(R.id.tvPhone);
+                                delivery = findViewById(R.id.tvDelivery);
+                                TransFee = findViewById(R.id.tvTransFee);
+                                address = findViewById(R.id.tvAddress);
+
+                                MaHD .setText(document.getString("DonHang_Id"));
+                                Status.setText(document.getString("status"));
+                                nguoiOrder.setText(document.getString("name"));
+                                tvpay.setText(document.getString("TongThanhToan"));
+                                date.setText(document.getString("ngaydat"));
+                                phone.setText(document.getString("SoDienThoai"));
+                                if(document.getBoolean("nhận tại cửa hàng")==true) {
+                                    delivery.setText("nhận tại cửa hàng");
+                                }
+                                else{
+                                    delivery.setText("giao hàng");
+                                }
+                                TransFee.setText(document.getString("phiVanChuyen"));
+                                address.setText(document.getString("DiaChi"));
 
 
-        BasproAdapter.setData(products);
-        mRecycler.setAdapter(BasproAdapter);
+                                if (document.get("ListProducts") != null||document.get("ListProducts")!="") {
+                                    List<Map<String, Object>> productDOX = (List<Map<String, Object>>) document.get("ListProducts");
+                                    for(Map<String, Object> ObjPro : productDOX)
+                                    {
+                                        ProtrungGian = new basket_product_item();
+                                        ProtrungGian.setCategory(ObjPro.get("category").toString());
+                                        ProtrungGian.setID(ObjPro.get("id").toString());
+                                        if(ObjPro.get("mau")!= null) {
+                                            if (ObjPro.get("mau").toString() != "") {
+                                                ProtrungGian.setMau(ObjPro.get("mau").toString());
+                                            }
+                                        }
+                                        else{
+                                            ProtrungGian.setMau("");
+                                        }
+
+
+                                        if(ObjPro.get("size")!= null) {
+                                            if (ObjPro.get("size").toString() != "") {
+                                                ProtrungGian.setSize(ObjPro.get("size").toString());
+                                            }
+                                        }
+                                        else{
+                                            ProtrungGian.setSize("");
+                                        }
+
+                                        ProtrungGian.setName(ObjPro.get("name").toString());
+                                        ProtrungGian.setNumdat(Integer.parseInt(ObjPro.get("numdat").toString()));
+                                        ProtrungGian.setPrice(Integer.parseInt(ObjPro.get("price").toString()));
+                                        ProtrungGian.setSoluong(Integer.parseInt(ObjPro.get("soluong").toString()));
+
+                                        products.add(ProtrungGian);
+                                    }
+//                            products = (List<basket_product_item>) document.get("ListProducts");
+//                            Log.d("check",((List<?>) document.get("ListProducts")).get(0).toString().sp+"");
+//                            for(Array set : document.get("ListProducts").toArray() )
+                                }
+                                BasproAdapter.setData(products);
+                                mRecycler.setAdapter(BasproAdapter);
+
+                            }
+                        } else {
+
+                        }
+                    }
+                });
+
+//        BasproAdapter.setData(products);
+//        mRecycler.setAdapter(BasproAdapter);
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
 //        products.add( new product_item("https://cf.shopee.vn/file/34acd5e930c8a21e1c3a70d3cf2a70c5","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng","55%",2,198000,89000));
 //        products.add( new product_item("https://cf.shopee.vn/file/b2612c1a8242069aced2f2f26b592f38","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang","22%",5,58000,45000));

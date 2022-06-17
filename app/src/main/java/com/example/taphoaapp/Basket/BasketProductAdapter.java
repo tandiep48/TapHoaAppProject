@@ -229,7 +229,7 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
         product.setNumdat(1);
         holder.type_mau.setText("Màu: " + String.valueOf(product.getMau()));
         holder.type_size.setText("Size: " +String.valueOf(product.getSize()));
-        sum = product.getPrice() * product.getSoluong();
+        sum = product.getPrice() * product.getNumdat();
         holder.price.setText(String.valueOf(currencyFormatter.format(product.getPrice())));
         holder.setNumtong(sum);
         holder.tong.setText(String.valueOf(currencyFormatter.format(sum)));
@@ -239,12 +239,12 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
             @Override
             public void onClick(View v) {
                int tmp;
-               if( (Integer.parseInt(holder.tvQuan.getText().toString()) + 1) >= Integer.parseInt(holder.soluong.getText().toString())) tmp = Integer.parseInt(holder.soluong.getText().toString());
-               else tmp = Integer.parseInt(holder.tvQuan.getText().toString()) + 1;
+               if( (Integer.parseInt(holder.tvQuan.getText().toString()) + 1) >= Integer.parseInt(holder.soluong.getText().toString())) {tmp = Integer.parseInt(holder.soluong.getText().toString());}
+               else {tmp = Integer.parseInt(holder.tvQuan.getText().toString()) + 1;}
                 sum = product.getPrice() * tmp;
-                holder.setNumtong(sum);;
+                holder.setNumtong(sum);
                 holder.tong.setText(String.valueOf(currencyFormatter.format(sum)));
-                holder.numtong = product.getPrice();
+//                holder.numtong = product.getPrice();
 //                for (int i = 0; i < productItemList.size(); i++){
 //                    product_item productTMP = productItemList.get(i);
 //                    int sumTMP = productTMP.getPrice() * productTMP.getSoluong();
@@ -266,7 +266,7 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
                     }
                     else {tnp = 1;}
                     sum = product.getPrice() * tnp;
-                    holder.setNumtong(sum);;
+                    holder.setNumtong(sum);
                     holder.tong.setText(String.valueOf(currencyFormatter.format(sum)));
 ////                    tinh = 0;
 //                    for (int i = 0; i < productItemList.size(); i++){

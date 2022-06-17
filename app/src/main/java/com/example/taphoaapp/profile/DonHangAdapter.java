@@ -28,6 +28,8 @@ import com.example.taphoaapp.BasketFragment;
 import com.example.taphoaapp.DetailProduct.DetailProductActivity;
 import com.example.taphoaapp.R;
 import com.example.taphoaapp.product_item;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -41,6 +43,9 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ProductV
     private  List<DonHang_item> DonHangItemList;
     private  List<DonHang_item> OriginDonHangItemList;
     String userID;
+    private FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -103,6 +108,8 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ProductV
 
         Locale locale = new Locale("vi", "VN");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+        mAuth = FirebaseAuth.getInstance();
+        userID = mAuth.getCurrentUser().getUid();
 
         DonHang_item DonHang = DonHangItemList.get(position);
 
@@ -124,7 +131,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ProductV
 //                intent.putExtra("NAME",product.getName());
                 intent.putExtra("prevActive", "MainActivity");
                 intent.putExtra("userID", userID);
-//                intent.putExtra("Category",product.getCategory());
+                intent.putExtra("maDH",holder.MaDH.getText());
 //                intent.putExtra("Soluong",1);
 //                intent.putExtra("gia",product.getPrice());
 //                intent.putExtra("color","");

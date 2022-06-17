@@ -36,6 +36,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -67,13 +68,17 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
     private String passName,passCategory,passcolor,passsize,userID;
     private int passPrice,passquantity,passSoluong;
     basket_product_item productItem;
+    basket_product_item ProtrungGian;
 
     List <String> TrungGian;
     List<String> listColor;
     List<String> listSize;
+    List<basket_product_item> products;
     String PrevActive;
     Bundle extras ;
     private Button add,order;
+    private FirebaseAuth mAuth;
+
 //    DataCommunication mCallback;
 
 //    @Override
@@ -97,6 +102,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_detail_product);
+        mAuth = FirebaseAuth.getInstance();
         extras = getIntent().getExtras();
         Locale locales = new Locale("vi");
         Locale.setDefault(locales);
@@ -107,6 +113,8 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
         mCallback = (DataCommunication) DetailProductActivity.this;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        products = new ArrayList<>();
+
         Intent i = getIntent();
         Bundle extras = getIntent().getExtras();
 
@@ -114,6 +122,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
             userID = i.getStringExtra("userID");
 
         }
+        userID = mAuth.getCurrentUser().getUid();
 
         add = findViewById(R.id.detail_BuyNow);
         order = findViewById(R.id.detail_Order);
@@ -131,16 +140,84 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                 productItem.setPrice(Integer.parseInt(tvgia.getText().toString()));
                 //productItem.setNumdat(Integer.parseInt(tv.getText().toString()));
                 productItem.setSoluong(Integer.parseInt(tvsoluong.getText().toString()));
-                productItem.setMau(spinColor.getSelectedItem().toString());
-                productItem.setSize(spinSize.getSelectedItem().toString());
+                if(spinColor.getSelectedItem()!=null && spinColor.getSelectedItem().toString() !="") {
+                    productItem.setMau(spinColor.getSelectedItem().toString());
+                }
+                if(spinSize.getSelectedItem()!=null && spinSize.getSelectedItem().toString() !="") {
+                    productItem.setSize(spinSize.getSelectedItem().toString());
+                }
 //                List<product_item> products = new ArrayList<>();
 //                products.add(productItem);
 //                Map<String, Object> order = new HashMap<>();
 //                order.put("ListProducts", products);
+                db.collection("Gio_hang")
+                        .document(userID)
+                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if(document != null){
+                                if (document.exists()) {
+                                    if (document.get("ListProducts") != null||document.get("ListProducts")!="") {
+                                        List<Map<String, Object>> productDOX = (List<Map<String, Object>>) document.get("ListProducts");
+                                        for(Map<String, Object> ObjPro : productDOX)
+                                        {
+                                            ProtrungGian = new basket_product_item();
+                                            ProtrungGian.setCategory(ObjPro.get("category").toString());
+                                            ProtrungGian.setID(ObjPro.get("id").toString());
+                                            if(ObjPro.get("mau")!= null) {
+                                                if (ObjPro.get("mau").toString() != "") {
+                                                    ProtrungGian.setMau(ObjPro.get("mau").toString());
+                                                }
+                                            }
+                                            else{
+                                                ProtrungGian.setMau("");
+                                            }
 
 
+                                            if(ObjPro.get("size")!= null) {
+                                                if (ObjPro.get("size").toString() != "") {
+                                                    ProtrungGian.setSize(ObjPro.get("size").toString());
+                                                }
+                                            }
+                                            else{
+                                                ProtrungGian.setSize("");
+                                            }
 
-                db.collection("Gio_hang").document(userID).update("ListProducts", FieldValue.arrayUnion(productItem)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            ProtrungGian.setName(ObjPro.get("name").toString());
+                                            ProtrungGian.setNumdat(Integer.parseInt(ObjPro.get("numdat").toString()));
+                                            ProtrungGian.setPrice(Integer.parseInt(ObjPro.get("price").toString()));
+                                            ProtrungGian.setSoluong(Integer.parseInt(ObjPro.get("soluong").toString()));
+
+                                            products.add(ProtrungGian);
+                                        }
+//                            products = (List<basket_product_item>) document.get("ListProducts");
+//                            Log.d("check",((List<?>) document.get("ListProducts")).get(0).toString().sp+"");
+//                            for(Array set : document.get("ListProducts").toArray() )
+                                    }
+
+                                }else{}
+                            }else {
+
+                            }
+                        } else {
+                        }
+                    }
+                });
+
+                for(basket_product_item ObjPro : products)
+                {
+                 if(productItem.getName().equalsIgnoreCase(ObjPro.getName()))
+                 {
+                     products.remove(ObjPro);
+                 }
+                }
+                products.add(productItem);
+
+//                FieldValue.arrayUnion(productItem)
+
+                db.collection("Gio_hang").document(userID).update("ListProducts", products).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
 
@@ -150,7 +227,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Map<String, Object> data = new HashMap<>();
-                                db.collection("Gio_hang")
+                                db.collection("Don_hang")
                                         .document("Counter")
                                         .get()
                                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -162,7 +239,13 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                                                         size = (document.getDouble("Count").intValue() +1);
                                                         data.put("name", "");
                                                         data.put("phiVanChuyen", "");
-                                                        data.put("DonHang_Id", "DH"+size);
+                                                        if(size <=9) {
+                                                            data.put("DonHang_Id", "DH0" + size);
+                                                        }
+                                                        else{
+                                                            data.put("DonHang_Id", "DH" + size);
+                                                        }
+
                                                         data.put("DiaChi", "");
                                                         data.put("SoDienThoai", "");
                                                         data.put("TongThanhToan", "");

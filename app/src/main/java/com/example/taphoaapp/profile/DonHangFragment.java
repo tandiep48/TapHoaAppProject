@@ -33,6 +33,7 @@ import com.example.taphoaapp.Search.SearchActivity;
 import com.example.taphoaapp.product_item;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -58,8 +59,13 @@ public class DonHangFragment extends Fragment  implements IOnBackPressed {
     private Spinner spinner;
     public List<DonHang_item> SortDonHang;
     private Collator VNCollator;
-    String name, image, discount,category;
-    Integer soluong,giacu,gia;
+//    String name, image, discount,category;
+String maDH; String status; String time ;
+    Integer soluong,giacu,gia,pay;
+    private FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String userID;
+
 
 
 
@@ -104,6 +110,8 @@ public class DonHangFragment extends Fragment  implements IOnBackPressed {
         spinner = mView.findViewById(R.id.Spinner_sort);
 //        SortProduct = getListProduct();
         SortDonHang = new ArrayList<DonHang_item>();
+        mAuth = FirebaseAuth.getInstance();
+        userID = mAuth.getCurrentUser().getUid();
 
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(),
@@ -216,39 +224,39 @@ public class DonHangFragment extends Fragment  implements IOnBackPressed {
 
     private List<DonHang_item> getListDonHang(){
         List<DonHang_item> DonHangs = new ArrayList<>();
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("SAN_PHAM")
-//                .whereEqualTo("CATEGORY", "quanao")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                category = document.getString("CATEGORY");
-//                                name = document.getString("NAME");
-//                                image = document.getString("IMAGE");
-//                                discount = String.valueOf(toIntExact(document.getLong("DISCOUNT")));
-//                                soluong = toIntExact(document.getLong("SOLUONG"));
-//                                giacu = toIntExact(document.getLong("GIACU"));
-//                                gia = toIntExact(document.getLong("GIA"));
-//
-//                                products.add( new product_item(category,image,name,discount,soluong,giacu,gia));
-//                                Log.e("documment", document.getId() + " => " + document.getData());
-//                            }
-//                            SortProduct = products;
-//                            proAdapter.setData(SortProduct);
-//                        } else {
-//                            Log.e("documment", "Error getting documents: ", task.getException());
-//                        }
-//                    }
-//                });
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Don_hang")
+                .whereEqualTo("userID", userID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                maDH = document.getString("DonHang_Id");
+                                status = document.getString("status");
+                                soluong = toIntExact(document.getLong("soluongsanpham"));
+                                pay = Integer.parseInt(document.getString("TongThanhToan"));
+                                time = document.getString("ngaydat");
+
+                                DonHangs.add( new DonHang_item(maDH,status,soluong,pay,time));
+                                Log.e("documment", document.getId() + " => " + document.getData());
+                            }
+                            SortDonHang = DonHangs;
+                            proAdapter.setData(SortDonHang);
+                        } else {
+                            Log.e("documment", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
         String formattedDate = df.format(c);
-        DonHangs.add( new DonHang_item("DH02","Đang lấy hàng",1,104000, formattedDate));
-    SortDonHang = DonHangs;
-    proAdapter.setData(SortDonHang);
+//        DonHangs.add( new DonHang_item("DH02","Đang lấy hàng",1,104000, formattedDate));
+//    SortDonHang = DonHangs;
+//    proAdapter.setData(SortDonHang);
 
 //        products.add( new product_item("https://cf.shopee.vn/file/34acd5e930c8a21e1c3a70d3cf2a70c5","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng","55%",10,198000,89000));
 //        products.add( new product_item("https://cf.shopee.vn/file/b2612c1a8242069aced2f2f26b592f38","Mũ lưỡi trai ❤️ Nón kết thêu chữ Memorie phong cách Ulzzang","22%",15,58000,45000));

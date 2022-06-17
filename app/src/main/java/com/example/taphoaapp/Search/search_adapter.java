@@ -12,7 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.taphoaapp.DetailProduct.DetailProductActivity;
 import com.example.taphoaapp.R;
+import com.example.taphoaapp.profile.DonhangDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,16 @@ public class search_adapter extends RecyclerView.Adapter<search_adapter.ViewHold
         if(search_item == null) return;
         holder.name.setText(search_item.getName());
         holder.category.setText(search_item.getCategory());
+
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, DetailProductActivity.class);
+                intent.putExtra("NAME",holder.name.getText().toString());
+                intent.putExtra("prevActive", "SearchActivity");
+                context.startActivity(intent);
+            }
+        });
 
     }
 

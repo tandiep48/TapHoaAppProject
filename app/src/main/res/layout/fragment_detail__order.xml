@@ -220,13 +220,14 @@
 
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
+
     <Button
         android:id="@+id/DonHang_Huy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight = "1"
-        android:text="Hủy Đơn hàng"
         android:layout_alignParentBottom="true"
-        android:backgroundTint="@color/negative_red"/>
+        android:layout_weight="1"
+        android:backgroundTint="@color/negative_red"
+        android:text="Hủy Đơn hàng" />
 
 </RelativeLayout>

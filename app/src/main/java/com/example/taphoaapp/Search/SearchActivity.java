@@ -15,8 +15,10 @@ import com.example.taphoaapp.Basket.BasketProductAdapter;
 import com.example.taphoaapp.R;
 import com.example.taphoaapp.product_item;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -24,11 +26,14 @@ public class SearchActivity extends AppCompatActivity {
     private search_adapter searchAdapter;
       List<Search_Item>  ListOriginsearchAdapt;
     androidx.appcompat.widget.SearchView search;
+    private Collator VNCollator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_search);
         super.onCreate(savedInstanceState);
+        VNCollator = Collator.getInstance(new Locale("vi", "VN")); //Your locale here
+        VNCollator.setStrength(Collator.PRIMARY); //desired strength
 
         mRecycler = findViewById(R.id.searchView_recyclerview);
         ListOriginsearchAdapt = getListProduct();
@@ -84,7 +89,10 @@ public class SearchActivity extends AppCompatActivity {
         }
         for ( Search_Item item:getListProduct()){
 
-            if (item.getName().toLowerCase().contains(textSearch.toLowerCase())){
+//            if (item.getName().toLowerCase().contains(textSearch.toLowerCase())){
+//                searchList.add(item);
+//            }
+            if (VNcontains(item.getName().toLowerCase(),textSearch.toLowerCase()) == true){
                 searchList.add(item);
             }
 
@@ -123,4 +131,29 @@ public class SearchActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+    public int compare(String arg1, String arg2) {
+        return VNCollator.compare(arg1, arg2);
+    }
+
+    private static boolean VNcontains(String source, String target) {
+        if (target.length() > source.length()) {
+            return false;
+        }
+
+        Collator collator = Collator.getInstance();
+        collator.setStrength(Collator.PRIMARY);
+
+        int end = source.length() - target.length() + 1;
+
+        for (int i = 0; i < end; i++) {
+            String sourceSubstring = source.substring(i, i + target.length());
+
+            if (collator.compare(sourceSubstring, target) == 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }
