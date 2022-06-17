@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.taphoaapp.ChangePasswordActivity;
 import com.example.taphoaapp.HomeViewPagerAdpater;
+import com.example.taphoaapp.LoginActivity;
 import com.example.taphoaapp.R;
 import com.example.taphoaapp.Search.SearchActivity;
 import com.example.taphoaapp.widget.CustomViewPager;
@@ -140,7 +141,8 @@ public class ProfileFragment extends Fragment {
         Logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getActivity(), LoginActivity.class));
             }
         });
 
