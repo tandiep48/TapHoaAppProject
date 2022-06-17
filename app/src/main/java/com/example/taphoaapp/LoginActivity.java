@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -44,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     GoogleSignInClient gsc;
     GoogleSignIn gsi;
     GoogleSignInOptions gso;
+
 
 
     @Override
@@ -127,11 +131,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
+                            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString(mAuth.getCurrentUser().getUid().toString(), pass.getText().toString().trim());
+                            editor.commit();
                             Intent intent = new Intent(LoginActivity.this,
                                     MainActivity.class);
                             intent.putExtra("userID", mAuth.getCurrentUser().getUid());
-                            intent.putExtra("email", Email);
-                            intent.putExtra("password", Password);
+                            intent.putExtra("email", email.getText().toString().trim());
+                            intent.putExtra("password", pass.getText().toString().trim());
                             startActivity(intent);
                         } else {
                             Toast.makeText(LoginActivity.this, "Đăng nhập thất bại",
@@ -166,8 +175,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         finish();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra("userID", mAuth.getCurrentUser().getUid());
-        intent.putExtra("email", Email);
-        intent.putExtra("password", Password);
+        intent.putExtra("email", email.getText().toString().trim());
+        intent.putExtra("password", pass.getText().toString().trim());
         startActivity(intent);
     }
 }

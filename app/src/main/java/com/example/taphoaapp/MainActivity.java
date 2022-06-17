@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
     Bundle extras;
     Context mContext;
     DataCommunication mCallback;
+    String PasssPassword;
+
 
 
 
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mCallback = (DataCommunication) MainActivity.this;
+//        mCallback = (DataCommunication) MainActivity.this;
 //        if(PrevActive!= null){
 //        Log.e("PrevActive : " , PrevActive.toString());
 //        }
@@ -69,8 +71,12 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
         Intent i = getIntent();
         Bundle extras = getIntent().getExtras();
 
+
         if ( i!= null &&extras != null) {
             order = extras.getString("Order");
+            PasssPassword = i.getStringExtra("password");
+            Log.e("MainActive : ", PasssPassword.toString());
+
 
             userID = i.getStringExtra("userID");
 

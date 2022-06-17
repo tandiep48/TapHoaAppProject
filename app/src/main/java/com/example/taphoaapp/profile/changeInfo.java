@@ -15,11 +15,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NavUtils;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.taphoaapp.Basket.DataCommunication;
+import com.example.taphoaapp.BasketFragment;
 import com.example.taphoaapp.IOnBackPressed;
 import com.example.taphoaapp.LoginActivity;
 import com.example.taphoaapp.MainActivity;
@@ -112,6 +115,10 @@ public class changeInfo extends AppCompatActivity  {
 //                    .replace(R.id.Main_root, new BasketFragment())
 //                    .commit();
 //        }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Thay đổi thông tin tài khoản");
 
         Locale locales = new Locale("vi");
         Locale.setDefault(locales);
@@ -226,6 +233,54 @@ public class changeInfo extends AppCompatActivity  {
 
       }
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public Intent getSupportParentActivityIntent() {
+        return getParentActivityIntentImpl();
+    }
+
+    @Override
+    public Intent getParentActivityIntent() {
+        return getParentActivityIntentImpl();
+    }
+
+    private Intent getParentActivityIntentImpl() {
+        Intent i = null;
+        if (extras != null) {
+            PrevActive = extras.getString("prevActive");
+            //The key argument here must match that used in the other activity
+        }
+
+        // Here you need to do some logic to determine from which Activity you came.
+        // example: you could pass a variable through your Intent extras and check that.
+        if (PrevActive == "MainActivity") {
+            i = new Intent(this, MainActivity.class);
+            // set any flags or extras that you need.
+            // If you are reusing the previous Activity (i.e. bringing it to the top
+            // without re-creating a new instance) set these flags:
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            // if you are re-using the parent Activity you may not need to set any extras
+            i.putExtra("prevActive", "DetailProduct");
+        } else {
+            i = new Intent(this, BasketFragment.class);
+            // same comments as above
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            i.putExtra("prevActive", "DetailProduct");
+        }
+
+        return i;
     }
 
 

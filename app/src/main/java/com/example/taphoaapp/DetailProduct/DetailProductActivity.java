@@ -239,7 +239,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                                                     if (document.exists()) {
                                                         size = (document.getDouble("Count").intValue() +1);
                                                         data.put("name", "");
-                                                        data.put("phiVanChuyen", "");
+                                                        data.put("phiVanChuyen", 15000);
                                                         if(size <=9) {
                                                             data.put("DonHang_Id", "DH0" + size);
                                                         }
@@ -249,7 +249,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
 
                                                         data.put("DiaChi", "");
                                                         data.put("SoDienThoai", "");
-                                                        data.put("TongThanhToan", "");
+                                                        data.put("TongThanhToan", 0);
                                                         data.put("giaohang", false);
                                                         data.put("ListProducts", Arrays.asList(productItem));
 

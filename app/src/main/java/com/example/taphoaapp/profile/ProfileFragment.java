@@ -3,9 +3,11 @@ package com.example.taphoaapp.profile;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +20,14 @@ import com.example.taphoaapp.LoginActivity;
 import com.example.taphoaapp.R;
 import com.example.taphoaapp.Search.SearchActivity;
 import com.example.taphoaapp.widget.CustomViewPager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,8 +41,9 @@ public class ProfileFragment extends Fragment {
     private View mView;
     Button changeInfo, changePass , StoreInfo, Logout;
     TextView Info_fullname,Info_email,Info_age,Info_gender,Info_phone;
-    String UID;
+    String UID,PassPassword;
     private FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -98,6 +107,38 @@ public class ProfileFragment extends Fragment {
         StoreInfo =  mView.findViewById(R.id.btnStoreInfo);
         Logout =  mView.findViewById(R.id.btnLogout);
 
+        Intent i = requireActivity().getIntent();
+        Bundle extras = requireActivity().getIntent().getExtras();
+
+        if ( i!= null && extras != null) {
+
+            PassPassword = extras.getString("password");
+            // and get whatever type user account id is
+        }
+
+
+        db.collection("User")
+                .document(UID)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (document.exists()) {
+                            Info_fullname.setText(document.getString("fullName"));
+                            Info_email .setText(document.getString("email"));
+                            Info_age.setText(document.getString("age"));
+                            Info_gender.setText(document.getString("gender"));
+                            Info_phone.setText(document.getString("phone"));
+                        }
+                    }
+                }
+                else {
+                }
+            }
+        });
+
         changeInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +149,7 @@ public class ProfileFragment extends Fragment {
                 intent.putExtra("Info_age",Info_age.getText().toString());
                 intent.putExtra("Info_gender",Info_gender.getText().toString());
                 intent.putExtra("Info_phone",Info_phone.getText().toString());
+                intent.putExtra("password",PassPassword);
                 startActivity(intent);
             }
         });
@@ -121,6 +163,7 @@ public class ProfileFragment extends Fragment {
                 intent.putExtra("Info_age",Info_age.getText().toString());
                 intent.putExtra("Info_gender",Info_gender.getText().toString());
                 intent.putExtra("Info_phone",Info_phone.getText().toString());
+                intent.putExtra("password",PassPassword.toString());
                 startActivity(intent);
             }
         });
@@ -135,6 +178,7 @@ public class ProfileFragment extends Fragment {
                 intent.putExtra("Info_age",Info_age.getText().toString());
                 intent.putExtra("Info_gender",Info_gender.getText().toString());
                 intent.putExtra("Info_phone",Info_phone.getText().toString());
+                intent.putExtra("password",PassPassword);
                 startActivity(intent);
             }
         });
@@ -146,7 +190,6 @@ public class ProfileFragment extends Fragment {
 //
 ////                intent.putExtra("userID", UID);
 //                startActivity(intent);
-
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getActivity(), LoginActivity.class));
             }

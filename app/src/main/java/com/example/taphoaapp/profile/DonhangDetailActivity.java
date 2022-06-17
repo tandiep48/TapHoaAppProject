@@ -259,7 +259,7 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
                                 MaHD .setText(document.getString("DonHang_Id"));
                                 Status.setText(document.getString("status"));
                                 nguoiOrder.setText(document.getString("name"));
-                                tvpay.setText(document.getString("TongThanhToan"));
+                                tvpay.setText(document.getLong("TongThanhToan").toString());
                                 date.setText(document.getString("ngaydat"));
                                 phone.setText(document.getString("SoDienThoai"));
                                 if(document.getBoolean("nhận tại cửa hàng")==true) {
@@ -268,7 +268,7 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
                                 else{
                                     delivery.setText("giao hàng");
                                 }
-                                TransFee.setText(document.getString("phiVanChuyen"));
+                                TransFee.setText(document.getLong("phiVanChuyen").toString());
                                 address.setText(document.getString("DiaChi"));
 
 

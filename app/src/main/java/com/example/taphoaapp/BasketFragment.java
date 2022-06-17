@@ -172,7 +172,7 @@ public class BasketFragment extends Fragment {
 
         i = getActivity().getIntent();
         extras = getActivity().getIntent().getExtras();
-        userID = mAuth.getCurrentUser().getUid();
+
 
         if ( i!= null &&extras != null) {
 
@@ -185,7 +185,7 @@ public class BasketFragment extends Fragment {
             product_item = (basket_product_item) i.getSerializableExtra("productItem");
 
 
-                userID = i.getStringExtra("userID");
+//                userID = i.getStringExtra("userID");
 
 
             ActiPrev = i.getStringExtra("PrevActive");
@@ -196,6 +196,7 @@ public class BasketFragment extends Fragment {
             // and get whatever type user account id is
         }
 
+        userID = mAuth.getCurrentUser().getUid();
         RelativeLayout ml = mView.findViewById(R.id.basket_root);
         ml.invalidate();
 
@@ -486,7 +487,7 @@ public class BasketFragment extends Fragment {
                     data.put("phiVanChuyen", "");
                     data.put("DiaChi", "");
                     data.put("SoDienThoai", "");
-                    data.put("TongThanhToan", "");
+                    data.put("TongThanhToan", 0);
                     data.put("giaohang", false);
                     if(ActiPrev != null) {
                         if (i != null && extras != null && ActiPrev.toString().equalsIgnoreCase("DetailProduct")) {
@@ -563,7 +564,7 @@ public class BasketFragment extends Fragment {
         order.put("DiaChi", address.getText().toString());
         order.put("SoDienThoai", phone.getText().toString());
         order.put("phiVanChuyen", 15000);
-        order.put("TongThanhToan", FinalTong);
+        order.put("TongThanhToan",FinalTong);
         order.put("nhận tại cửa hàng", nhanhang.isChecked());
         order.put("DonHang_Id", IdDonHang.getText().toString());
         order.put("ngaydat",formattedDate);
@@ -594,7 +595,7 @@ public class BasketFragment extends Fragment {
                                             DocumentSnapshot document = task.getResult();
                                             if (document.exists()) {
                                                 size = (document.getDouble("Count").intValue() +1);
-                                                db.collection("Don_hang").document(userID).update("Counter",size);
+                                                db.collection("Don_hang").document("Counter").update("Count",size);
                                                 if(size <=9) {
                                                     IdDonHang.setText("DH0" + size);
                                                 }

@@ -60,7 +60,7 @@ public class DonHangFragment extends Fragment  implements IOnBackPressed {
     public List<DonHang_item> SortDonHang;
     private Collator VNCollator;
 //    String name, image, discount,category;
-String maDH; String status; String time ;
+String maDH; String status; String time;
     Integer soluong,giacu,gia,pay;
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -236,7 +236,7 @@ String maDH; String status; String time ;
                                 maDH = document.getString("DonHang_Id");
                                 status = document.getString("status");
                                 soluong = toIntExact(document.getLong("soluongsanpham"));
-                                pay = Integer.parseInt(document.getString("TongThanhToan"));
+                                pay = toIntExact(document.getLong("TongThanhToan"));
                                 time = document.getString("ngaydat");
 
                                 DonHangs.add( new DonHang_item(maDH,status,soluong,pay,time));

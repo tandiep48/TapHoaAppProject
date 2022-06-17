@@ -1,9 +1,13 @@
 package com.example.taphoaapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -13,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.taphoaapp.Search.SearchActivity;
 import com.example.taphoaapp.widget.CustomViewPager;
 import com.google.android.material.tabs.TabLayout;
 
@@ -28,6 +33,7 @@ public class HomeFragment extends Fragment {
     private View mView;
     private String order;
     private Context mContext;
+    private View ViewItem;
 
     @Override
     public void onAttach(Context context) {
@@ -102,6 +108,9 @@ public class HomeFragment extends Fragment {
 
         mView =  inflater.inflate(R.layout.fragment_home, container, false);
 
+
+
+
         mTabLayout = mView.findViewById(R.id.TopTabHome);
         viewMain = mView.findViewById(R.id.ViewPagerHome);
 
@@ -113,4 +122,6 @@ public class HomeFragment extends Fragment {
 
         return mView;
     }
+
+
 }

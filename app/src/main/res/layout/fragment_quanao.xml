@@ -12,10 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white"
+        app:layout_collapseMode="pin"
         android:elevation="4dp"
         app:menu="@menu/search_menu"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+
+
 
 <!--        <androidx.appcompat.widget.SearchView-->
 <!--            android:layout_width="wrap_content"-->

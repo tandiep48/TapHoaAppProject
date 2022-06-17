@@ -194,6 +194,7 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("PrevActive", "MainActivity");
                 startActivity(intent);
             }
         });

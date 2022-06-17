@@ -48,6 +48,27 @@ public class changePassword extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
         mAuth = FirebaseAuth.getInstance();
+        Intent i = getIntent();
+        Bundle extras = getIntent().getExtras();
+
+        if ( i!= null &&extras != null) {
+            order = extras.getString("Order");
+
+            userID = i.getStringExtra("userID");
+
+            ActiPrev = i.getStringExtra("PrevActive");
+
+            PassPassword = extras.getString("password");
+            if(PassPassword !=null) {
+                Log.e("ChangePass,password : ", PassPassword);
+            }
+
+            if(ActiPrev !=null) {
+                Log.e("PrevActive : ", ActiPrev.toString());
+            }
+
+            // and get whatever type user account id is
+        }
 //        mCallback = (DataCommunication) changePassword.this;
 //        if(PrevActive!= null){
 //        Log.e("PrevActive : " , PrevActive.toString());
@@ -95,24 +116,6 @@ public class changePassword extends AppCompatActivity  {
             }
         });
 
-        Intent i = getIntent();
-        Bundle extras = getIntent().getExtras();
-
-        if ( i!= null &&extras != null) {
-            order = extras.getString("Order");
-
-            userID = i.getStringExtra("userID");
-
-            ActiPrev = i.getStringExtra("PrevActive");
-
-            PassPassword = i.getStringExtra("password");
-
-            if(ActiPrev !=null) {
-                Log.e("PrevActive : ", ActiPrev.toString());
-            }
-
-            // and get whatever type user account id is
-        }
 
 //        if(savedInstanceState == null  ) {
 //            Fragment newFragment = new BasketFragment();

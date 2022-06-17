@@ -155,17 +155,28 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback.setPassCategory(product.getCategory());
-                mCallback.setPassName(product.getName());
-                mCallback.setPassPrice(product.getPrice());
-                mCallback.setPassquantity(1);
-                mCallback.setPassSoluong(product.getSoluong());
 
-                Fragment newFragment = new BasketFragment();
-                ((FragmentActivity)mContext).getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_home,new BasketFragment())
-                        .commit();
+                Intent intent = new Intent(mContext, DetailProductActivity.class);
+                intent.putExtra("NAME",product.getName());
+                intent.putExtra("prevActive", "MainActivity");
+                intent.putExtra("userID", userID);
+                intent.putExtra("password", Password);
+//                intent.putExtra("Category",product.getCategory());
+//                intent.putExtra("Soluong",1);
+//                intent.putExtra("gia",product.getPrice());
+//                intent.putExtra("color","");
+                mContext.startActivity(intent);
+//                mCallback.setPassCategory(product.getCategory());
+//                mCallback.setPassName(product.getName());
+//                mCallback.setPassPrice(product.getPrice());
+//                mCallback.setPassquantity(1);
+//                mCallback.setPassSoluong(product.getSoluong());
+//
+//                Fragment newFragment = new BasketFragment();
+//                ((FragmentActivity)mContext).getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.fragment_home,new BasketFragment())
+//                        .commit();
 //                FragmentTransaction transaction = ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction();
 //
 //// Replace whatever is in the fragment_container view with this fragment,
@@ -184,6 +195,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
             }
         });
+
 
     }
 
@@ -226,5 +238,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             }
         };
     }
+
 
 }
