@@ -52,7 +52,7 @@
         android:paddingEnd="12dp"
         android:layout_height="50dp"
         android:hint="Mật khẩu"
-        android:inputType="text"
+        android:inputType="textPassword"
         app:layout_constraintTop_toBottomOf="@id/EmailInput"
         app:layout_constraintLeft_toLeftOf="@id/EmailInput"
         android:layout_marginTop="20dp"/>
@@ -65,7 +65,7 @@
         android:paddingEnd="12dp"
         android:layout_height="50dp"
         android:hint="Xác nhận mật khẩu"
-        android:inputType="text"
+        android:inputType="textPassword"
         app:layout_constraintTop_toBottomOf="@id/MatKhauInput"
         app:layout_constraintLeft_toLeftOf="@id/MatKhauInput"
         app:layout_constraintRight_toRightOf="@id/MatKhauInput"

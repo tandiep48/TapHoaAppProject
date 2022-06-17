@@ -64,6 +64,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login.setOnClickListener(this);
         Glogin.setOnClickListener(this);
         Flogin.setOnClickListener(this);
+        forgot.setOnClickListener(this);
+
     }
 
     @Override
@@ -86,6 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 signIn();
                 break;
             case R.id.ForgotBtn:
+                startActivity(new Intent(LoginActivity.this, ChangePasswordAtLoginActivity.class));
                 break;
         }
     }

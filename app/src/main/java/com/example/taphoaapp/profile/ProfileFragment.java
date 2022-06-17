@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.taphoaapp.ChangePasswordActivity;
 import com.example.taphoaapp.HomeViewPagerAdpater;
 import com.example.taphoaapp.R;
 import com.example.taphoaapp.Search.SearchActivity;
@@ -112,7 +113,7 @@ public class ProfileFragment extends Fragment {
         changePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), changePassword.class);
+                Intent intent = new Intent(getActivity(), ChangePasswordActivity.class);
                 intent.putExtra("userID", UID);
                 intent.putExtra("Info_fullname", Info_fullname.getText().toString());
                 intent.putExtra("Info_email", Info_email.getText().toString());

@@ -113,6 +113,10 @@
                 android:value="com.example.taphoaapp.MainActivity"
                 />
         </activity>
+        <activity android:name=".ChangePasswordActivity"
+            android:configChanges="locale"
+            android:exported="true"/>
+        <activity android:name=".ChangePasswordAtLoginActivity" />
 
     </application>
 
