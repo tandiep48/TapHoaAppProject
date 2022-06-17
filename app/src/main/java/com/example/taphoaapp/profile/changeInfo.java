@@ -53,6 +53,7 @@ public class changeInfo extends AppCompatActivity  {
     EditText Fullname , Email,Phone,Gender,Age,ComfPass;
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String PassPassword;
 
 
 
@@ -90,7 +91,7 @@ public class changeInfo extends AppCompatActivity  {
             order = extras.getString("Order");
 
             userID = i.getStringExtra("userID");
-
+            PassPassword = i.getStringExtra("password");
             ActiPrev = i.getStringExtra("PrevActive");
             if(ActiPrev !=null) {
                 Log.e("PrevActive : ", ActiPrev.toString());
@@ -119,6 +120,7 @@ public class changeInfo extends AppCompatActivity  {
         this.getApplicationContext().getResources().updateConfiguration(config, null);
 
         mAuth = FirebaseAuth.getInstance();
+        userID = mAuth.getCurrentUser().getUid();
 
 
         db.collection("User")
@@ -148,47 +150,58 @@ public class changeInfo extends AppCompatActivity  {
                 String Password = ComfPass.getText().toString().trim();
                 if(Password.isEmpty()){
                     thongBao = "mật khẩu không được để trống";
+                    AlertDialog.Builder builder = new AlertDialog.Builder(changeInfo.this);
+                    builder.setMessage(thongBao)
+                            .setTitle("Thông báo");
+                    builder.show();
                 }
-
-                if (Password.length()<6) {
+                else if (Password.length()<6) {
                    thongBao = "mật khẩu không được ít hơn 6 ký tự";
+                    AlertDialog.Builder builder = new AlertDialog.Builder(changeInfo.this);
+                    builder.setMessage(thongBao)
+                            .setTitle("Thông báo");
+                    builder.show();
                 }
+                else {
 
-                mAuth.signInWithEmailAndPassword(Email.getText().toString(), Password)
-                        .addOnCompleteListener(changeInfo.this,
-                                new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (task.isSuccessful()) {
+//                    mAuth.signInWithEmailAndPassword(Email.getText().toString(), Password)
+//                            .addOnCompleteListener(changeInfo.this,
+//                                    new OnCompleteListener<AuthResult>() {
+//                                        @Override
+//                                        public void onComplete(@NonNull Task<AuthResult> task) {
+//                                            if (task.isSuccessful()) {
+                                                if(Password.equalsIgnoreCase(PassPassword)){
+                                                Map<String, Object> order = new HashMap<>();
+                                                order.put("fullName", Fullname.getText().toString());
+                                                order.put("email", Email.getText().toString());
+                                                order.put("age", Age.getText().toString());
+                                                order.put("gender", Gender.getText().toString());
+                                                order.put("phone", Phone.getText().toString());
 
-                                            Map<String, Object> order = new HashMap<>();
-                                            order.put("fullName", Fullname.getText().toString());
-                                            order.put("email", Email.getText().toString());
-                                            order.put("age", Age.getText().toString());
-                                            order.put("gender", Gender.getText().toString());
-                                            order.put("phone", Phone.getText().toString());
+                                                db.collection("User").document(userID)
+                                                        .set(order);
 
-                                            db.collection("User").document(userID)
-                                                    .set(order);
-
-                                            AlertDialog.Builder builder = new AlertDialog.Builder(changeInfo.this);
-                                            builder.setMessage("Thay đổi thông tin thành công!")
-                                                    .setTitle("Thông báo");
-                                            builder.show();
-                                            new Handler().postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Intent intent = new Intent(changeInfo.this, LoginActivity.class);
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(changeInfo.this);
+                                                builder.setMessage("Thay đổi thông tin thành công!")
+                                                        .setTitle("Thông báo");
+                                                builder.show();
+                                                new Handler().postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Intent intent = new Intent(changeInfo.this, MainActivity.class);
 //                intent.putExtra("userID", UID);
-                                                    startActivity(intent);
-                                                }
-                                            }, 2000);
-                                        } else {
-                                            Toast.makeText(changeInfo.this, "Đăng nhập thất bại",
-                                                    Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
+                                                        intent.putExtra("prevActive", "changeInfo");
+                                                        intent.putExtra("password", Password);
+                                                        startActivity(intent);
+                                                    }
+                                                }, 2000);
+                                            } else {
+                                                Toast.makeText(changeInfo.this, "Đăng nhập thất bại",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+//                                        }
+//                                    });
+                }
 
             }
         });

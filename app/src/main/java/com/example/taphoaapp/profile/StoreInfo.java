@@ -8,18 +8,24 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NavUtils;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.taphoaapp.Basket.DataCommunication;
+import com.example.taphoaapp.BasketFragment;
 import com.example.taphoaapp.DetailProduct.DetailProductActivity;
 import com.example.taphoaapp.IOnBackPressed;
+import com.example.taphoaapp.MainActivity;
 import com.example.taphoaapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -52,6 +58,7 @@ public class StoreInfo extends AppCompatActivity  {
     private MapView map = null;
     ScaleBarOverlay mScaleBarOverlay;
     RotationGestureOverlay mRotationGestureOverlay;
+    String Password;
 
 
 
@@ -67,7 +74,10 @@ public class StoreInfo extends AppCompatActivity  {
 
 
         setContentView(R.layout.store_infor);
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Giới thiệu cửa hàng");
 
 //        mCallback = (DataCommunication) StoreInfo.this;
 //        if(PrevActive!= null){
@@ -129,7 +139,7 @@ public class StoreInfo extends AppCompatActivity  {
 
         if ( i!= null &&extras != null) {
             order = extras.getString("Order");
-
+            Password = i.getStringExtra("password");
             userID = i.getStringExtra("userID");
 
             ActiPrev = i.getStringExtra("PrevActive");
@@ -228,6 +238,53 @@ public class StoreInfo extends AppCompatActivity  {
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public Intent getSupportParentActivityIntent() {
+        return getParentActivityIntentImpl();
+    }
+
+    @Override
+    public Intent getParentActivityIntent() {
+        return getParentActivityIntentImpl();
+    }
+
+    private Intent getParentActivityIntentImpl() {
+        Intent i = null;
+        if (extras != null) {
+            PrevActive = extras.getString("prevActive");
+            //The key argument here must match that used in the other activity
+        }
+
+        // Here you need to do some logic to determine from which Activity you came.
+        // example: you could pass a variable through your Intent extras and check that.
+        if (PrevActive == "MainActivity") {
+            i = new Intent(this, MainActivity.class);
+            // set any flags or extras that you need.
+            // If you are reusing the previous Activity (i.e. bringing it to the top
+            // without re-creating a new instance) set these flags:
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            // if you are re-using the parent Activity you may not need to set any extras
+            i.putExtra("prevActive", "DetailProduct");
+        } else {
+            i = new Intent(this, BasketFragment.class);
+            // same comments as above
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            i.putExtra("prevActive", "DetailProduct");
+        }
+
+        return i;
+    }
 
 
 

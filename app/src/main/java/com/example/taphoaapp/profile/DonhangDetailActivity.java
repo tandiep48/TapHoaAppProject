@@ -81,6 +81,7 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String userID;
+    String Password;
 
     private String passName,passCategory,passcolor,passsize, maDH;
     private int passPrice,passquantity,passSoluong;
@@ -142,6 +143,7 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
         if ( i!= null &&extras != null) {
             userID = i.getStringExtra("userID");
             maDH = i.getStringExtra("maDH");
+            Password = i.getStringExtra("password");
         }
         Locale locale = new Locale("vi", "VN");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);

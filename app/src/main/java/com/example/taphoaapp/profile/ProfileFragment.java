@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String userID;
+    String Password;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -104,6 +106,17 @@ public class ProfileFragment extends Fragment {
         Info_phone = mView.findViewById(R.id.Info_phone);
 
         UID = mAuth.getCurrentUser().getUid();
+        Intent i = getActivity().getIntent();
+        Bundle extras = getActivity().getIntent().getExtras();
+
+        if ( i!= null &&extras != null) {
+
+            userID = i.getStringExtra("userID");
+
+            Password = i.getStringExtra("password");
+
+            // and get whatever type user account id is
+        }
 
         changeInfo = mView.findViewById(R.id.btnChangeInfo);
         changePass = mView.findViewById(R.id.btnChangePass);
@@ -144,6 +157,7 @@ userID = mAuth.getCurrentUser().getUid();
                 intent.putExtra("Info_age",Info_age.getText().toString());
                 intent.putExtra("Info_gender",Info_gender.getText().toString());
                 intent.putExtra("Info_phone",Info_phone.getText().toString());
+                intent.putExtra("password", Password);
                 startActivity(intent);
             }
         });
@@ -157,6 +171,7 @@ userID = mAuth.getCurrentUser().getUid();
                 intent.putExtra("Info_age",Info_age.getText().toString());
                 intent.putExtra("Info_gender",Info_gender.getText().toString());
                 intent.putExtra("Info_phone",Info_phone.getText().toString());
+                intent.putExtra("password", Password);
                 startActivity(intent);
             }
         });
@@ -171,6 +186,7 @@ userID = mAuth.getCurrentUser().getUid();
                 intent.putExtra("Info_age",Info_age.getText().toString());
                 intent.putExtra("Info_gender",Info_gender.getText().toString());
                 intent.putExtra("Info_phone",Info_phone.getText().toString());
+                intent.putExtra("password", Password);
                 startActivity(intent);
             }
         });
@@ -179,6 +195,7 @@ userID = mAuth.getCurrentUser().getUid();
             public void onClick(View v) {
                 mAuth.signOut();
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
+
 //                intent.putExtra("userID", UID);
                 startActivity(intent);
             }

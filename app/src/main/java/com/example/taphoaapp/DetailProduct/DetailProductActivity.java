@@ -61,7 +61,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
     private TextView tvname, tvdiscount,tvsoluong,tvgiacu,tvgia,tvMota;
     private Spinner spinColor , spinSize;
     SpinnerColorAdapter spinnerColor;
-    String name, image, discount, Namevalue, ColorVal , SizeVal, category,IDsp ;
+    String name, image, discount, Namevalue, ColorVal , SizeVal, category,IDsp,Password ;
     Integer soluong,giacu,gia;
     Integer size;
 
@@ -120,6 +120,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
 
         if ( i!= null &&extras != null) {
             userID = i.getStringExtra("userID");
+            Password = i.getStringExtra("password");
 
         }
         userID = mAuth.getCurrentUser().getUid();
@@ -271,6 +272,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                 intent.putExtra("PrevActive", "DetailProduct");
                 intent.putExtra("productItem",productItem);
                 intent.putExtra("userID",userID);
+                intent.putExtra("password", Password);
                 setPassCategory(category);
                 setPassName(tvname.getText().toString());
                 int price = -1 , num,soluong =-1;

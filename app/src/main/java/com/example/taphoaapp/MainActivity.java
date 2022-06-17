@@ -111,7 +111,16 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
                 viewMain.setCurrentItem(1);
                 bottomnavigation.getMenu().findItem(R.id.Menu_Basket).setChecked(true);
             }
+            else if (i != null && extras != null && ActiPrev.toString().equalsIgnoreCase("changeInfo")) {
+                viewMain.setCurrentItem(2);
+                bottomnavigation.getMenu().findItem(R.id.Menu_Profile).setChecked(true);
+            }
+            else if (i != null && extras != null && ActiPrev.toString().equalsIgnoreCase("changePassword")) {
+                viewMain.setCurrentItem(2);
+                bottomnavigation.getMenu().findItem(R.id.Menu_Profile).setChecked(true);
+            }
         }
+
 
 
         viewMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

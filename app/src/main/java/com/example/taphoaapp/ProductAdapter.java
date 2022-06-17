@@ -41,6 +41,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     private  List<product_item> productItemList;
     private  List<product_item> OriginproductItemList;
     String userID;
+    String Password;
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -118,6 +119,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         if ( i!= null &&extras != null) {
             userID = i.getStringExtra("userID");
+            Password = i.getStringExtra("password");
         }
 
         if(product == null) return;
@@ -128,6 +130,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 intent.putExtra("NAME",product.getName());
                 intent.putExtra("prevActive", "MainActivity");
                 intent.putExtra("userID", userID);
+                intent.putExtra("password", Password);
 //                intent.putExtra("Category",product.getCategory());
 //                intent.putExtra("Soluong",1);
 //                intent.putExtra("gia",product.getPrice());
