@@ -172,6 +172,7 @@ public class BasketFragment extends Fragment {
 
         i = getActivity().getIntent();
         extras = getActivity().getIntent().getExtras();
+        userID = mAuth.getCurrentUser().getUid();
 
         if ( i!= null &&extras != null) {
 
@@ -184,8 +185,7 @@ public class BasketFragment extends Fragment {
             product_item = (basket_product_item) i.getSerializableExtra("productItem");
 
 
-//                userID = i.getStringExtra("userID");
-            userID = mAuth.getCurrentUser().getUid();
+                userID = i.getStringExtra("userID");
 
 
             ActiPrev = i.getStringExtra("PrevActive");
