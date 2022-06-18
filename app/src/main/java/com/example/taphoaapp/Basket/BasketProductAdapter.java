@@ -22,6 +22,7 @@ import com.example.taphoaapp.BasketFragment;
 import com.example.taphoaapp.DetailProduct.DetailProductActivity;
 import com.example.taphoaapp.R;
 import com.example.taphoaapp.basket_product_item;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -35,7 +36,7 @@ import java.util.Locale;
 public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdapter.ProductViewHolder>{
 
     DataCommunication mCallback;
-
+    private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     BasketFragment mFragment;
     private Context mContext;
@@ -146,13 +147,14 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-
+        mAuth = FirebaseAuth.getInstance();
         i = ((Activity) mContext).getIntent();
         extras = ((Activity) mContext).getIntent().getExtras();
 
         if ( i!= null &&extras != null) {
-            userID = i.getStringExtra("userID");
+//            userID = i.getStringExtra("userID");
         }
+        userID = mAuth.getCurrentUser().getUid();
         Locale locale = new Locale("vi", "VN");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
 
@@ -170,8 +172,9 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.collection("Gio_hang").document(userID).update("ListProducts", FieldValue.arrayRemove(productItemList.get(position)));
+//                db.collection("Gio_hang").document(userID).update("ListProducts", FieldValue.arrayRemove(productItemList.get(position)));
                 DeleteAt(position);
+                db.collection("Gio_hang").document(userID).update("ListProducts", productItemList);
             }
         });
 

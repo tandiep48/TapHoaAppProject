@@ -157,17 +157,21 @@ public class changeInfo extends AppCompatActivity  {
                 String Password = ComfPass.getText().toString().trim();
                 if(Password.isEmpty()){
                     thongBao = "mật khẩu không được để trống";
-                    AlertDialog.Builder builder = new AlertDialog.Builder(changeInfo.this);
-                    builder.setMessage(thongBao)
-                            .setTitle("Thông báo");
-                    builder.show();
+                    ComfPass.setError(thongBao);
+                    ComfPass.requestFocus();
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(changeInfo.this);
+//                    builder.setMessage(thongBao)
+//                            .setTitle("Thông báo");
+//                    builder.show();
                 }
                 else if (Password.length()<6) {
                    thongBao = "mật khẩu không được ít hơn 6 ký tự";
-                    AlertDialog.Builder builder = new AlertDialog.Builder(changeInfo.this);
-                    builder.setMessage(thongBao)
-                            .setTitle("Thông báo");
-                    builder.show();
+                    ComfPass.setError(thongBao);
+                    ComfPass.requestFocus();
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(changeInfo.this);
+//                    builder.setMessage(thongBao)
+//                            .setTitle("Thông báo");
+//                    builder.show();
                 }
                 else {
 

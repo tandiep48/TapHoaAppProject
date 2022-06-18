@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +26,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.taphoaapp.Basket.BasketProductAdapter;
 import com.example.taphoaapp.Basket.DataCommunication;
+import com.example.taphoaapp.profile.changeInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -55,7 +58,7 @@ import java.util.Map;
  * Use the {@link BasketFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BasketFragment extends Fragment {
+public class BasketFragment extends Fragment implements DataCommunication  {
 
     private RecyclerView mRecycler;
     private BasketProductAdapter BasproAdapter;
@@ -76,6 +79,7 @@ public class BasketFragment extends Fragment {
    Integer size;
    FirebaseFirestore db = FirebaseFirestore.getInstance();
    basket_product_item ProtrungGian;
+   boolean getaddtoBasket;
 
     private FirebaseAuth mAuth;
 
@@ -83,6 +87,96 @@ public class BasketFragment extends Fragment {
     Integer price, numdat, soluong;
 
     private RecyclerViewReadyCallback recyclerViewReadyCallback;
+
+    @Override
+    public boolean getaddtoBasket() {
+        return getaddtoBasket;
+    }
+
+    @Override
+    public void setaddtoBasket(boolean getaddtoBasket) {
+
+    }
+
+    @Override
+    public String getPassName() {
+        return null;
+    }
+
+    @Override
+    public void setPassName(String passName) {
+
+    }
+
+    @Override
+    public String getPassCategory() {
+        return null;
+    }
+
+    @Override
+    public void setPassCategory(String passCategory) {
+
+    }
+
+    @Override
+    public int getPassquantity() {
+        return 0;
+    }
+
+    @Override
+    public void setPassquantity(int passquantity) {
+
+    }
+
+    @Override
+    public String getPasscolor() {
+        return null;
+    }
+
+    @Override
+    public void setPasscolor(String passcolor) {
+
+    }
+
+    @Override
+    public String getPasssize() {
+        return null;
+    }
+
+    @Override
+    public void setPasssize(String passsize) {
+
+    }
+
+    @Override
+    public int getPassPrice() {
+        return 0;
+    }
+
+    @Override
+    public void setPassPrice(int passPrice) {
+
+    }
+
+    @Override
+    public int getPassSoluong() {
+        return 0;
+    }
+
+    @Override
+    public void setPassSoluong(int passSoluong) {
+
+    }
+
+    @Override
+    public void setPrevActive(String PrevActive) {
+
+    }
+
+    @Override
+    public String getPrevActive() {
+        return null;
+    }
 
     public interface RecyclerViewReadyCallback {
         void onLayoutReady();
@@ -102,10 +196,21 @@ public class BasketFragment extends Fragment {
     Locale locale = new Locale("vi", "VN");
     NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
 
+
     @Override
     public void onResume() {
         super.onResume();
         total.setText(String.valueOf(currencyFormatter.format(FinalTong)));
+        MainActivity activity = (MainActivity) getActivity();
+        getaddtoBasket =  activity.getaddmybasket();
+        if(getaddtoBasket)
+        {
+//            Log.e("BaskFrag:",Boolean.toString(getaddtoBasket));
+            getListProduct();
+            getaddtoBasket = false;
+            getActivity().getIntent().putExtra("addtoBask",getaddtoBasket);
+        }
+//        Toast.makeText(getContext(),Boolean.toString(getaddtoBasket),Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -164,7 +269,14 @@ public class BasketFragment extends Fragment {
 //        extras = getActivity().getIntent().getExtras();
 
         mAuth = FirebaseAuth.getInstance();
-
+        mRecycler = mView.findViewById(R.id.rvFoods);
+        total = mView.findViewById(R.id.tvTotal);
+        TransFee = mView.findViewById(R.id.tvTransFee);
+        name= mView.findViewById(R.id.editTextPersonName);
+        address = mView.findViewById(R.id.editTextAdress);
+        phone = mView.findViewById(R.id.editTextPhone);
+        nhanhang = mView.findViewById(R.id.basket_deliver_check);
+        IdDonHang = mView.findViewById(R.id.tvIdDonHang);
 //
 //        if (requireActivity().getIntent().hasExtra("prevActive")) {
 //            prevActive = savedInstanceState.getString("prevActive");
@@ -183,7 +295,8 @@ public class BasketFragment extends Fragment {
             PassSoluong= i.getIntExtra("PrevActive",0);
 
             product_item = (basket_product_item) i.getSerializableExtra("productItem");
-
+            getaddtoBasket = i.getBooleanExtra("addtoBask",false);
+//            Toast.makeText(getContext(),Boolean.toString(getaddtoBasket),Toast.LENGTH_SHORT).show();
 
 //                userID = i.getStringExtra("userID");
 
@@ -204,21 +317,37 @@ public class BasketFragment extends Fragment {
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(products != null) {
-                    OrderListProduct(products);
-                    // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setMessage("Đặt hàng thành công!")
-                            .setTitle("Thông báo");
-
-                    builder.show();
+                if(name.getText().toString().isEmpty()) {
+                    name.setError("Tên không được để trống");
+                    name.requestFocus();
                 }
-                else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setMessage("Giỏ hàng trống!")
-                            .setTitle("Thông báo");
+                if(!nhanhang.isChecked()&& address.getText().toString().isEmpty()) {
+                    address.setError("Địa chỉ không được để trống khi chọn giao hàng");
+                    address.requestFocus();
+                }
+                else {
+                    if (products != null) {
+                        OrderListProduct(products);
+                        // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage("Đặt hàng thành công!")
+                                .setTitle("Thông báo");
 
-                    builder.show();
+                        builder.show();
+
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+////                          getActivity().notifyDataSetChanged();
+//                        }
+//                    }, 2000);
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage("Giỏ hàng trống!")
+                                .setTitle("Thông báo");
+
+                        builder.show();
+                    }
                 }
 
             }
@@ -245,14 +374,6 @@ public class BasketFragment extends Fragment {
         });
 
 
-        mRecycler = mView.findViewById(R.id.rvFoods);
-        total = mView.findViewById(R.id.tvTotal);
-        TransFee = mView.findViewById(R.id.tvTransFee);
-        name= mView.findViewById(R.id.editTextPersonName);
-        address = mView.findViewById(R.id.editTextAdress);
-        phone = mView.findViewById(R.id.editTextPhone);
-        nhanhang = mView.findViewById(R.id.basket_deliver_check);
-        IdDonHang = mView.findViewById(R.id.tvIdDonHang);
 
 
         TransFee.setText(String.valueOf(currencyFormatter.format(15000)));
@@ -369,6 +490,7 @@ public class BasketFragment extends Fragment {
 //            }
 //        });
 
+
         return mView;
     }
 
@@ -456,6 +578,7 @@ public class BasketFragment extends Fragment {
                         }
                         BasproAdapter.setData(products);
                         mRecycler.setAdapter(BasproAdapter);
+
 
 
                     }else{FillBasket();}
@@ -647,6 +770,9 @@ public class BasketFragment extends Fragment {
         }
 
     }
+
+
+
 
     public void SetTotalPrice(){
         //        Log.e("fianlPrice",String.valueOf(FinalTong));

@@ -1,6 +1,9 @@
 package com.example.taphoaapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,11 +17,22 @@ import com.example.taphoaapp.profile.ProfileMainFragment;
 public class MainViewPagerAdpater extends FragmentStatePagerAdapter
 {
     Bundle extras ;
+  Intent i;
+  boolean getaddtoBasket;
 
 
+    public MainViewPagerAdpater(@NonNull FragmentManager fm, int behavior,Intent intent) {
+        super(fm, behavior);
 
+        i = intent;
+        extras = i.getExtras();
+        if ( i!= null &&extras != null) {
+            getaddtoBasket = i.getBooleanExtra("addtoBask",false);
+//            Log.e("MainViewPage:",Boolean.toString(getaddtoBasket));
+            // and get whatever type user account id is
+        }
 
-    public MainViewPagerAdpater(@NonNull FragmentManager fm, int behavior) { super(fm, behavior); }
+    }
 
     @NonNull
     @Override
@@ -29,6 +43,11 @@ public class MainViewPagerAdpater extends FragmentStatePagerAdapter
             case 1: return new BasketFragment();
             case 2: return new ProfileMainFragment();
             default: return new HomeFragment();
+//            default: if(getaddtoBasket){return new BasketFragment();}
+//                else {
+//                return new HomeFragment();
+//            }
+
         }
     }
 

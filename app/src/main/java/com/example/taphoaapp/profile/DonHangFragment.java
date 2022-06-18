@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,6 +66,7 @@ String maDH; String status; String time;
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String userID;
+    TextView EmptyDH;
 
 
 
@@ -113,6 +115,9 @@ String maDH; String status; String time;
         mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getCurrentUser().getUid();
 
+        EmptyDH = mView.findViewById(R.id.Empty_DonHangList);
+
+
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(),
                 android.R.layout.simple_spinner_item, getListsize());
@@ -128,7 +133,7 @@ String maDH; String status; String time;
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
 //                        SortProduct.sort((o1, o2) -> (o1.getName().substring(0,1)).compareToIgnoreCase((o2.getName().substring(0,1))));
-//                        SortDonHang.sort((o1, o2) -> compare(o1.getName(),o2.getName()));
+                        SortDonHang.sort((o1, o2) -> compare(o1.getMaDH(),o2.getMaDH()));
 //                        Collections.sort(SortDonHang, VNCollator);
 
                     }
@@ -139,7 +144,7 @@ String maDH; String status; String time;
                 }
                 if(position>1&&position<=3){
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                        SortDonHang.sort(((o1, o2) ->  Integer.valueOf(o1.getPrice()).compareTo(Integer.valueOf(o2.getPrice()))));
+                        SortDonHang.sort(((o1, o2) ->  Integer.valueOf(o1.getPay()).compareTo(Integer.valueOf(o2.getPay()))));
                     }
                     if (position==3){
                         Collections.reverse(SortDonHang);
@@ -171,11 +176,11 @@ String maDH; String status; String time;
 
     private List<CharSequence>  getListsize(){
         List<CharSequence> listSize = new ArrayList<>();
-        listSize.add(new String("A-Z"));
-        listSize.add(new String("Z-A"));
-        listSize.add(new String("Giá tăng dần"));
-        listSize.add(new String("Giá giảm dần"));
-        listSize.add(new String("Khuyến mãi"));
+        listSize.add(new String("Mã đơn hàng: A-Z"));
+        listSize.add(new String("Mã đơn hàng: Z-A"));
+        listSize.add(new String("Giá trị tăng dần"));
+        listSize.add(new String("Giá trị giảm dần"));
+//        listSize.add(new String("Khuyến mãi"));
 
         return listSize;
     }
@@ -188,6 +193,7 @@ String maDH; String status; String time;
 //        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        SearchView searchView = (SearchView) view.findViewById(R.id.search_viewmenu);
 //        searchView.onActionViewExpanded();
+
 
 
 //        ViewItem=view.findViewById(R.id.search_item_menu);
@@ -243,6 +249,16 @@ String maDH; String status; String time;
                                 Log.e("documment", document.getId() + " => " + document.getData());
                             }
                             SortDonHang = DonHangs;
+                            if(DonHangs.isEmpty()||DonHangs.size() ==0||DonHangs ==null)
+                            {
+                                EmptyDH.setVisibility(View.VISIBLE);
+                                EmptyDH.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                                EmptyDH.requestLayout();
+                            }
+                            else{
+                                EmptyDH.setVisibility(View.GONE);
+                            }
+
                             proAdapter.setData(SortDonHang);
                         } else {
                             Log.e("documment", "Error getting documents: ", task.getException());

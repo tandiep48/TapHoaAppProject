@@ -1,6 +1,11 @@
 package com.example.taphoaapp.Basket;
 
 public interface DataCommunication {
+
+    public boolean getaddtoBasket();
+
+    public void setaddtoBasket(boolean getaddtoBasket);
+
     public String getPassName();
 
     public void setPassName(String passName);

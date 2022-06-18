@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.example.taphoaapp.profile.ProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,14 +36,15 @@ public class WelcomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String PassPassword= sharedPreferences.getString(mAuth.getCurrentUser().getUid(), "123456");//load it from SharedPref
+
 
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 if(firebaseUser != null)
                 {
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(WelcomeActivity.this);
+                    String PassPassword= sharedPreferences.getString(firebaseUser.getUid(), "123456");//load it from SharedPref
                     Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
                     intent.putExtra("PrevActive", "WelcomeActivity");
                     intent.putExtra("password", PassPassword);

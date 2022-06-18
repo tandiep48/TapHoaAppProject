@@ -2,6 +2,7 @@ package com.example.taphoaapp.DetailProduct;
 
 import static java.lang.Math.toIntExact;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -78,22 +79,23 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
     Bundle extras ;
     private Button add,order;
     private FirebaseAuth mAuth;
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public boolean getaddtoBasket = false;
 //    DataCommunication mCallback;
 
-//    @Override
-//    public void attachBaseContext(Context context) {
-//        super.attachBaseContext(context);
-//
-//        // This makes sure that the container activity has implemented
-//        // the callback interface. If not, it throws an exception
-//        try {
-//            mCallback = (DataCommunication) this;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(context.toString()
-//                    + " must implement DataCommunication");
-//        }
-//    }
+    @Override
+    public void attachBaseContext(Context context) {
+        super.attachBaseContext(context);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (DataCommunication) this;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement DataCommunication");
+        }
+    }
 
 
     @Override
@@ -111,7 +113,6 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
         this.getApplicationContext().getResources().updateConfiguration(config, null);
 //        mCallback = (DataCommunication) this.getApplicationContext();
         mCallback = (DataCommunication) DetailProductActivity.this;
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         products = new ArrayList<>();
 
@@ -130,166 +131,16 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DetailProductActivity.this, MainActivity.class);
-//                intent.putExtra("prevActive", "DetailProduct");
-
-                productItem = new basket_product_item();
-
-                productItem.setID(IDsp);
-                productItem.setCategory(category);
-                productItem.setName(tvname.getText().toString());
-                productItem.setPrice(Integer.parseInt(tvgia.getText().toString()));
-                //productItem.setNumdat(Integer.parseInt(tv.getText().toString()));
-                productItem.setSoluong(Integer.parseInt(tvsoluong.getText().toString()));
-                if(spinColor.getSelectedItem()!=null && spinColor.getSelectedItem().toString() !="") {
-                    productItem.setMau(spinColor.getSelectedItem().toString());
-                }
-                if(spinSize.getSelectedItem()!=null && spinSize.getSelectedItem().toString() !="") {
-                    productItem.setSize(spinSize.getSelectedItem().toString());
-                }
-//                List<product_item> products = new ArrayList<>();
-//                products.add(productItem);
-//                Map<String, Object> order = new HashMap<>();
-//                order.put("ListProducts", products);
-                db.collection("Gio_hang")
-                        .document(userID)
-                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if(document != null){
-                                if (document.exists()) {
-                                    if (document.get("ListProducts") != null||document.get("ListProducts")!="") {
-                                        List<Map<String, Object>> productDOX = (List<Map<String, Object>>) document.get("ListProducts");
-                                        for(Map<String, Object> ObjPro : productDOX)
-                                        {
-                                            ProtrungGian = new basket_product_item();
-                                            ProtrungGian.setCategory(ObjPro.get("category").toString());
-                                            ProtrungGian.setID(ObjPro.get("id").toString());
-                                            if(ObjPro.get("mau")!= null) {
-                                                if (ObjPro.get("mau").toString() != "") {
-                                                    ProtrungGian.setMau(ObjPro.get("mau").toString());
-                                                }
-                                            }
-                                            else{
-                                                ProtrungGian.setMau("");
-                                            }
-
-
-                                            if(ObjPro.get("size")!= null) {
-                                                if (ObjPro.get("size").toString() != "") {
-                                                    ProtrungGian.setSize(ObjPro.get("size").toString());
-                                                }
-                                            }
-                                            else{
-                                                ProtrungGian.setSize("");
-                                            }
-
-                                            ProtrungGian.setName(ObjPro.get("name").toString());
-                                            ProtrungGian.setNumdat(Integer.parseInt(ObjPro.get("numdat").toString()));
-                                            ProtrungGian.setPrice(Integer.parseInt(ObjPro.get("price").toString()));
-                                            ProtrungGian.setSoluong(Integer.parseInt(ObjPro.get("soluong").toString()));
-
-                                            products.add(ProtrungGian);
-                                        }
-//                            products = (List<basket_product_item>) document.get("ListProducts");
-//                            Log.d("check",((List<?>) document.get("ListProducts")).get(0).toString().sp+"");
-//                            for(Array set : document.get("ListProducts").toArray() )
-                                    }
-
-                                }else{}
-                            }else {
-
-                            }
-                        } else {
-                        }
-                    }
-                });
-
-                for(basket_product_item ObjPro : products)
-                {
-                 if(productItem.getName().equalsIgnoreCase(ObjPro.getName()))
-                 {
-                     products.remove(ObjPro);
-                 }
-                }
-                products.add(productItem);
-
-//                FieldValue.arrayUnion(productItem)
-
-                db.collection("Gio_hang").document(userID).update("ListProducts", products).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-
-                    }
-                })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Map<String, Object> data = new HashMap<>();
-                                db.collection("Don_hang")
-                                        .document("Counter")
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    DocumentSnapshot document = task.getResult();
-                                                    if (document.exists()) {
-                                                        size = (document.getDouble("Count").intValue() +1);
-                                                        data.put("name", "");
-                                                        data.put("phiVanChuyen", 15000);
-                                                        if(size <=9) {
-                                                            data.put("DonHang_Id", "DH0" + size);
-                                                        }
-                                                        else{
-                                                            data.put("DonHang_Id", "DH" + size);
-                                                        }
-
-                                                        data.put("DiaChi", "");
-                                                        data.put("SoDienThoai", "");
-                                                        data.put("TongThanhToan", 0);
-                                                        data.put("giaohang", false);
-                                                        data.put("ListProducts", Arrays.asList(productItem));
-
-
-                                                        db.collection("Gio_hang").document(userID).set(data);
-                                                    } else {
-
-                                                    }
-                                                } else {
-
-                                                }
-                                            }
-                                        });
-
-                            }
-                        });
-
-                mCallback.setPrevActive("DetailProduct");
-                intent.putExtra("Order", "YES");
-                intent.putExtra("PrevActive", "DetailProduct");
-                intent.putExtra("productItem",productItem);
-                intent.putExtra("userID",userID);
-                intent.putExtra("password", Password);
-                setPassCategory(category);
-                setPassName(tvname.getText().toString());
-                int price = -1 , num,soluong =-1;
-
-                try {
-                    price = Integer.parseInt(tvgia.getText().toString());
-                    soluong = Integer.parseInt(tvsoluong.getText().toString());
-                } catch(NumberFormatException nfe) {
-                    System.out.println("Could not parse " + nfe);
-                }
-                setPassPrice(price);
-                setPassquantity(1);
-                setPassSoluong(soluong);
-//                mCallback.getPasscolor();
-//                mCallback.setPasssize();
-////
-                DetailProductActivity.this.startActivity(intent);
+                getaddtoBasket = false;
+                AddtoBasket();
+            }
+        });
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getaddtoBasket = true;
+                setaddtoBasket(getaddtoBasket);
+                AddtoBasket();
             }
         });
 
@@ -530,6 +381,214 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
 //    }
 }
 
+public void AddtoBasket(){
+    productItem = new basket_product_item();
+
+    productItem.setID(IDsp);
+    productItem.setCategory(category);
+    productItem.setName(tvname.getText().toString());
+    productItem.setPrice(Integer.parseInt(tvgia.getText().toString()));
+    //productItem.setNumdat(Integer.parseInt(tv.getText().toString()));
+    productItem.setSoluong(Integer.parseInt(tvsoluong.getText().toString()));
+    if(spinColor.getSelectedItem()!=null && spinColor.getSelectedItem().toString() !="") {
+        productItem.setMau(spinColor.getSelectedItem().toString());
+    }
+    if(spinSize.getSelectedItem()!=null && spinSize.getSelectedItem().toString() !="") {
+        productItem.setSize(spinSize.getSelectedItem().toString());
+    }
+//                List<product_item> products = new ArrayList<>();
+//                products.add(productItem);
+//                Map<String, Object> order = new HashMap<>();
+//                order.put("ListProducts", products);
+    db.collection("Gio_hang")
+            .document(userID)
+            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        @Override
+        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if(document != null){
+                    if (document.exists()) {
+                        if (document.get("ListProducts") != null||document.get("ListProducts")!="") {
+                            List<Map<String, Object>> productDOX = (List<Map<String, Object>>) document.get("ListProducts");
+                            for(Map<String, Object> ObjPro : productDOX)
+                            {
+                                ProtrungGian = new basket_product_item();
+                                ProtrungGian.setCategory(ObjPro.get("category").toString());
+                                ProtrungGian.setID(ObjPro.get("id").toString());
+                                if(ObjPro.get("mau")!= null) {
+                                    if (ObjPro.get("mau").toString() != "") {
+                                        ProtrungGian.setMau(ObjPro.get("mau").toString());
+                                    }
+                                }
+                                else{
+                                    ProtrungGian.setMau("");
+                                }
+
+
+                                if(ObjPro.get("size")!= null) {
+                                    if (ObjPro.get("size").toString() != "") {
+                                        ProtrungGian.setSize(ObjPro.get("size").toString());
+                                    }
+                                }
+                                else{
+                                    ProtrungGian.setSize("");
+                                }
+
+                                ProtrungGian.setName(ObjPro.get("name").toString());
+                                ProtrungGian.setNumdat(Integer.parseInt(ObjPro.get("numdat").toString()));
+                                ProtrungGian.setPrice(Integer.parseInt(ObjPro.get("price").toString()));
+                                ProtrungGian.setSoluong(Integer.parseInt(ObjPro.get("soluong").toString()));
+
+                                products.add(ProtrungGian);
+                            }
+//                            products = (List<basket_product_item>) document.get("ListProducts");
+//                            Log.d("check",((List<?>) document.get("ListProducts")).get(0).toString().sp+"");
+//                            for(Array set : document.get("ListProducts").toArray() )
+                        }
+
+                        for(basket_product_item ObjPro : products)
+                        {
+                            if(productItem.getName().equalsIgnoreCase(ObjPro.getName()))
+                            {
+                                products.remove(ObjPro);
+                            }
+                        }
+                        products.add(productItem);
+
+//                FieldValue.arrayUnion(productItem)
+
+                        db.collection("Gio_hang").document(userID).update("ListProducts", products).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(DetailProductActivity.this,"Đã thêm vào giỏ hàng",Toast.LENGTH_SHORT).show();
+                                if(!getaddtoBasket) {
+                                    Intent intent = new Intent(DetailProductActivity.this, MainActivity.class);
+//                intent.putExtra("prevActive", "DetailProduct");
+                                    intent.putExtra("Order", "YES");
+                                    intent.putExtra("PrevActive", "DetailProduct");
+                                    intent.putExtra("productItem", productItem);
+                                    intent.putExtra("userID", userID);
+                                    intent.putExtra("password", Password);
+                                    DetailProductActivity.this.startActivity(intent);
+                                }
+                                else {
+//                                    getParent().getIntent().putExtra("addtoBask", getaddtoBasket);
+                                }
+                            }
+                        })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(DetailProductActivity.this,"Đang tạo mới giỏ hàng",Toast.LENGTH_SHORT).show();
+                                        Map<String, Object> data = new HashMap<>();
+                                        db.collection("Don_hang")
+                                                .document("Counter")
+                                                .get()
+                                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            DocumentSnapshot document = task.getResult();
+                                                            if (document.exists()) {
+                                                                size = (document.getDouble("Count").intValue() +1);
+                                                                data.put("name", "");
+                                                                data.put("phiVanChuyen", 15000);
+                                                                if(size <=9) {
+                                                                    data.put("DonHang_Id", "DH0" + size);
+                                                                }
+                                                                else{
+                                                                    data.put("DonHang_Id", "DH" + size);
+                                                                }
+
+                                                                data.put("DiaChi", "");
+                                                                data.put("SoDienThoai", "");
+                                                                data.put("TongThanhToan", 0);
+                                                                data.put("giaohang", false);
+                                                                data.put("ListProducts", Arrays.asList(productItem));
+
+
+                                                                db.collection("Gio_hang").document(userID).set(data);
+                                                            } else {
+
+                                                            }
+                                                        } else {
+
+                                                        }
+                                                    }
+                                                });
+
+                                    }
+                                });
+
+                    }else{
+                        Toast.makeText(DetailProductActivity.this,"Đang tạo mới giỏ hàng",Toast.LENGTH_SHORT).show();
+                        Map<String, Object> data = new HashMap<>();
+                        db.collection("Don_hang")
+                                .document("Counter")
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                size = (document.getDouble("Count").intValue() +1);
+                                                data.put("name", "");
+                                                data.put("phiVanChuyen", 15000);
+                                                if(size <=9) {
+                                                    data.put("DonHang_Id", "DH0" + size);
+                                                }
+                                                else{
+                                                    data.put("DonHang_Id", "DH" + size);
+                                                }
+
+                                                data.put("DiaChi", "");
+                                                data.put("SoDienThoai", "");
+                                                data.put("TongThanhToan", 0);
+                                                data.put("giaohang", false);
+                                                data.put("ListProducts", Arrays.asList(productItem));
+
+
+                                                db.collection("Gio_hang").document(userID).set(data);
+                                            } else {
+
+                                            }
+                                        } else {
+
+                                        }
+                                    }
+                                });
+
+                    }
+                }else {
+
+                }
+            } else {
+            }
+        }
+    });
+
+
+
+//    mCallback.setPrevActive("DetailProduct");
+//    setPassCategory(category);
+//    setPassName(tvname.getText().toString());
+//    int price = -1 , num,soluong =-1;
+//
+//    try {
+//        price = Integer.parseInt(tvgia.getText().toString());
+//        soluong = Integer.parseInt(tvsoluong.getText().toString());
+//    } catch(NumberFormatException nfe) {
+//        System.out.println("Could not parse " + nfe);
+//    }
+//    setPassPrice(price);
+//    setPassquantity(1);
+//    setPassSoluong(soluong);
+////                mCallback.getPasscolor();
+////                mCallback.setPasssize();
+}
+
     private List<SpinnerColor> getListColor(){
         List<SpinnerColor> listColor = new ArrayList<>();
         listColor.add(new SpinnerColor("Xám","#808080"));
@@ -551,7 +610,11 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                Intent intent = new Intent();
+                intent.putExtra("addtoBask", getaddtoBasket);
+                setResult(RESULT_OK, intent);
                 NavUtils.navigateUpFromSameTask(this);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -582,17 +645,30 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
             // set any flags or extras that you need.
             // If you are reusing the previous Activity (i.e. bringing it to the top
             // without re-creating a new instance) set these flags:
+            i.putExtra("addtoBask", getaddtoBasket);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             // if you are re-using the parent Activity you may not need to set any extras
             i.putExtra("prevActive", "DetailProduct");
         } else {
             i = new Intent(this, BasketFragment.class);
             // same comments as above
+            i.putExtra("addtoBask", getaddtoBasket);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             i.putExtra("prevActive", "DetailProduct");
         }
 
         return i;
+    }
+
+
+    @Override
+    public boolean getaddtoBasket() {
+        return true;
+    }
+
+    @Override
+    public void setaddtoBasket(boolean getaddtoBasket) {
+
     }
 
     @Override

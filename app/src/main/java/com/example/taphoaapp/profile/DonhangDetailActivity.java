@@ -385,6 +385,16 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
     }
 
     @Override
+    public boolean getaddtoBasket() {
+        return false;
+    }
+
+    @Override
+    public void setaddtoBasket(boolean getaddtoBasket) {
+
+    }
+
+    @Override
     public String getPassName() {
         return passName;
     }

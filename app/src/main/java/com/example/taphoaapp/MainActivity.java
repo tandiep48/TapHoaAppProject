@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.taphoaapp.Basket.DataCommunication;
 import com.example.taphoaapp.DetailProduct.DetailProductActivity;
@@ -45,7 +46,27 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
     Context mContext;
     DataCommunication mCallback;
     String PasssPassword;
+    public boolean getaddtoBasket;
+    Intent i ;
 
+    public boolean getaddmybasket() {
+        return getaddtoBasket;
+    }
+
+    @Override
+    public void attachBaseContext(Context context) {
+        mContext = context;
+        super.attachBaseContext(context);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (DataCommunication) this;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement DataCommunication");
+        }
+    }
 
 
 
@@ -55,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
 //        mCallback = (DataCommunication) MainActivity.this;
 //        if(PrevActive!= null){
 //        Log.e("PrevActive : " , PrevActive.toString());
@@ -68,15 +92,15 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
 //        }
 
 
-        Intent i = getIntent();
-        Bundle extras = getIntent().getExtras();
+        i = getIntent();
+        extras = getIntent().getExtras();
 
 
         if ( i!= null &&extras != null) {
             order = extras.getString("Order");
             PasssPassword = i.getStringExtra("password");
             Log.e("MainActive : ", PasssPassword.toString());
-
+            getaddtoBasket = i.getBooleanExtra("addtoBask",false);
 
             userID = i.getStringExtra("userID");
 
@@ -108,7 +132,8 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
 
 
 
-        MainViewPagerAdpater view_pager_adpater = new MainViewPagerAdpater(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+
+        MainViewPagerAdpater view_pager_adpater = new MainViewPagerAdpater(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,getIntent());
 
         viewMain.setAdapter(view_pager_adpater);
 //        mTabLayout.setupWithViewPager(viewMain);
@@ -126,6 +151,13 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
                 bottomnavigation.getMenu().findItem(R.id.Menu_Profile).setChecked(true);
             }
         }
+//        if(getaddtoBasket) {
+//            MainViewPagerAdpater view_pager_adpater1 = new MainViewPagerAdpater(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,getIntent());
+//            viewMain.setAdapter(view_pager_adpater1);
+//            viewMain.setCurrentItem(1);
+//            getaddtoBasket = false;
+//            getIntent().putExtra("addtoBask",getaddtoBasket);
+//        }
 
 
 
@@ -139,7 +171,22 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0: bottomnavigation.getMenu().findItem(R.id.Menu_Shop).setChecked(true); break;
-                    case 1: bottomnavigation.getMenu().findItem(R.id.Menu_Basket).setChecked(true); break;
+                    case 1: {bottomnavigation.getMenu().findItem(R.id.Menu_Basket).setChecked(true);
+//                        Toast.makeText(mContext,Boolean.toString(getaddtoBasket),Toast.LENGTH_SHORT).show();
+                        if(getaddtoBasket) {
+//                            MainViewPagerAdpater view_pager_adpater1 = new MainViewPagerAdpater(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,getIntent());
+//                            viewMain.setAdapter(view_pager_adpater1);
+//                            Log.e("MainActive:",Boolean.toString(getaddtoBasket));
+//                            Toast.makeText(MainActivity.this,Boolean.toString(getaddtoBasket),Toast.LENGTH_SHORT).show();
+//                            getaddtoBasket = false;
+//                            getIntent().putExtra("addtoBask",getaddtoBasket);
+////                            finish();
+//                            overridePendingTransition(0, 0);
+//                            getIntent().putExtra("addtoBask",true);
+//                            startActivity(getIntent());
+//                            overridePendingTransition(0, 0);
+                        }
+                        break;}
                     case 2: bottomnavigation.getMenu().findItem(R.id.Menu_Profile).setChecked(true); break;
                 }
             }
@@ -167,6 +214,39 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
 //        List<String> FragList = Arrays.asList(Fragement);
 //        List<String> TiList = Arrays.asList(Title);
 
+    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+        // Collect data from the intent and use it
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data != null) {
+            getaddtoBasket = data.getBooleanExtra("addtoBask", false);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+//        if(getaddtoBasket()){
+//            setaddtoBasket(false);
+//            this.recreate();
+//        }
+//        if(getaddtoBasket)
+//        {
+//            this.recreate();
+//            i.putExtra("addtoBask", false);
+//        }
+        super.onResume();
+
+    }
+
+
+    @Override
+    public void supportNavigateUpTo(@NonNull Intent upIntent) {
+//        if(getaddtoBasket)
+//        {
+//            this.recreate();
+//            i.putExtra("addtoBask", false);
+//        }
+        super.supportNavigateUpTo(upIntent);
+    }
 
     @Override
     public void onBackPressed() {
@@ -176,6 +256,16 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
 
       }
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean getaddtoBasket() {
+        return getaddtoBasket;
+    }
+
+    @Override
+    public void setaddtoBasket(boolean getaddtoBasket) {
+
     }
 
     @Override

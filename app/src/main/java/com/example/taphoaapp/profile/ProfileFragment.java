@@ -13,8 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.taphoaapp.ChangePasswordActivity;
+import com.example.taphoaapp.DetailProduct.DetailProductActivity;
 import com.example.taphoaapp.HomeViewPagerAdpater;
 import com.example.taphoaapp.LoginActivity;
 import com.example.taphoaapp.R;
@@ -102,6 +104,7 @@ public class ProfileFragment extends Fragment {
 
         UID = mAuth.getCurrentUser().getUid();
 
+
         changeInfo = mView.findViewById(R.id.btnChangeInfo);
         changePass = mView.findViewById(R.id.btnChangePass);
         StoreInfo =  mView.findViewById(R.id.btnStoreInfo);
@@ -185,6 +188,8 @@ public class ProfileFragment extends Fragment {
         Logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getActivity(),"Đăng xuất khỏi tài khoản "+  mAuth.getCurrentUser().getEmail(),Toast.LENGTH_SHORT).show();
+                mAuth.getCurrentUser().getEmail();
 //                mAuth.signOut();
 //                Intent intent = new Intent(getActivity(), LoginActivity.class);
 //

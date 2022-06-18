@@ -135,7 +135,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 //                intent.putExtra("Soluong",1);
 //                intent.putExtra("gia",product.getPrice());
 //                intent.putExtra("color","");
-                mContext.startActivity(intent);
+                int requestCode = 1; // Or some number you choose
+                ((Activity) mContext).startActivityForResult(intent, requestCode);
+//                mContext.startActivity(intent);
             }
         });
             Glide
@@ -165,7 +167,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 //                intent.putExtra("Soluong",1);
 //                intent.putExtra("gia",product.getPrice());
 //                intent.putExtra("color","");
-                mContext.startActivity(intent);
+                int requestCode = 1; // Or some number you choose
+                ((Activity) mContext).startActivityForResult(intent, requestCode);
+//                mContext.startActivity(intent);
 //                mCallback.setPassCategory(product.getCategory());
 //                mCallback.setPassName(product.getName());
 //                mCallback.setPassPrice(product.getPrice());
