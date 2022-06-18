@@ -33,9 +33,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     private String order, userID, confirmUserID, userPass, userMail;
     Button btnChangePass;
     EditText editTextNewPassword, editTextCNewPassword, editTextOldPassword;
-//    FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
-    AuthCredential authCredential;
     String PassPassword,ActiPrev,PrevActive;
     Bundle extras;
 
@@ -61,10 +59,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
         if ( i!= null &&extras != null) {
             order = extras.getString("Order");
             userID = i.getStringExtra("userID");
-//           Toast.makeText(getApplicationContext(),)
-
-//            Toast toast =Toast.makeText(this, PassPassword, Toast.LENGTH_LONG);
-//            toast.show();
             PassPassword = i.getStringExtra("password");
             Log.e("ChangePass,password : ", PassPassword);
             if(PassPassword !=null) {
@@ -76,110 +70,53 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 ActiPrev = i.getStringExtra("PrevActive");
             }
         }
-//        confirmUserID = firebaseAuth.getCurrentUser().getUid();
+
         confirmUserID = firebaseUser.getUid();
 
         btnChangePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (userID == confirmUserID)
-//                {
                     Boolean Run = true;
-                    userMail = firebaseUser.getEmail().trim();
-                    userPass = "987654321";
-                    String newpassword = editTextNewPassword.getText().toString().trim();
-                    String newcpassword = editTextCNewPassword.getText().toString().trim();
                     if(editTextNewPassword.getText().toString().trim().isEmpty()||(editTextCNewPassword.getText().toString().trim().isEmpty()||editTextOldPassword.getText().toString().isEmpty()))
                     {
                         editTextNewPassword.setError("Không được để trống khung mật khẩu");
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(ChangePasswordActivity.this);
-//                        builder.setMessage("Không được để trống khung mật khẩu")
-//                                .setTitle("Thông báo");
-//                        builder.show();
                         editTextNewPassword.requestFocus();
+                        editTextCNewPassword.requestFocus();
+                        editTextOldPassword.requestFocus();
                         Run = false;
-//                        return;
                     }
-//                    if(newcpassword.isEmpty())
-//                    {
-//                        editTextCNewPassword.setError("Password must match");
-//                        editTextCNewPassword.requestFocus();
-//                        Run = false;
-//                        return;
-//                    }
                     if(!editTextOldPassword.getText().toString().equalsIgnoreCase(PassPassword)){
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(ChangePasswordActivity.this);
-//                        builder.setMessage("Mật khẩu cũ nhập sai ")
-//                                .setTitle("Thông báo");
-//                        builder.show();
-
                         editTextOldPassword.setError("Mật khẩu cũ nhập sai");
                         editTextOldPassword.requestFocus();
                         Run = false;
-//                        return;
                     }
                 if(editTextNewPassword.getText().toString().trim().length() < 6)
                 {
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(ChangePasswordActivity.this);
-//                        builder.setMessage("Mật khẩu nhập lại chưa trùng với mật khẩu mới")
-//                                .setTitle("Thông báo");
-//                        builder.show();
-//                        editTextNewPassword.setError("Password must not empty");
-//                        editTextNewPassword.requestFocus();
                     editTextNewPassword.setError("Mật khẩu mới phải ít nhất 6 ký tự");
                     editTextNewPassword.requestFocus();
                     Run = false;
-//                        return;
                 }
-
-                    if(!(editTextNewPassword.getText().toString().trim()).equalsIgnoreCase(editTextCNewPassword.getText().toString().trim()))
-                    {
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(ChangePasswordActivity.this);
-//                        builder.setMessage("Mật khẩu nhập lại chưa trùng với mật khẩu mới")
-//                                .setTitle("Thông báo");
-//                        builder.show();
-//                        editTextNewPassword.setError("Password must not empty");
-//                        editTextNewPassword.requestFocus();
-                        editTextCNewPassword.setError("Mật khẩu nhập lại chưa trùng với mật khẩu mới");
-                        editTextCNewPassword.requestFocus();
-                        Run = false;
-//                        return;
-                    }
-                    if(Run==true) {
-                        authCredential = EmailAuthProvider.getCredential(userMail,editTextOldPassword.getText().toString());
-                        firebaseUser.reauthenticate(authCredential).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    firebaseUser.updatePassword(newpassword).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(ChangePasswordActivity.this);
-                                                builder.setMessage("Mật khẩu mới đổi thành công")
-                                                        .setTitle("Thông báo");
-                                                builder.show();
-
-                                                new Handler().postDelayed(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        Intent intent = new Intent( ChangePasswordActivity.this, MainActivity.class);
-//                intent.putExtra("userID", UID);
-                                                        intent.putExtra("prevActive", "changePassword");
-                                                        intent.putExtra("password", newpassword);
-                                                        startActivity(intent);
-                                                    }
-                                                }, 2000);
-
-                                                Log.d(TAG, "Password updated");
-                                            }else { Log.d(TAG, "Error password not updated"); }
-                                        }
-                                    });
-                                }
+                if(!(editTextNewPassword.getText().toString().trim()).equalsIgnoreCase(editTextCNewPassword.getText().toString().trim()))
+                {
+                    editTextCNewPassword.setError("Mật khẩu nhập lại chưa trùng với mật khẩu mới");
+                    editTextCNewPassword.requestFocus();
+                    Run = false;
+                }
+                if(Run==true) {
+                    String newpassword = editTextNewPassword.getText().toString().trim();
+                    firebaseUser.updatePassword(newpassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful())
+                            {
+                                Toast.makeText(ChangePasswordActivity.this, "Update Successfully", Toast.LENGTH_SHORT).show();
+                            }else
+                            {
+                                Toast.makeText(ChangePasswordActivity.this, "Something wrong", Toast.LENGTH_SHORT).show();
                             }
-                        });
-                    }
-//                }
+                        }
+                    });
+                }
             }
         });
     }
