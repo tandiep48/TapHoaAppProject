@@ -8,8 +8,11 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,7 +40,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -47,13 +52,15 @@ public class changeInfo extends AppCompatActivity  {
     private TabLayout mTabLayout;
     private ViewPager viewMain;
     private BottomNavigationView bottomnavigation;
-    private String passName,passCategory,passcolor,passsize  , order,active ,PrevActive, ActiPrev,userID , thongBao;
+    private String passName,passCategory,passcolor,passsize  , order,active ,PrevActive, ActiPrev,userID , thongBao,IGender;
     private int passPrice,passquantity,passSoluong;
     Bundle extras;
     Button btnChangeInfo;
     Context mContext;
     DataCommunication mCallback;
-    EditText Fullname , Email,Phone,Gender,Age,ComfPass;
+    Spinner Gender;
+    EditText Fullname , Email,Phone,Age,ComfPass;
+//    Gender
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String PassPassword;
@@ -102,7 +109,7 @@ public class changeInfo extends AppCompatActivity  {
             Fullname.setText(extras.getString("Info_fullname"));
             Email.setText(extras.getString("Info_email"));
             Age.setText(extras.getString("Info_age"));
-            Gender.setText(extras.getString("Info_gender"));
+            IGender = extras.getString("Info_gender");
             Phone.setText(extras.getString("Info_phone"));
 
             // and get whatever type user account id is
@@ -129,6 +136,22 @@ public class changeInfo extends AppCompatActivity  {
         mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getCurrentUser().getUid();
 
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(changeInfo.this,
+                android.R.layout.simple_spinner_item, getListGender());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Gender.setAdapter(adapter);
+        Gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                IGender =  Gender.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         db.collection("User")
                 .document(userID)
@@ -142,7 +165,14 @@ public class changeInfo extends AppCompatActivity  {
                             Fullname.setText(document.getString("fullName"));
                             Email.setText(document.getString("email"));
                             Age.setText(document.getString("age"));
-                            Gender.setText(document.getString("gender"));
+                            IGender = document.getString("gender");
+                            if(IGender.equalsIgnoreCase("Male")) {
+                                Gender.setSelection(0);
+                            }
+                        else{
+                                Gender.setSelection(1);
+                            }
+//                            Gender.setText(document.getString("gender"));
                             Phone.setText(document.getString("phone"));
                         }
                     }
@@ -186,7 +216,13 @@ public class changeInfo extends AppCompatActivity  {
                                                 order.put("fullName", Fullname.getText().toString());
                                                 order.put("email", Email.getText().toString());
                                                 order.put("age", Age.getText().toString());
-                                                order.put("gender", Gender.getText().toString());
+                                                    if(Gender.getSelectedItem().toString().equalsIgnoreCase("Nam")) {
+                                                        order.put("gender","Male");
+                                                    }
+                                                    else{
+                                                        order.put("gender","Female");
+                                                    }
+//                                                order.put("gender", Gender.getText().toString());
                                                 order.put("phone", Phone.getText().toString());
 
                                                 db.collection("User").document(userID)
@@ -228,6 +264,13 @@ public class changeInfo extends AppCompatActivity  {
 
     }
 
+    private List<CharSequence> getListGender(){
+        List<CharSequence> listGender = new ArrayList<>();
+        listGender.add(new String("Nam"));
+        listGender.add(new String("Nữ"));
+
+        return listGender;
+    }
 
     @Override
     public void onBackPressed() {

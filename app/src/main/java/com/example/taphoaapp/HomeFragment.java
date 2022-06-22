@@ -13,13 +13,23 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.taphoaapp.Search.SearchActivity;
 import com.example.taphoaapp.widget.CustomViewPager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,9 +41,10 @@ public class HomeFragment extends Fragment {
     private TabLayout mTabLayout;
     private CustomViewPager viewMain;
     private View mView;
-    private String order;
+    private String order,Cate;
     private Context mContext;
     private View ViewItem;
+    List<String> Category;
 
     @Override
     public void onAttach(Context context) {
@@ -108,17 +119,46 @@ public class HomeFragment extends Fragment {
 
         mView =  inflater.inflate(R.layout.fragment_home, container, false);
 
-
-
-
         mTabLayout = mView.findViewById(R.id.TopTabHome);
         viewMain = mView.findViewById(R.id.ViewPagerHome);
 
-        HomeViewPagerAdpater view_pager_adpater = new HomeViewPagerAdpater(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        viewMain.setAdapter(view_pager_adpater);
-        viewMain.setPagingEnabled(true);
-        mTabLayout.setupWithViewPager(viewMain);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Category =new ArrayList<>(Arrays.asList("quanao","electron","vanphong","sach"));
+
+        db.collection("SAN_PHAM").whereNotIn("CATEGORY", Arrays.asList("quanao","electron","vanphong","sach"))
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                            Cate = document.getString("CATEGORY");
+                            Log.e("CategoryWierd",Cate);
+                            boolean add = true;
+                            boolean Fin = false;
+                            for(int i = 0; i < Category.size();i++)
+                            {
+                                if(Cate.equalsIgnoreCase(Category.get(i).toString())){
+                                    add =false;
+                                }
+                                if(i == Category.size()-1){ Fin = true; }
+                            }
+                            if(add && Fin)
+                            {
+                                Category.add(Cate);
+                            }
+                        HomeViewPagerAdpater view_pager_adpater = new HomeViewPagerAdpater(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,Category);
+
+                        viewMain.setAdapter(view_pager_adpater);
+                        viewMain.setPagingEnabled(true);
+                        mTabLayout.setupWithViewPager(viewMain);
+                    }
+                } else {
+
+                }
+            }
+        });
+
 
         return mView;
     }

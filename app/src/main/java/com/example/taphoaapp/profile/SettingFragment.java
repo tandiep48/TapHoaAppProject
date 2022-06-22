@@ -74,9 +74,9 @@ public class SettingFragment extends Fragment {
         mTabLayout = mView.findViewById(R.id.TopTabProfile);
         viewMain = mView.findViewById(R.id.ViewPagerProfile);
 
-        HomeViewPagerAdpater view_pager_adpater = new HomeViewPagerAdpater(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+//        HomeViewPagerAdpater view_pager_adpater = new HomeViewPagerAdpater(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        viewMain.setAdapter(view_pager_adpater);
+//        viewMain.setAdapter(view_pager_adpater);
         viewMain.setPagingEnabled(false);
         mTabLayout.setupWithViewPager(viewMain);
 

@@ -132,6 +132,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ProductV
                 intent.putExtra("prevActive", "MainActivity");
                 intent.putExtra("userID", userID);
                 intent.putExtra("maDH",holder.MaDH.getText());
+                intent.putExtra("MaHD",DonHang.getMaHD());
                 intent.putExtra("DHStatus",holder.status.getText());
 //                intent.putExtra("Soluong",1);
 //                intent.putExtra("gia",product.getPrice());
@@ -147,6 +148,19 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ProductV
             holder.Date.setText(String.valueOf(DonHang.getTime()));
             holder.pay.setText(String.valueOf(currencyFormatter.format(DonHang.getPay() ) ));
             holder.status.setText(String.valueOf(DonHang.getStatus() ));
+
+            if(holder.status.getText().toString().equalsIgnoreCase("Đang lấy hàng . . .")){
+                holder.status.setTextColor(mContext.getResources().getColor(R.color.holo_orange_dark));
+            }
+            else if(holder.status.getText().toString().equalsIgnoreCase("Đang giao hàng . . .")){
+                holder.status.setTextColor(mContext.getResources().getColor(R.color.blue));
+            }
+            else if(holder.status.getText().toString().equalsIgnoreCase("Đã giao hàng")){
+                holder.status.setTextColor(mContext.getResources().getColor(R.color.holo_green_dark));
+            }
+            else if(holder.status.getText().toString().equalsIgnoreCase("Đã hủy")){
+                holder.status.setTextColor(mContext.getResources().getColor(R.color.holo_red_dark));
+            }
 
 
     }

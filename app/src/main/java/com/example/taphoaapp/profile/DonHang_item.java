@@ -6,19 +6,20 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class DonHang_item implements Serializable {
-      private String MaDH, status,time;
+      private String MaHD, MaDH, status,time;
       private int soluong,pay;
 
 
     public DonHang_item() {
     }
 
-    public DonHang_item(String maDH, String status, int soluong, int pay, String time) {
+    public DonHang_item(String maHD, String maDH, String status, String time, int soluong, int pay) {
+        MaHD = maHD;
         MaDH = maDH;
         this.status = status;
+        this.time = time;
         this.soluong = soluong;
         this.pay = pay;
-        this.time = time;
     }
 
     public String getMaDH() {
@@ -59,6 +60,14 @@ public class DonHang_item implements Serializable {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getMaHD() {
+        return MaHD;
+    }
+
+    public void setMaHD(String maHD) {
+        MaHD = maHD;
     }
 }
 

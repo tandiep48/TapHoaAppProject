@@ -56,6 +56,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,6 +91,10 @@ public class BasketFragment extends Fragment implements DataCommunication  {
 
     private FirebaseAuth mAuth;
     int sizeTaoDonHang = 0;
+    Spinner spinerArea;
+    String Quan;
+    Boolean checkDistric;
+    String MaHD;
 
     String Category,Name;
     Integer price, numdat, soluong;
@@ -287,6 +293,7 @@ public class BasketFragment extends Fragment implements DataCommunication  {
         products = new ArrayList<>();
         PhiVC = 10000;
         Area = "Quận 3";
+        checkDistric = false;
 
         mAuth = FirebaseAuth.getInstance();
         mRecycler = mView.findViewById(R.id.rvFoods);
@@ -308,11 +315,11 @@ public class BasketFragment extends Fragment implements DataCommunication  {
 
         if ( i!= null &&extras != null) {
 
-            PassCategory = i.getStringExtra("PrevActive");
-            PassName = i.getStringExtra("PrevActive");
-            PassPrice = i.getIntExtra("PrevActive",0);
-            PassQuantity = i.getIntExtra("PrevActive",0);
-            PassSoluong= i.getIntExtra("PrevActive",0);
+//            PassCategory = i.getStringExtra("PrevActive");
+//            PassName = i.getStringExtra("PrevActive");
+//            PassPrice = i.getIntExtra("PrevActive",0);
+//            PassQuantity = i.getIntExtra("PrevActive",0);
+//            PassSoluong= i.getIntExtra("PrevActive",0);
 
             product_item = (basket_product_item) i.getSerializableExtra("productItem");
             getaddtoBasket = i.getBooleanExtra("addtoBask",false);
@@ -354,28 +361,37 @@ public class BasketFragment extends Fragment implements DataCommunication  {
                         builder.show();
                     }
                     else {
-                        addDonHang = true;
-                         MainActivity activity = (MainActivity) getActivity();
-                         activity.changeAddmyDonhang(addDonHang);
-                         getActivity().getIntent().putExtra("addtoDonhang",addDonHang);
-                         Log.e("BasketAddDonHang",Boolean.toString(addDonHang));
-                        OrderListProduct(products);
-                        // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
+                        checkQuan();
+                        if(checkDistric) {
+                            addDonHang = true;
+                            MainActivity activity = (MainActivity) getActivity();
+                            activity.changeAddmyDonhang(addDonHang);
+                            getActivity().getIntent().putExtra("addtoDonhang", addDonHang);
+                            Log.e("BasketAddDonHang", Boolean.toString(addDonHang));
+                            OrderListProduct(products);
+                            // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
 //                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 //                        builder.setMessage("Đặt hàng thành công!")
 //                                .setTitle("Thông báo");
 //
 //                        builder.show();
+                        }
                     }
                 }
 
+            }
+        });
+        address.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                checkQuan();
             }
         });
 
         NestedScrollView scrollView = mView.findViewById(R.id.basket_myScrollView);
         scrollView.invalidate();
         scrollView.requestLayout();
-        Spinner spinerArea = mView.findViewById(R.id.basket_area_spinner);
+        spinerArea = mView.findViewById(R.id.basket_area_spinner);
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(),
                 android.R.layout.simple_spinner_item, getListArea());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -386,6 +402,7 @@ public class BasketFragment extends Fragment implements DataCommunication  {
                Area = spinerArea.getSelectedItem().toString();
 //                Toast.makeText(getActivity(), String.valueOf(position), Toast.LENGTH_SHORT);
 //                Toast.makeText(getActivity(), spinerArea.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                checkQuan();
                 if(nhanhang.isChecked()){ChangeTransFee(0);}
                 else if(Area.equalsIgnoreCase("Quận 3") ||Area.equalsIgnoreCase("Quận 1") || Area.equalsIgnoreCase("Quận 10")){
                     ChangeTransFee(10000);
@@ -577,8 +594,44 @@ public class BasketFragment extends Fragment implements DataCommunication  {
         return mView;
     }
 
-    private List<basket_product_item> getListProduct(){
+    private void checkQuan(){
+        int start =0 ;
+        int end = 0;
+        String tam2;
+        String tam = address.getText().toString();
+        if(!tam.isEmpty()) {
+            Log.e("addressFull", tam);
+            if(tam.contains("Quận")) {
+                Matcher m = Pattern.compile("\\bQuận($| )").matcher(tam);
+                while (m.find()) {
+                    start = m.start();
+                    end = m.end();
+                }
+                tam2 = tam.substring(start);
+                if (tam2.contains(",")) {
+                    Quan = tam2.substring(0, tam2.indexOf(","));
+                    Log.e("Quan", Quan);
+                    if (!Quan.equalsIgnoreCase(spinerArea.getSelectedItem().toString())) {
+                        Log.e("spinner Area", spinerArea.getSelectedItem().toString());
+                        address.setError("Quận ở Địa chỉ nhập khác với Quận được chọn ");
+                        checkDistric = false;
+                    } else {
+                        checkDistric = true;
+                        address.setError(null);
+                    }
+                } else {
+                    checkDistric = false;
+                    address.setError("Địa chỉ nhập sai định dạng");
+                }
+            }
+            else{
+                checkDistric = false;
+                address.setError("Vui lòng nhập Địa chỉ theo định dạng số nhà Tên đường, Phường , Quận , thành phố");
+            }
+        }
+    }
 
+    private List<basket_product_item> getListProduct(){
         db.collection("Don_hang")
                 .document("Counter")
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -836,8 +889,33 @@ public class BasketFragment extends Fragment implements DataCommunication  {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("hh:mm aaa dd-MMM-yyyy", Locale.getDefault());
         String formattedDate = df.format(c);
-
         Map<String, Object> order = new HashMap<>();
+        db.collection("Don_hang")
+                .document("Counter")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                size = (document.getDouble("Count").intValue() +1);
+                                if(size <=9) {
+                                    IdDonHang.setText("DH0"+size);
+                                }
+                                else{
+                                    IdDonHang.setText("DH"+size);
+                                }
+
+                            } else {
+
+                            }
+                        } else {
+
+                        }
+                    }
+                });
+
         order.put("userID", userID);
         order.put("name", name.getText().toString());
         order.put("DiaChi", address.getText().toString());
@@ -848,14 +926,15 @@ public class BasketFragment extends Fragment implements DataCommunication  {
         order.put("DonHang_Id", IdDonHang.getText().toString());
         order.put("ngaydat",formattedDate);
         order.put("soluongsanpham",products.size());
-        order.put("status","đang lấy hàng . . .");
+        order.put("status","Đang lấy hàng . . .");
 
         order.put("ListProducts", products);
+        MaHD = userID + formattedDate;
+        i.putExtra("MaHD",MaHD);
 
 
 
-
-        db.collection("Don_hang").document(userID + formattedDate)
+        db.collection("Don_hang").document(MaHD)
                 .set(order)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -872,38 +951,19 @@ public class BasketFragment extends Fragment implements DataCommunication  {
                         }, 500);
 
                         db.collection("Gio_hang").document(userID).update("ListProducts",Arrays.asList());
-                        db.collection("Don_hang")
-                                .document("Counter")
-                                .get()
-                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            DocumentSnapshot document = task.getResult();
-                                            if (document.exists()) {
-                                                size = (document.getDouble("Count").intValue() +1);
-                                                db.collection("Don_hang").document("Counter").update("Count",size);
-                                                if(size <=9) {
-                                                    db.collection("Gio_hang").document(userID).update("DonHang_Id","DH0" + size);
-                                                    IdDonHang.setText("DH0" + size);
-                                                }
-                                                else{
-                                                    db.collection("Gio_hang").document(userID).update("DonHang_Id", "DH" + size);
-                                                    IdDonHang.setText( "DH" + size);
-                                                }
-                                                products.clear();
-                                                BasproAdapter.setData(products);
-                                                mRecycler.setAdapter(BasproAdapter);
+                        db.collection("Don_hang").document("Counter").update("Count",size);
+                        if(size <=9) {
+                            db.collection("Gio_hang").document(userID).update("DonHang_Id","DH0" + size + 1);
+                            IdDonHang.setText("DH0" + size + 1);
+                        }
+                        else{
+                            db.collection("Gio_hang").document(userID).update("DonHang_Id", "DH" + size + 1);
+                            IdDonHang.setText( "DH" + size + 1);
+                        }
+                        products.clear();
+                        BasproAdapter.setData(products);
+                        mRecycler.setAdapter(BasproAdapter);
 
-
-                                            } else {
-
-                                            }
-                                        } else {
-
-                                        }
-                                    }
-                                });
 
                     }
                 })

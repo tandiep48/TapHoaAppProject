@@ -64,7 +64,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
     private Spinner spinColor , spinSize;
     SpinnerColorAdapter spinnerColor;
     String name, image, discount, Namevalue, ColorVal , SizeVal, category,IDsp,Password ;
-    Integer soluong,giacu,gia;
+    Integer soluong,giacu,gia,Dis;
     Integer size;
 
     private String passName,passCategory,passcolor,passsize,userID;
@@ -146,7 +146,7 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
         });
 
         tvname = findViewById(R.id.detail_product_name);
-        tvdiscount = findViewById(R.id.detail_product_discount);
+        tvdiscount = findViewById(R.id.detail_discount_gia);
         tvsoluong = findViewById(R.id.detail_product_soluong);
         tvgiacu = findViewById(R.id.detail_product_giagoc);
         tvgia = findViewById(R.id.detail_product_gia);
@@ -224,13 +224,18 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
 //                            holder.price.setText(String.valueOf("Giá : " +currencyFormatter.format(product.getPrice() ) ));
 //                            holder.giagoc.setText(String.valueOf("Giá gốc : " +currencyFormatter.format(product.getGiaGoc()) ));
 //                            holder.giagoc.setPaintFlags(holder.giagoc.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                                tvdiscount.setText(String.valueOf(toIntExact(document.getLong("DISCOUNT")))+"%");
+                                Dis = toIntExact(document.getLong("DISCOUNT"));
+                                tvdiscount.setText(Dis+"%");
                                 Log.e("Soluong :",String.valueOf(toIntExact(document.getLong("SOLUONG"))));
-                                tvsoluong.setText("số lượng : " + String.valueOf(toIntExact(document.getLong("SOLUONG"))));
-                                tvgiacu.setText("Giá gốc : " +String.valueOf(toIntExact(document.getLong("GIACU"))));
+                                soluong = toIntExact(document.getLong("SOLUONG"));
+                                tvsoluong.setText("số lượng : " + soluong);
+                                giacu = toIntExact(document.getLong("GIACU"));
+                                tvgiacu.setText("Giá gốc : " +giacu);
                                 tvgiacu.setPaintFlags(tvgiacu.getPaintFlags() |Paint.STRIKE_THRU_TEXT_FLAG);
 
-                                tvgia.setText("Giá : " +String.valueOf(toIntExact(document.getLong("GIA"))));
+                                gia = (toIntExact(document.getLong("GIA")));
+                                tvgia.setText("Giá : " +gia);
+
 
                                 Log.e("documment", document.getId() + " => " + document.getData());
                             }
@@ -396,10 +401,10 @@ public void AddtoBasket(){
     productItem.setID(IDsp);
     productItem.setCategory(category);
     productItem.setName(tvname.getText().toString());
-    productItem.setPrice(Integer.parseInt(tvgia.getText().toString()));
+    productItem.setPrice(gia);
     //productItem.setNumdat(Integer.parseInt(tv.getText().toString()));
     productItem.setNumdat(Integer.parseInt("1"));
-    productItem.setSoluong(Integer.parseInt(tvsoluong.getText().toString()));
+    productItem.setSoluong(soluong);
     if(spinColor.getSelectedItem()!=null && spinColor.getSelectedItem().toString() !="") {
         productItem.setMau(spinColor.getSelectedItem().toString());
     }

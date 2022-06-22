@@ -1,11 +1,15 @@
 package com.example.taphoaapp.profile;
 
 import static java.lang.Math.toIntExact;
+import static java.security.AccessController.getContext;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +47,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.api.Context;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -67,12 +72,15 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
     basket_product_item product_item;
 
     List<basket_product_item> products;
+    NumberFormat currencyFormatter;
+    Locale locale;
 
     private TabLayout mTabLayout;
     private ViewPager viewMain;
     private BottomNavigationView bottomnavigation;
     private ImageView main , one , two , three;
     private TextView MaHD,Status , nguoiOrder,tvpay,date,phone,delivery,TransFee,address;
+    private TextView Deliverer,Receiver,TimeNhan,receivePay,Tax, thanks;
     private Spinner spinColor , spinSize;
     SpinnerColorAdapter spinnerColor;
     String name, image, discount, Namevalue, ColorVal , SizeVal, category,IDsp ;
@@ -88,12 +96,14 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
     basket_product_item productItem;
     basket_product_item ProtrungGian;
 
+    String MaHoaDon;
     List <String> TrungGian;
     List<String> listColor;
     List<String> listSize;
     String PrevActive;
     Bundle extras ;
     private Button add,order, cancelOrder;
+    Context mContext;
 //    DataCommunication mCallback;
 
 
@@ -118,8 +128,8 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_detail__order);
-
-
+        locale = new Locale("vi", "VN");
+        currencyFormatter = NumberFormat.getCurrencyInstance(locale);
         mRecycler = findViewById(R.id.DonHang_productRC);
         BasproAdapter = new DonHangProductAdapter(this);
         mRecycler.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false) {
@@ -144,6 +154,7 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
         if ( i!= null &&extras != null) {
             userID = i.getStringExtra("userID");
             maDH = i.getStringExtra("maDH");
+            MaHoaDon = i.getStringExtra("MaHD");
             Password = i.getStringExtra("password");
         }
         Locale locale = new Locale("vi", "VN");
@@ -160,6 +171,18 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
         address = findViewById(R.id.tvAddress);
         cancelOrder = findViewById(R.id.DonHang_Huy);
 
+        Deliverer = findViewById(R.id.tvDeliverer);
+        Receiver = findViewById(R.id.tvReceiver);
+        TimeNhan = findViewById(R.id.tvTimeRecei);
+        receivePay = findViewById(R.id.tvPay);
+        Tax = findViewById(R.id.tvTax);
+        thanks = findViewById(R.id.tvThank);
+
+        Deliverer.setVisibility(View.GONE);
+                Receiver.setVisibility(View.GONE);
+                TimeNhan.setVisibility(View.GONE);
+                receivePay.setVisibility(View.GONE);Tax.setVisibility(View.GONE);
+                thanks.setVisibility(View.GONE);
 //        MaHD.setText("DH02");
 //        Status.setText("Đang lấy hàng");
 //        nguoiOrder.setText("Diệp Đức Tân");
@@ -182,13 +205,14 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
         cancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Status.getText().toString() == "đang lấy hàng . . ."||Status.getText().toString().equalsIgnoreCase("đang lấy hàng . . .")||Status.getText().toString().contains("đang lấy hàng . . .")) {
+                if(Status.getText().toString() == "Trạng thái Đơn hàng : Đang lấy hàng . . ."||Status.getText().toString().equalsIgnoreCase("Trạng thái Đơn hàng : Đang lấy hàng . . .")||Status.getText().toString().contains("Đang lấy hàng . . .")) {
+
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which){
                                 case DialogInterface.BUTTON_POSITIVE:
-                                    db.collection("Don_hang").document(maDH).update("status","Đã hủy").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    db.collection("Don_hang").document(MaHoaDon).update("status","Đã hủy").addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(DonhangDetailActivity.this);
@@ -226,7 +250,7 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
         Toolbar toolbar = (Toolbar) findViewById(R.id.DonHangdetail_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Chi tiết Đơn hàng" + maDH);
+        getSupportActionBar().setTitle("Chi tiết Đơn hàng " + maDH);
 //        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
@@ -248,10 +272,49 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                MaHD .setText(document.getString("DonHang_Id"));
-                                Status.setText(document.getString("status"));
-                                nguoiOrder.setText(document.getString("name"));
-                                tvpay.setText(document.getLong("TongThanhToan").toString());
+                                String text3 = "Mã Đơn hàng : ";
+                                String text4 = text3 + document.getString("DonHang_Id");
+                                Spannable spannable1 = new SpannableString(text4);
+                                spannable1.setSpan(new ForegroundColorSpan(DonhangDetailActivity.this.getResources().getColor(R.color.green)), text3.length(), text4.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                Status.setText(spannable1, TextView.BufferType.SPANNABLE);
+//                                MaHD .setText("Mã Đơn hàng : " + document.getString("DonHang_Id"));
+
+                                String text1 = "Trạng thái Đơn hàng : ";
+                                String text2 = text1 + document.getString("status");
+//                                Status.setText(document.getString("status"));
+                                Spannable spannable2 = new SpannableString(text2);
+
+                                if(text2.equalsIgnoreCase("Trạng thái Đơn hàng : Đang lấy hàng . . .")){
+//                                    Status.setTextColor(DonhangDetailActivity.this.getResources().getColor(R.color.holo_orange_dark));
+                                    spannable2.setSpan(new ForegroundColorSpan(DonhangDetailActivity.this.getResources().getColor(R.color.holo_orange_dark)), text1.length(), text2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    Status.setText(spannable2, TextView.BufferType.SPANNABLE);
+                                }
+                                else if(text2.equalsIgnoreCase("Trạng thái Đơn hàng : Đang giao hàng . . .")){
+//                                   Status.setTextColor(DonhangDetailActivity.this.getResources().getColor(R.color.blue));
+                                    spannable2.setSpan(new ForegroundColorSpan(DonhangDetailActivity.this.getResources().getColor(R.color.blue)), text1.length(), text2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    Status.setText(spannable2, TextView.BufferType.SPANNABLE);
+                                }
+                                else if(text2.equalsIgnoreCase("Trạng thái Đơn hàng : Đã giao hàng")){
+//                                   Status.setTextColor(DonhangDetailActivity.this.getResources().getColor(R.color.holo_green_dark));
+                                    spannable2.setSpan(new ForegroundColorSpan(DonhangDetailActivity.this.getResources().getColor(R.color.holo_green_dark)), text1.length(), text2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    Status.setText(spannable2, TextView.BufferType.SPANNABLE);
+                                    Deliverer.setVisibility(View.VISIBLE);
+                                    Receiver.setVisibility(View.VISIBLE);
+                                    TimeNhan.setVisibility(View.VISIBLE);
+                                    receivePay.setVisibility(View.VISIBLE);Tax.setVisibility(View.VISIBLE);
+                                    thanks.setVisibility(View.VISIBLE);
+                                }
+                                else if(text2.equalsIgnoreCase("Trạng thái Đơn hàng : Đã hủy")){
+//                                   Status.setTextColor(DonhangDetailActivity.this.getResources().getColor(R.color.holo_red_dark));
+                                    spannable2.setSpan(new ForegroundColorSpan(DonhangDetailActivity.this.getResources().getColor(R.color.holo_red_dark)), text1.length(), text2.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    Status.setText(spannable2, TextView.BufferType.SPANNABLE);
+                                }
+
+
+                                nguoiOrder.setText("Tên người đặt : " + document.getString("name"));
+//                                tvpay.setText(document.getLong("TongThanhToan").toString());
+                                tvpay.setText(String.valueOf(currencyFormatter.format(document.getLong("TongThanhToan")) ));
+
                                 date.setText(document.getString("ngaydat"));
                                 phone.setText(document.getString("SoDienThoai"));
                                 if(document.getBoolean("nhận tại cửa hàng")==true) {
@@ -260,7 +323,10 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
                                 else{
                                     delivery.setText("giao hàng");
                                 }
-                                TransFee.setText(document.getLong("phiVanChuyen").toString());
+
+//                                TransFee.setText(document.getLong("phiVanChuyen").toString());
+                                TransFee.setText(String.valueOf(currencyFormatter.format(document.getLong("phiVanChuyen")) ));
+
                                 address.setText(document.getString("DiaChi"));
 
 

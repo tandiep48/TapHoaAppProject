@@ -243,9 +243,15 @@
     <color name="XANH_DUONG">#0000FF</color>
 
     <color name="XÁM">#808080</color>
-    <color name="XANH_THAN">#191970</color>
+<!--    <color name="XANH_THAN">#191970</color>-->
 
     <color name="XANH_MATCHA">#b1cba6</color>
+
+    <color name="XANH">#30D5C8</color>
+    <color name="XÁM_ĐẬM">#A9A9A9</color>
+    <color name="XÁM_NHẠT">#D3D3D3</color>
+    <color name="XANH_THAN">#191970</color>
+    <color name="TÍM">#FF6200EE</color>
 
 
 

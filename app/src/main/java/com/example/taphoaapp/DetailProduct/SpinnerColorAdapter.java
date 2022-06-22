@@ -36,8 +36,8 @@ public class SpinnerColorAdapter extends ArrayAdapter<String> {
 //        ImageView iColor = convertView.findViewById(R.id.img_spinnerselect_color);
 
 //        SpinnerColor
-              String spinnerColor = daynay.get(position) ;
-              String bgspinnerColor = spinnerColor.replace(" ","_");
+              String spinnerColor = daynay.get(position).toString() ;
+              String bgspinnerColor = spinnerColor.toUpperCase().replace(" ","_");
         if(spinnerColor != null) {
             tvColor.setText(spinnerColor);
             Resources res = mContext.getResources();
@@ -60,7 +60,7 @@ public class SpinnerColorAdapter extends ArrayAdapter<String> {
         View vColor = convertView.findViewById(R.id.view_spinner_color);
 
         String spinnerColor = daynay.get(position);
-        String bgspinnerColor = spinnerColor.replace(" ","_");
+        String bgspinnerColor = spinnerColor.toUpperCase().replace(" ","_").toString();
         if(spinnerColor != null) {
             tvColor.setText(spinnerColor);
             Resources res = mContext.getResources();

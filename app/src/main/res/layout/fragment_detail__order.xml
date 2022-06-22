@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,6 +13,8 @@
         android:background="@color/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintBottom_toTopOf="@+id/myScrollView"
+        app:layout_constraintEnd_toEndOf="@+id/myScrollView"
         app:layout_constraintHeight_default="wrap"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -25,8 +27,16 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/DonHang_Huy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="wrap"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DonHangdetail_toolbar"
         android:id="@+id/myScrollView">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -44,8 +54,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="Mã đơn hàng"
-                    android:textColor="@color/green"
                     android:textSize="30dp" />
+
+
 
                 <TextView
                     android:id="@+id/tvStatusOrder"
@@ -55,6 +66,7 @@
                     android:layout_marginTop="3dp"
                     android:text="Trạng thái"
                     android:textSize="20dp" />
+
 
                 <TextView
                     android:id="@+id/tvPersonName"
@@ -215,6 +227,56 @@
                         android:textColor="@color/red"
                         android:textSize="25dp" />
                 </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/tvDeliverer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:text="Người giao : Nguyễn Văn A"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/tvReceiver"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:text="Người nhận : Nguyễn Văn B"
+                        android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/tvTimeRecei"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="Thời điểm nhận : 20/6/2010"
+                    android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/tvPay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:text="Đã thanh toán : 50000 đồng"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/tvTax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:text="Mã số thuế : 2801693913"
+                        android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/tvThank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="Cảm ơn quý khách đã mua hàng tại SockerXanh !"
+                    android:textColor="@color/green"
+                    android:textSize="20dp" />
             </LinearLayout>
 
 
@@ -228,6 +290,12 @@
         android:layout_alignParentBottom="true"
         android:layout_weight="1"
         android:backgroundTint="@color/negative_red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myScrollView"
         android:text="Hủy Đơn hàng" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

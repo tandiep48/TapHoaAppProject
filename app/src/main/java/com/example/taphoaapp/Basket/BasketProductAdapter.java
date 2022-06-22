@@ -231,13 +231,13 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
         holder.soluong.setText(String.valueOf(product.getSoluong()));
         holder.tvQuan.setText(String.valueOf(1));
         product.setNumdat(1);
-        if(product.getMau().isEmpty()||product.getMau() == null) {
+        if(product.getMau() == null) {
             holder.type_mau.setText("");
         }
         else {
             holder.type_mau.setText("Màu: " + String.valueOf(product.getMau()));
         }
-        if(product.getSize().isEmpty()||product.getSize() == null) {
+        if(product.getSize() == null) {
             holder.type_size.setText("");
         }
         else {

@@ -161,7 +161,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             else {
                 holder.soluong.setText(String.valueOf("số lượng : " + product.getSoluong()));
             }
-            holder.discount.setText("Khuyến mãi : " +product.getDiscount());
+            holder.discount.setText("Khuyến mãi : " +product.getDiscount()+"%");
             holder.price.setText(String.valueOf("Giá : " +currencyFormatter.format(product.getPrice() ) ));
             holder.giagoc.setText(String.valueOf("Giá gốc : " +currencyFormatter.format(product.getGiaGoc()) ));
             holder.giagoc.setPaintFlags(holder.giagoc.getPaintFlags() |Paint.STRIKE_THRU_TEXT_FLAG);

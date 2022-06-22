@@ -69,6 +69,7 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed, SwipeRe
     public List<product_item> SortProduct;
     private Collator VNCollator;
     String name, image, discount,category;
+    private String PassCategory,PassIDSP;
     Integer soluong,giacu,gia;
     Menu nMenu;
     Toolbar myToolbar;
@@ -81,12 +82,19 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed, SwipeRe
         // Required empty public constructor
     }
 
+    public QuanaoFragment(String Category) {
+//        this.PassCategory = Category;
+//        Log.e("QuanAoFragmentGet",PassCategory);
+        // Required empty public constructor
+    }
+
+
 
     // TODO: Rename and change types and number of parameters
-    public static QuanaoFragment newInstance(String param1, String param2) {
+    public static QuanaoFragment newInstance(String Category ) {
         QuanaoFragment fragment = new QuanaoFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
+        args.putString("Category", Category);
 //        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -100,8 +108,10 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed, SwipeRe
 
         setHasOptionsMenu(true);
 
+
         if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
+            PassCategory = getArguments().getString("Category");
+            Log.e("QuanAoFragmentGet",PassCategory);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
@@ -255,14 +265,24 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed, SwipeRe
 
     private List<product_item> getListProduct(){
         List<product_item> products = new ArrayList<>();
+//        if(PassCategory.equalsIgnoreCase("dientu")){
+//            PassIDSP = "DT";
+//        }
+//        else {
+//            PassIDSP = "QA";
+//        }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         db.collection("SAN_PHAM")
-                .whereEqualTo("CATEGORY", "quanao")
+//        .whereGreaterThanOrEqualTo("SANPHAM_ID",PassIDSP)
+                .whereEqualTo("CATEGORY",PassCategory)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            if(PassCategory.equalsIgnoreCase("quanao")){ Log.e("QuanAoFragment",PassCategory);}
+                            else {Log.e("DienTuFragment",PassCategory);}
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 category = document.getString("CATEGORY");
                                 name = document.getString("NAME");
