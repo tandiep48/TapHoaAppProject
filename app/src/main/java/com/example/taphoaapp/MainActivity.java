@@ -11,13 +11,17 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.res.Configuration;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
@@ -46,11 +50,19 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
     Context mContext;
     DataCommunication mCallback;
     String PasssPassword;
-    public boolean getaddtoBasket;
+    public boolean getaddtoBasket,getaddDonHang;
     Intent i ;
+
 
     public boolean getaddmybasket() {
         return getaddtoBasket;
+    }
+    public void changeAddmyDonhang(boolean add) {
+        this.getaddDonHang = add;
+    }
+
+    public boolean getaddmyDonhang() {
+        return getaddDonHang;
     }
 
     @Override
@@ -67,7 +79,10 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
                     + " must implement DataCommunication");
         }
     }
-
+public void changeFragZeroTwo(int pos) {
+        if (viewMain != null)
+        viewMain.setCurrentItem(pos);
+}
 
 
     @Override
@@ -77,7 +92,15 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+//        BroadcastReceiver receiver=new BroadcastReceiver(){
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//
+//            }
+//        };
+//
+//        IntentFilter filter=new IntentFilter(Intent.EXTRA_STREAM);
+//        registerReceiver(receiver,filter);
 
 //        mCallback = (DataCommunication) MainActivity.this;
 //        if(PrevActive!= null){
@@ -103,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
             getaddtoBasket = i.getBooleanExtra("addtoBask",false);
 
             userID = i.getStringExtra("userID");
+            getaddDonHang = i.getBooleanExtra("addtoDonhang",false);
 
             ActiPrev = i.getStringExtra("PrevActive");
             if(ActiPrev !=null) {
@@ -141,6 +165,19 @@ public class MainActivity extends AppCompatActivity implements DataCommunication
             if (i != null && extras != null && ActiPrev.toString().equalsIgnoreCase("DetailProduct")) {
                 viewMain.setCurrentItem(1);
                 bottomnavigation.getMenu().findItem(R.id.Menu_Basket).setChecked(true);
+            }
+            else if (i != null  && getaddDonHang) {
+                viewMain.setCurrentItem(2);
+                bottomnavigation.getMenu().findItem(R.id.Menu_Profile).setChecked(true);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                     getaddDonHang = false;
+                     i.putExtra("addtoDonhang",getaddDonHang);
+                    }
+                }, 2000);
+
             }
             else if (i != null && extras != null && ActiPrev.toString().equalsIgnoreCase("changeInfo")) {
                 viewMain.setCurrentItem(2);

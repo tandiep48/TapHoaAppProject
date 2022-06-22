@@ -7,7 +7,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ public class SachFragment extends Fragment {
 
     private RecyclerView mRecycler;
     private ProductAdapter proAdapter;
+    private SwipeRefreshLayout mSrlLayout;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -77,6 +80,23 @@ public class SachFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mRecycler = view.findViewById(R.id.rcv_product_list);
         proAdapter = new ProductAdapter(getActivity());
+
+        mSrlLayout = view.findViewById(R.id.sf_refresh_layout1);
+
+        mSrlLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                proAdapter.clear();
+                proAdapter.notifyDataSetChanged();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getListProduct();
+                    }
+                }, 500);
+            }
+        });
+
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false);
         mRecycler.setLayoutManager(linearLayoutManager);

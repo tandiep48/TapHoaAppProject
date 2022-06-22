@@ -5,6 +5,7 @@ import static java.lang.Math.toIntExact;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -70,11 +71,11 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
     private int passPrice,passquantity,passSoluong;
     basket_product_item productItem;
     basket_product_item ProtrungGian;
-
     List <String> TrungGian;
     List<String> listColor;
     List<String> listSize;
     List<basket_product_item> products;
+    List<basket_product_item> SoSanhPro;
     String PrevActive;
     Bundle extras ;
     private Button add,order;
@@ -217,11 +218,19 @@ public class DetailProductActivity extends AppCompatActivity implements DataComm
                                         .with(DetailProductActivity.this)
                                         .load(document.getString("IMAGE"))
                                         .into(main);
-                                tvdiscount.setText(String.valueOf(toIntExact(document.getLong("DISCOUNT"))));
+//                                holder.soluong.setText(String.valueOf("số lượng : " + product.getSoluong()));
+//                            }
+//                            holder.discount.setText("Khuyến mãi : " +product.getDiscount());
+//                            holder.price.setText(String.valueOf("Giá : " +currencyFormatter.format(product.getPrice() ) ));
+//                            holder.giagoc.setText(String.valueOf("Giá gốc : " +currencyFormatter.format(product.getGiaGoc()) ));
+//                            holder.giagoc.setPaintFlags(holder.giagoc.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                                tvdiscount.setText(String.valueOf(toIntExact(document.getLong("DISCOUNT")))+"%");
                                 Log.e("Soluong :",String.valueOf(toIntExact(document.getLong("SOLUONG"))));
-                                tvsoluong.setText( String.valueOf(toIntExact(document.getLong("SOLUONG"))));
-                                tvgiacu.setText(String.valueOf(toIntExact(document.getLong("GIACU"))));
-                                tvgia.setText(String.valueOf(toIntExact(document.getLong("GIA"))));
+                                tvsoluong.setText("số lượng : " + String.valueOf(toIntExact(document.getLong("SOLUONG"))));
+                                tvgiacu.setText("Giá gốc : " +String.valueOf(toIntExact(document.getLong("GIACU"))));
+                                tvgiacu.setPaintFlags(tvgiacu.getPaintFlags() |Paint.STRIKE_THRU_TEXT_FLAG);
+
+                                tvgia.setText("Giá : " +String.valueOf(toIntExact(document.getLong("GIA"))));
 
                                 Log.e("documment", document.getId() + " => " + document.getData());
                             }
@@ -389,6 +398,7 @@ public void AddtoBasket(){
     productItem.setName(tvname.getText().toString());
     productItem.setPrice(Integer.parseInt(tvgia.getText().toString()));
     //productItem.setNumdat(Integer.parseInt(tv.getText().toString()));
+    productItem.setNumdat(Integer.parseInt("1"));
     productItem.setSoluong(Integer.parseInt(tvsoluong.getText().toString()));
     if(spinColor.getSelectedItem()!=null && spinColor.getSelectedItem().toString() !="") {
         productItem.setMau(spinColor.getSelectedItem().toString());
@@ -407,7 +417,6 @@ public void AddtoBasket(){
         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
-                if(document != null){
                     if (document.exists()) {
                         if (document.get("ListProducts") != null||document.get("ListProducts")!="") {
                             List<Map<String, Object>> productDOX = (List<Map<String, Object>>) document.get("ListProducts");
@@ -447,13 +456,18 @@ public void AddtoBasket(){
 //                            for(Array set : document.get("ListProducts").toArray() )
                         }
 
-                        for(basket_product_item ObjPro : products)
-                        {
-                            if(productItem.getName().equalsIgnoreCase(ObjPro.getName()))
-                            {
-                                products.remove(ObjPro);
-                            }
-                        }
+//                        for(basket_product_item ObjPro : products)
+//                        {
+
+                            products.removeIf(i ->productItem.getName().equalsIgnoreCase(i.getName()));
+//                            if(productItem.getName().equalsIgnoreCase(ObjPro.getName()))
+//                            {
+////                                products.remove(ObjPro);
+//                                products.removeIf(productItem -> productItem.getName().equalsIgnoreCase(ObjPro.getName()));
+//
+//                            }
+//                        }
+
                         products.add(productItem);
 
 //                FieldValue.arrayUnion(productItem)
@@ -561,9 +575,7 @@ public void AddtoBasket(){
                                 });
 
                     }
-                }else {
 
-                }
             } else {
             }
         }

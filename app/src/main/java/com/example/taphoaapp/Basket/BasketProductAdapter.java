@@ -172,6 +172,7 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mFragment.productsDelAt(position);
 //                db.collection("Gio_hang").document(userID).update("ListProducts", FieldValue.arrayRemove(productItemList.get(position)));
                 DeleteAt(position);
                 db.collection("Gio_hang").document(userID).update("ListProducts", productItemList);
@@ -230,8 +231,18 @@ public class BasketProductAdapter extends RecyclerView.Adapter<BasketProductAdap
         holder.soluong.setText(String.valueOf(product.getSoluong()));
         holder.tvQuan.setText(String.valueOf(1));
         product.setNumdat(1);
-        holder.type_mau.setText("Màu: " + String.valueOf(product.getMau()));
-        holder.type_size.setText("Size: " +String.valueOf(product.getSize()));
+        if(product.getMau().isEmpty()||product.getMau() == null) {
+            holder.type_mau.setText("");
+        }
+        else {
+            holder.type_mau.setText("Màu: " + String.valueOf(product.getMau()));
+        }
+        if(product.getSize().isEmpty()||product.getSize() == null) {
+            holder.type_size.setText("");
+        }
+        else {
+            holder.type_size.setText("Size: " + String.valueOf(product.getSize()));
+        }
         sum = product.getPrice() * product.getNumdat();
         holder.price.setText(String.valueOf(currencyFormatter.format(product.getPrice())));
         holder.setNumtong(sum);

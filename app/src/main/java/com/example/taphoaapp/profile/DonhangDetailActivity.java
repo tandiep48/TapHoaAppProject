@@ -96,6 +96,7 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
     private Button add,order, cancelOrder;
 //    DataCommunication mCallback;
 
+
 //    @Override
 //    public void attachBaseContext(Context context) {
 //        super.attachBaseContext(context);
@@ -181,7 +182,7 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
         cancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Status.getText() == "đang lấy hàng . . .") {
+                if(Status.getText().toString() == "đang lấy hàng . . ."||Status.getText().toString().equalsIgnoreCase("đang lấy hàng . . .")||Status.getText().toString().contains("đang lấy hàng . . .")) {
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -246,15 +247,6 @@ public class DonhangDetailActivity extends AppCompatActivity implements DataComm
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                MaHD = findViewById(R.id.tvOrderName);
-                                Status = findViewById(R.id.tvStatusOrder);
-                                nguoiOrder = findViewById(R.id.tvPersonName);
-                                tvpay = findViewById(R.id.tvPrice);
-                                date = findViewById(R.id.tvDate);
-                                phone = findViewById(R.id.tvPhone);
-                                delivery = findViewById(R.id.tvDelivery);
-                                TransFee = findViewById(R.id.tvTransFee);
-                                address = findViewById(R.id.tvAddress);
 
                                 MaHD .setText(document.getString("DonHang_Id"));
                                 Status.setText(document.getString("status"));

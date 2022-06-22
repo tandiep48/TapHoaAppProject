@@ -132,6 +132,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ProductV
                 intent.putExtra("prevActive", "MainActivity");
                 intent.putExtra("userID", userID);
                 intent.putExtra("maDH",holder.MaDH.getText());
+                intent.putExtra("DHStatus",holder.status.getText());
 //                intent.putExtra("Soluong",1);
 //                intent.putExtra("gia",product.getPrice());
 //                intent.putExtra("color","");

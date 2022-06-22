@@ -8,8 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.util.Log;
@@ -30,6 +33,7 @@ import android.widget.Toast;
 
 import com.example.taphoaapp.Basket.BasketProductAdapter;
 import com.example.taphoaapp.Basket.DataCommunication;
+import com.example.taphoaapp.profile.ProfileMainFragment;
 import com.example.taphoaapp.profile.changeInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -65,11 +69,12 @@ public class BasketFragment extends Fragment implements DataCommunication  {
     private View mView;
     private TextView total,TransFee,IdDonHang;
     List<basket_product_item> products;
+    List<basket_product_item> Sosanhproducts;
     DataCommunication mCallback;
     private Button order;
     Bundle extras ;
-    String prevActive,ActiPrev,PassCategory,PassName,userID;
-     private Integer PassPrice,PassQuantity,PassSoluong;
+    String prevActive,ActiPrev,PassCategory,PassName,userID,Area;
+     private Integer PassPrice,PassQuantity,PassSoluong,PhiVC;
     private EditText name, address,phone;
     private CheckBox nhanhang;
    private Intent i;
@@ -79,9 +84,11 @@ public class BasketFragment extends Fragment implements DataCommunication  {
    Integer size;
    FirebaseFirestore db = FirebaseFirestore.getInstance();
    basket_product_item ProtrungGian;
-   boolean getaddtoBasket;
+   boolean getaddtoBasket,addDonHang;
+    private NestedScrollView mSrlLayout;
 
     private FirebaseAuth mAuth;
+    int sizeTaoDonHang = 0;
 
     String Category,Name;
     Integer price, numdat, soluong;
@@ -233,6 +240,15 @@ public class BasketFragment extends Fragment implements DataCommunication  {
         // Required empty public constructor
     }
 
+    public boolean getaddDonHang(){
+        return addDonHang;
+    }
+
+    public void productsDelAt(int position){
+        if(products != null || !products.isEmpty()||products.size() >0)
+        products.remove(position);
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -267,6 +283,10 @@ public class BasketFragment extends Fragment implements DataCommunication  {
 
         mView =  inflater.inflate(R.layout.fragment_basket, container, false);
 //        extras = getActivity().getIntent().getExtras();
+        mSrlLayout = mView.findViewById(R.id.basket_myScrollView);
+        products = new ArrayList<>();
+        PhiVC = 10000;
+        Area = "Quận 3";
 
         mAuth = FirebaseAuth.getInstance();
         mRecycler = mView.findViewById(R.id.rvFoods);
@@ -326,27 +346,26 @@ public class BasketFragment extends Fragment implements DataCommunication  {
                     address.requestFocus();
                 }
                 else {
-                    if (products != null) {
-                        OrderListProduct(products);
-                        // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setMessage("Đặt hàng thành công!")
-                                .setTitle("Thông báo");
-
-                        builder.show();
-
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-////                          getActivity().notifyDataSetChanged();
-//                        }
-//                    }, 2000);
-                    } else {
+                     if (products == null ||products.isEmpty()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setMessage("Giỏ hàng trống!")
                                 .setTitle("Thông báo");
 
                         builder.show();
+                    }
+                    else {
+                        addDonHang = true;
+                         MainActivity activity = (MainActivity) getActivity();
+                         activity.changeAddmyDonhang(addDonHang);
+                         getActivity().getIntent().putExtra("addtoDonhang",addDonHang);
+                         Log.e("BasketAddDonHang",Boolean.toString(addDonHang));
+                        OrderListProduct(products);
+                        // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                        builder.setMessage("Đặt hàng thành công!")
+//                                .setTitle("Thông báo");
+//
+//                        builder.show();
                     }
                 }
 
@@ -364,7 +383,34 @@ public class BasketFragment extends Fragment implements DataCommunication  {
         spinerArea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getActivity(), adapter.getItem(position), Toast.LENGTH_SHORT).show();
+               Area = spinerArea.getSelectedItem().toString();
+//                Toast.makeText(getActivity(), String.valueOf(position), Toast.LENGTH_SHORT);
+//                Toast.makeText(getActivity(), spinerArea.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                if(nhanhang.isChecked()){ChangeTransFee(0);}
+                else if(Area.equalsIgnoreCase("Quận 3") ||Area.equalsIgnoreCase("Quận 1") || Area.equalsIgnoreCase("Quận 10")){
+                    ChangeTransFee(10000);
+                }
+                else if (Area.equalsIgnoreCase("Phú Nhuận") ||Area.equalsIgnoreCase("Bình Thạnh") || Area.equalsIgnoreCase("Tân Bình")){
+                    ChangeTransFee(15000);
+                }
+                else if(Area.equalsIgnoreCase("Quận 5") ||Area.equalsIgnoreCase("Quận 4") )
+                    {
+                        ChangeTransFee(18000);
+                    }
+
+                else if(Area.equalsIgnoreCase("Quận 2") ||Area.equalsIgnoreCase("Quận 11") ){
+                    {
+                        ChangeTransFee(20000);
+                    }
+                }
+                else if(Area.equalsIgnoreCase("Quận 6") ||Area.equalsIgnoreCase("Quận 7") || Area.equalsIgnoreCase("Quận 8")){
+                    ChangeTransFee(25000);
+                }
+                else
+                {
+                    ChangeTransFee(30000);
+                }
+
             }
 
             @Override
@@ -376,7 +422,7 @@ public class BasketFragment extends Fragment implements DataCommunication  {
 
 
 
-        TransFee.setText(String.valueOf(currencyFormatter.format(15000)));
+
         db.collection("User")
                 .document(mAuth.getCurrentUser().getUid())
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -395,6 +441,43 @@ public class BasketFragment extends Fragment implements DataCommunication  {
 
 
 
+        nhanhang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(nhanhang.isChecked())
+                {
+                    TransFee.setText(String.valueOf(currencyFormatter.format(0)));
+                    PhiVC = 0;
+                    SetTotalPrice();
+                }
+                else{
+                    TransFee.setText(String.valueOf(currencyFormatter.format(PhiVC)));
+                    if(Area.equalsIgnoreCase("Quận 3") ||Area.equalsIgnoreCase("Quận 1") || Area.equalsIgnoreCase("Quận 10")){
+                        ChangeTransFee(10000);
+                    }
+                    else if (Area.equalsIgnoreCase("Phú Nhuận") ||Area.equalsIgnoreCase("Bình Thạnh") || Area.equalsIgnoreCase("Tân Bình")){
+                        ChangeTransFee(15000);
+                    }
+                    else if(Area.equalsIgnoreCase("Quận 5") ||Area.equalsIgnoreCase("Quận 4") )
+                    {
+                        ChangeTransFee(18000);
+                    }
+
+                    else if(Area.equalsIgnoreCase("Quận 2") ||Area.equalsIgnoreCase("Quận 11") ){
+                        {
+                            ChangeTransFee(20000);
+                        }
+                    }
+                    else if(Area.equalsIgnoreCase("Quận 6") ||Area.equalsIgnoreCase("Quận 7") || Area.equalsIgnoreCase("Quận 8")){
+                        ChangeTransFee(25000);
+                    }
+                    else
+                    {
+                        ChangeTransFee(30000);
+                    }
+                }
+            }
+        });
         BasproAdapter = new BasketProductAdapter(getActivity(), BasketFragment.this);
 
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false);
@@ -495,7 +578,149 @@ public class BasketFragment extends Fragment implements DataCommunication  {
     }
 
     private List<basket_product_item> getListProduct(){
-        products = new ArrayList<>();
+
+        db.collection("Don_hang")
+                .document("Counter")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    size =  (document.getDouble("Count").intValue() +1);
+                    db.collection("Gio_hang")
+                            .document(userID)
+                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if(document != null){
+                                    if (document.exists()) {
+                                        if(document.getString("name")!= null && document.getString("name")!="" ) {
+                                            name.setText(document.getString("name"));
+                                        }
+                                        if(document.getString("DiaChi")!= null) {
+                                            if (document.getString("DiaChi").toString() != "") {
+                                                address.setText(document.getString("DiaChi"));
+                                            }
+                                        }
+                                        else{
+                                            address.setText("828 Sư Vạn Hạnh, Phường 13, Quận 10, TP.HCM");
+                                        }
+                                        if(document.getString("SoDienThoai")!= null && document.getString("SoDienThoai")!="" ) {
+                                            phone.setText(document.getString("SoDienThoai"));
+                                        }
+
+                                        nhanhang.setChecked(document.getBoolean("giaohang"));
+                                        if(size <=9) {
+                                            IdDonHang.setText("DH0"+size);
+                                        }
+                                        else{
+                                            IdDonHang.setText("DH"+size);
+                                        }
+                                        if (document.get("ListProducts") != null||document.get("ListProducts")!="") {
+                                            List<Map<String, Object>> productDOX = (List<Map<String, Object>>) document.get("ListProducts");
+                                            for(Map<String, Object> ObjPro : productDOX)
+                                            {
+                                                ProtrungGian = new basket_product_item();
+                                                ProtrungGian.setCategory(ObjPro.get("category").toString());
+                                                ProtrungGian.setID(ObjPro.get("id").toString());
+                                                if(ObjPro.get("mau")!= null) {
+                                                    if (ObjPro.get("mau").toString() != "") {
+                                                        ProtrungGian.setMau(ObjPro.get("mau").toString());
+                                                    }
+                                                }
+                                                else{
+                                                    ProtrungGian.setMau("");
+                                                }
+
+
+                                                if(ObjPro.get("size")!= null) {
+                                                    if (ObjPro.get("size").toString() != "") {
+                                                        ProtrungGian.setSize(ObjPro.get("size").toString());
+                                                    }
+                                                }
+                                                else{
+                                                    ProtrungGian.setSize("");
+                                                }
+
+                                                ProtrungGian.setName(ObjPro.get("name").toString());
+                                                ProtrungGian.setNumdat(Integer.parseInt(ObjPro.get("numdat").toString()));
+                                                ProtrungGian.setPrice(Integer.parseInt(ObjPro.get("price").toString()));
+                                                ProtrungGian.setSoluong(Integer.parseInt(ObjPro.get("soluong").toString()));
+
+                                                products.add(ProtrungGian);
+                                            }
+//                            products = (List<basket_product_item>) document.get("ListProducts");
+//                            Log.d("check",((List<?>) document.get("ListProducts")).get(0).toString().sp+"");
+//                            for(Array set : document.get("ListProducts").toArray() )
+
+                                        }
+
+                                        for(int i = 0 ; i < products.size()-1;i++)
+                                        {
+                                            for(int z = 1 ; z < products.size();z ++)
+                                            {
+                                                if(products.get(i).getName().equalsIgnoreCase(products.get(z).getName()))
+                                                {
+                                                    Log.e("BasketRemove:" , products.get(i).getName());
+                                                    products.remove(i);
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        BasproAdapter.setData(products);
+                                        mRecycler.setAdapter(BasproAdapter);
+
+
+
+                                    }else{FillBasket();}
+                                }else {
+                                    FillBasket();
+                                }
+                            } else {
+                                FillBasket();
+                            }
+                        }
+                    });
+                } else {
+                    db.collection("Don_hang")
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            sizeTaoDonHang = task.getResult().size();
+                                        }
+                                    } else {
+                                        Log.e("Đếm Don_hang","Don_Hang chua được tạo!");
+                                    }
+                                }
+                            });
+
+
+                    Map<String, Object> Counter = new HashMap<>();
+                    Counter.put("Count", sizeTaoDonHang);
+
+                    db.collection("Don_hang").document("Counter")
+                            .set(Counter)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d("Don_Hang", "Tạo mới Counter thành công!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d("Don_Hang", "Tạo mới Counter thất bại!");
+                                }
+                            });
+                    Log.d("this", "Error getting documents: ");
+                }
+            }
+        });
 
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
 //        products.add( new product_item("https://cf.shopee.vn/file/34acd5e930c8a21e1c3a70d3cf2a70c5","Áo thun nam POLO trơn vải cá sấu cotton cao cấp ngắn tay cực sang trọng","55%",2,198000,89000));
@@ -512,100 +737,26 @@ public class BasketFragment extends Fragment implements DataCommunication  {
 //        {products.add( new basket_product_item(product_item.getCategory(),product_item.getID(),product_item.getMau(), product_item.getName(),product_item.getNumdat(),product_item.getPrice(),product_item.getSize(),product_item.getSoluong())); }
      //   {products.add( new product_item(PassCategory, PassName,PassPrice,PassQuantity,PassSoluong)); }
 
-        db.collection("Gio_hang")
-                .document(userID)
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if(document != null){
-                    if (document.exists()) {
-                        if(document.getString("name")!= null && document.getString("name")!="" ) {
-                            name.setText(document.getString("name"));
-                        }
-                        if(document.getString("DiaChi")!= null) {
-                            if (document.getString("DiaChi").toString() != "") {
-                                address.setText(document.getString("DiaChi"));
-                            }
-                        }
-                        else{
-                            address.setText("828 Sư Vạn Hạnh, Phường 13, Quận 10, TP.HCM");
-                        }
-                        if(document.getString("SoDienThoai")!= null && document.getString("SoDienThoai")!="" ) {
-                            phone.setText(document.getString("SoDienThoai"));
-                        }
-
-                        nhanhang.setChecked(document.getBoolean("giaohang"));
-                        IdDonHang.setText(document.getString("DonHang_Id"));
-                        if (document.get("ListProducts") != null||document.get("ListProducts")!="") {
-                            List<Map<String, Object>> productDOX = (List<Map<String, Object>>) document.get("ListProducts");
-                            for(Map<String, Object> ObjPro : productDOX)
-                            {
-                                ProtrungGian = new basket_product_item();
-                                ProtrungGian.setCategory(ObjPro.get("category").toString());
-                                ProtrungGian.setID(ObjPro.get("id").toString());
-                                if(ObjPro.get("mau")!= null) {
-                                    if (ObjPro.get("mau").toString() != "") {
-                                        ProtrungGian.setMau(ObjPro.get("mau").toString());
-                                    }
-                                }
-                                else{
-                                    ProtrungGian.setMau("");
-                                }
-
-
-                                if(ObjPro.get("size")!= null) {
-                                    if (ObjPro.get("size").toString() != "") {
-                                        ProtrungGian.setSize(ObjPro.get("size").toString());
-                                    }
-                                }
-                                else{
-                                    ProtrungGian.setSize("");
-                                }
-
-                                ProtrungGian.setName(ObjPro.get("name").toString());
-                                ProtrungGian.setNumdat(Integer.parseInt(ObjPro.get("numdat").toString()));
-                                ProtrungGian.setPrice(Integer.parseInt(ObjPro.get("price").toString()));
-                                ProtrungGian.setSoluong(Integer.parseInt(ObjPro.get("soluong").toString()));
-
-                                products.add(ProtrungGian);
-                            }
-//                            products = (List<basket_product_item>) document.get("ListProducts");
-//                            Log.d("check",((List<?>) document.get("ListProducts")).get(0).toString().sp+"");
-//                            for(Array set : document.get("ListProducts").toArray() )
-
-                        }
-                        BasproAdapter.setData(products);
-                        mRecycler.setAdapter(BasproAdapter);
-
-
-
-                    }else{FillBasket();}
-                    }else {
-                       FillBasket();
-                    }
-                } else {
-                    FillBasket();
-                }
-            }
-        });
 //        BasproAdapter.setData(products);
 //        mRecycler.setAdapter(BasproAdapter);
         return products;
     }
 
+    public void ChangeTransFee(int VCfee){
+        PhiVC = VCfee;
+        TransFee.setText(String.valueOf(currencyFormatter.format(PhiVC)));
+        SetTotalPrice();
+    }
+
     private void FillBasket(){
         Map<String, Object> data = new HashMap<>();
-        db.collection("Gio_hang")
-                .document("Counter")
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    size =  (document.getDouble("Count").intValue() +1);
-                    data.put("DonHang_Id", "DH"+size);
+
+                    if(size <=9) {
+                        data.put("DonHang_Id", "DH0"+size);
+                    }
+                    else{
+                        data.put("DonHang_Id", "DH"+size);
+                    }
                     data.put("name", "");
                     data.put("phiVanChuyen", "");
                     data.put("DiaChi", "");
@@ -634,23 +785,28 @@ public class BasketFragment extends Fragment implements DataCommunication  {
                     builder.show();
                     getListProduct();
                     Log.e("documment", "Error getting documents: ");
-                } else {
-                    Log.d("this", "Error getting documents: ");
-                }
-            }
-        });
+
 
     }
 
     private List<CharSequence>  getListArea(){
         List<CharSequence> listSize = new ArrayList<>();
         listSize.add(new String("Quận 1"));
+        listSize.add(new String("Quận 2"));
         listSize.add(new String("Quận 3"));
+        listSize.add(new String("Quận 4"));
         listSize.add(new String("Quận 5"));
+        listSize.add(new String("Quận 6"));
+        listSize.add(new String("Quận 7"));
+        listSize.add(new String("Quận 8"));
         listSize.add(new String("Quận 9"));
         listSize.add(new String("Quận 10"));
+        listSize.add(new String("Quận 11"));
         listSize.add(new String("Quận 12"));
         listSize.add(new String("Quận Bình Thạnh"));
+        listSize.add(new String("Quận Phú Nhuận"));
+        listSize.add(new String("Quận Tân Bình"));
+        listSize.add(new String("Quận Gò Vấp"));
         listSize.add(new String("Tp.Thủ Đức"));
 
 
@@ -705,7 +861,15 @@ public class BasketFragment extends Fragment implements DataCommunication  {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("PostOrder", "DocumentSnapshot successfully written!");
+                        Toast.makeText(getActivity(),"Đặt hàng thành công!",Toast.LENGTH_LONG).show();
 
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                MainActivity main = (MainActivity) getActivity();
+                                main.changeFragZeroTwo(2);
+                            }
+                        }, 500);
 
                         db.collection("Gio_hang").document(userID).update("ListProducts",Arrays.asList());
                         db.collection("Don_hang")
@@ -720,9 +884,11 @@ public class BasketFragment extends Fragment implements DataCommunication  {
                                                 size = (document.getDouble("Count").intValue() +1);
                                                 db.collection("Don_hang").document("Counter").update("Count",size);
                                                 if(size <=9) {
+                                                    db.collection("Gio_hang").document(userID).update("DonHang_Id","DH0" + size);
                                                     IdDonHang.setText("DH0" + size);
                                                 }
                                                 else{
+                                                    db.collection("Gio_hang").document(userID).update("DonHang_Id", "DH" + size);
                                                     IdDonHang.setText( "DH" + size);
                                                 }
                                                 products.clear();
@@ -782,7 +948,7 @@ public class BasketFragment extends Fragment implements DataCommunication  {
             BasketProductAdapter.ProductViewHolder holder = (BasketProductAdapter.ProductViewHolder) mRecycler.getChildViewHolder(mRecycler.getChildAt(i));
             FinalTong += holder.getNumtong();
         }
-        FinalTong = FinalTong + 15000 ;
+        FinalTong = FinalTong + PhiVC ;
         total.setText(String.valueOf(currencyFormatter.format(FinalTong)));
     }
 //    public void changeText(int data,TextView tv)

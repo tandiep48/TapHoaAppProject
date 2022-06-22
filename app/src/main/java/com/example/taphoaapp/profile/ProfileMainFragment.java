@@ -1,6 +1,7 @@
 package com.example.taphoaapp.profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,8 @@ public class ProfileMainFragment extends Fragment {
     private View mView;
     private String order;
     private Context mContext;
+    Intent i;
+    Boolean getaddDonHang;
 
     @Override
     public void onAttach(Context context) {
@@ -68,6 +71,15 @@ public class ProfileMainFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        if (i != null && viewMain != null &&  getaddDonHang) {
+            viewMain.setCurrentItem(0);
+//            mTabLayout.getMenu().findItem(R.id.Menu_Profile).setChecked(true);
+        }
+        super.onResume();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //
@@ -100,12 +112,25 @@ public class ProfileMainFragment extends Fragment {
 
         mView =  inflater.inflate(R.layout.fragment_home, container, false);
 
+        i = requireActivity().getIntent();
+        if ( i!= null ) {
+            getaddDonHang = i.getBooleanExtra("addtoDonhang",false);
+            // and get whatever type user account id is
+        }
+
+
         mTabLayout = mView.findViewById(R.id.TopTabHome);
         viewMain = mView.findViewById(R.id.ViewPagerHome);
 
         ProfileViewPagerAdpater view_pager_adpater = new ProfileViewPagerAdpater(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
         viewMain.setAdapter(view_pager_adpater);
+
+        if (i != null &&  getaddDonHang) {
+            viewMain.setCurrentItem(0);
+//            mTabLayout.getMenu().findItem(R.id.Menu_Profile).setChecked(true);
+        }
+
         viewMain.setPagingEnabled(true);
         mTabLayout.setupWithViewPager(viewMain);
 

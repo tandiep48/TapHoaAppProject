@@ -25,7 +25,7 @@ public class ProfileViewPagerAdpater extends FragmentStatePagerAdapter
             case 0: return new DonHangFragment();
             case 1: return new ProfileFragment();
 //            case 2: return new SettingFragment();
-            default: return new ProfileFragment();
+            default: return new DonHangFragment();
         }
     }
 

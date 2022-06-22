@@ -5,8 +5,11 @@ import static android.graphics.Color.rgb;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +74,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         private TextView  name , soluong, discount , price ,giagoc;
         private Button buy;
         private ImageView favorite;
-        private LinearLayout pressLayout;
+        private LinearLayout pressLayout,LinearBound;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,8 +87,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             buy = (Button) itemView.findViewById(R.id.MuaNgay);
             favorite = (ImageView) itemView.findViewById(R.id.product_favorite);
             pressLayout = itemView.findViewById(R.id.wrap_press_product);
-
-
+            LinearBound = itemView.findViewById(R.id.Bound_item_product);
         }
     }
 
@@ -146,10 +148,23 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                     .into(holder.mImageView);
 
             holder.name.setText(product.getName());
-            holder.soluong.setText(String.valueOf("số lượng : " + product.getSoluong()));
+            if(product.getSoluong() <= 0)
+            {
+                holder.soluong.setText(String.valueOf("Hết hàng"));
+                holder.soluong.setTextColor(mContext.getResources().getColor(R.color.error_red));
+                holder.soluong.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
+                holder.LinearBound.setAlpha((float) 0.4);
+//                holder.LinearBound.setBackgroundColor(mContext.getResources().getColor(R.color.LightGrey));
+//                holder.LinearBound.setBackgroundColor(Color.alpha(R.color.TransParent));
+////                holder.LinearBound.setBackgroundResource();
+            }
+            else {
+                holder.soluong.setText(String.valueOf("số lượng : " + product.getSoluong()));
+            }
             holder.discount.setText("Khuyến mãi : " +product.getDiscount());
             holder.price.setText(String.valueOf("Giá : " +currencyFormatter.format(product.getPrice() ) ));
             holder.giagoc.setText(String.valueOf("Giá gốc : " +currencyFormatter.format(product.getGiaGoc()) ));
+            holder.giagoc.setPaintFlags(holder.giagoc.getPaintFlags() |Paint.STRIKE_THRU_TEXT_FLAG);
 
         holder.discount.setTextColor(rgb(238, 77, 45));
         holder.price.setTextColor(mContext.getColor(R.color.negative_red));

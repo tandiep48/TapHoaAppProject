@@ -17,11 +17,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -54,7 +57,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class QuanaoFragment extends Fragment  implements IOnBackPressed{
+public class QuanaoFragment extends Fragment  implements IOnBackPressed, SwipeRefreshLayout.OnRefreshListener{
 
   private RecyclerView mRecycler;
   private ProductAdapter proAdapter;
@@ -67,6 +70,9 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
     private Collator VNCollator;
     String name, image, discount,category;
     Integer soluong,giacu,gia;
+    Menu nMenu;
+    Toolbar myToolbar;
+    private SwipeRefreshLayout mSrlLayout;
 
 
 
@@ -111,6 +117,21 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
         spinner = mView.findViewById(R.id.Spinner_sort);
 //        SortProduct = getListProduct();
         SortProduct = new ArrayList<product_item>();
+        mSrlLayout = mView.findViewById(R.id.sf_refresh_layout1);
+
+        mSrlLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                proAdapter.clear();
+                proAdapter.notifyDataSetChanged();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getListProduct();
+                    }
+                }, 500);
+            }
+        });
 
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(),
@@ -182,11 +203,12 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Toolbar myToolbar = (Toolbar) view.findViewById(R.id.my_toolbar);
+        myToolbar = (Toolbar) view.findViewById(R.id.my_toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(myToolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        SearchView searchView = (SearchView) view.findViewById(R.id.search_viewmenu);
 //        searchView.onActionViewExpanded();
+        setHasOptionsMenu(true);
 
 
         ViewItem=view.findViewById(R.id.search_item_menu);
@@ -206,7 +228,7 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
 
 //        proAdapter.setData(SortProduct);
         getListProduct();
-        mRecycler.setAdapter(proAdapter);
+
 
         RecyclerView.ItemDecoration itemDecoration  = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         mRecycler.addItemDecoration(itemDecoration);
@@ -220,6 +242,15 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
     {
         proAdapter.setData(getListProduct());
         mRecycler.setAdapter(proAdapter);
+    }
+
+    @Override
+    public void onResume() {
+//        onCreateOptionsMenu();
+//        requireActivity().invalidateOptionsMenu();
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(myToolbar);
+//        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        super.onResume();
     }
 
     private List<product_item> getListProduct(){
@@ -246,6 +277,9 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
                             }
                             SortProduct = products;
                             proAdapter.setData(SortProduct);
+                            mRecycler.setAdapter(proAdapter);
+                            proAdapter.notifyDataSetChanged();
+                            mSrlLayout.setRefreshing(false);
                         } else {
                             Log.e("documment", "Error getting documents: ", task.getException());
                         }
@@ -260,6 +294,18 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
 
 
         return products;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.search_item_menu) {
+            Intent intent = new Intent(getActivity(), SearchActivity.class);
+            intent.putExtra("PrevActive", "MainActivity");
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -309,5 +355,10 @@ public class QuanaoFragment extends Fragment  implements IOnBackPressed{
         else{
             return false;
         }
+    }
+
+    @Override
+    public void onRefresh() {
+
     }
 }

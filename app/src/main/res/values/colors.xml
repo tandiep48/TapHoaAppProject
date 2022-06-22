@@ -9,7 +9,7 @@
     <color name="card_bg">#fbfcfa</color>
     <color name="error_red">#ff3232</color>
     <color name="negative_red">#e55b5b</color>
-
+    <color name="TransParent">#CCFFFFFF</color>
 
 
     <color name="colorPrimary">#27ae60</color>

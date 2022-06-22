@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_product"
+    android:id="@+id/Bound_item_product"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="15dp"
@@ -13,7 +13,8 @@
     android:paddingTop="14dp"
     android:paddingBottom="14dp"
     tools:layout_editor_absoluteY="100dp"
-    tools:layout_height="150dp">
+    tools:layout_height="150dp"
+    >
 
     <LinearLayout
         android:id="@+id/wrap_press_product"
@@ -62,7 +63,7 @@
             android:id="@+id/product_soluong"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="10dp"
+            android:textSize="15dp"
             tools:text="5.02%" />
 
         <TextView
@@ -70,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="10dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/product_gia"
@@ -84,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:textSize="10dp" />
+            android:textSize="20dp" />
 
     </LinearLayout>
 

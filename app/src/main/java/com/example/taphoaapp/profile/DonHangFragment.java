@@ -2,9 +2,11 @@ package com.example.taphoaapp.profile;
 
 import static java.lang.Math.toIntExact;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,8 +28,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.taphoaapp.Basket.DataCommunication;
 import com.example.taphoaapp.IOnBackPressed;
+import com.example.taphoaapp.MainActivity;
 import com.example.taphoaapp.ProductAdapter;
 import com.example.taphoaapp.R;
 import com.example.taphoaapp.Search.SearchActivity;
@@ -67,6 +72,12 @@ String maDH; String status; String time;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String userID;
     TextView EmptyDH;
+    public boolean getaddtoBasket,getaddDonHang;
+    private SwipeRefreshLayout mSrlLayout;
+
+
+    Bundle extras;
+    Intent i ;
 
 
 
@@ -85,6 +96,20 @@ String maDH; String status; String time;
 //        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainActivity activity = (MainActivity) getActivity();
+        getaddDonHang =  activity.getaddmyDonhang();
+        Log.e("DonHangFragment",Boolean.toString(getaddDonHang));
+        if(getaddDonHang)
+        {
+//            Log.e("BaskFrag:",Boolean.toString(getaddtoBasket));
+            getListDonHang();
+        }
+//        Toast.makeText(getContext(),Boolean.toString(getaddtoBasket),Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -109,6 +134,20 @@ String maDH; String status; String time;
 
         mView =  inflater.inflate(R.layout.fragment_product_list, container, false);
         // Inflate the layout for this fragment
+        i = getActivity().getIntent();
+        extras = getActivity().getIntent().getExtras();
+
+
+        if ( i!= null &&extras != null) {
+
+            getaddtoBasket = i.getBooleanExtra("addtoBask", false);
+
+            userID = i.getStringExtra("userID");
+            getaddDonHang = i.getBooleanExtra("addtoDonhang", false);
+
+        }
+
+
         spinner = mView.findViewById(R.id.Spinner_sort);
 //        SortProduct = getListProduct();
         SortDonHang = new ArrayList<DonHang_item>();
@@ -118,10 +157,26 @@ String maDH; String status; String time;
         EmptyDH = mView.findViewById(R.id.Empty_DonHangList);
 
 
-
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(),
                 android.R.layout.simple_spinner_item, getListsize());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        mSrlLayout = mView.findViewById(R.id.sf_refresh_layout1);
+
+        mSrlLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                proAdapter.clear();
+                proAdapter.notifyDataSetChanged();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getListDonHang();
+                    }
+                }, 500);
+            }
+        });
+
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -212,7 +267,7 @@ String maDH; String status; String time;
 
 //        proAdapter.setData(SortDonHang);
         getListDonHang();
-        mRecycler.setAdapter(proAdapter);
+
 
         RecyclerView.ItemDecoration itemDecoration  = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         mRecycler.addItemDecoration(itemDecoration);
@@ -260,6 +315,9 @@ String maDH; String status; String time;
                             }
 
                             proAdapter.setData(SortDonHang);
+                            mRecycler.setAdapter(proAdapter);
+                            proAdapter.notifyDataSetChanged();
+                            mSrlLayout.setRefreshing(false);
                         } else {
                             Log.e("documment", "Error getting documents: ", task.getException());
                         }
